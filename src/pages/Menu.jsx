@@ -9,21 +9,23 @@ import {
   Package,
   Tag
 } from 'lucide-react';
-import { mockCategories, mockMenuItems, formatPrice } from '../data/mockData';
+import { formatPrice } from '../data/mockData';
+import { useMenuItems } from '../lib/useMenuItems';
+import { MenuItemForm } from '../components/MenuItemForm';
 
 /**
  * Menu: Página de gestão do cardápio (CRUD de itens, categorias, filtros e estatísticas).
  * Sugestão: extrair modal de edição para componente separado se crescer.
  */
 const Menu = () => {
-  const [categories, setCategories] = useState([]);
-  const [menuItems, setMenuItems] = useState([]);
+  const [categories, setCategories] = useState([]); // Mantém mock para categorias por enquanto
+  const { items: menuItems, loading, error, addItem, editItem, removeItem, fetchItems } = useMenuItems();
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedItem, setSelectedItem] = useState(null);
 
   useEffect(() => {
-    setCategories(mockCategories);
-    setMenuItems(mockMenuItems);
+    // TODO: Integrar categorias reais se necessário
+    setCategories([{ id: 1, name: 'Padrão' }]);
   }, []);
 
   const filteredItems = selectedCategory === 'all' 
@@ -31,27 +33,26 @@ const Menu = () => {
     : menuItems.filter(item => item.category_id === parseInt(selectedCategory));
 
   const handleAddItem = () => {
-    const newItem = {
-      id: menuItems.length + 1,
-      name: 'Novo Item',
-      description: 'Descrição do item',
+    setSelectedItem({
+      name: '',
+      description: '',
       price: 0,
       image: '/images/placeholder.jpg',
-      category_id: 1,
+      category_id: categories[0]?.id || 1,
       is_available: true
-    };
-    setMenuItems([...menuItems, newItem]);
-    setSelectedItem(newItem);
+    });
   };
 
-  const handleDeleteItem = (itemId) => {
-    setMenuItems(menuItems.filter(item => item.id !== itemId));
+  const handleDeleteItem = async (itemId) => {
+    await removeItem(itemId);
   };
 
-  const handleSaveItem = (updatedItem) => {
-    setMenuItems(menuItems.map(item => 
-      item.id === updatedItem.id ? updatedItem : item
-    ));
+  const handleSaveItem = async (item) => {
+    if (item.id) {
+      await editItem(item.id, item);
+    } else {
+      await addItem(item);
+    }
     setSelectedItem(null);
   };
 
@@ -202,101 +203,14 @@ const Menu = () => {
         </CardContent>
       </Card>
 
-      {/* Modal de Edição */}
-      {selectedItem && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <Card className="w-96 max-h-[80vh] overflow-y-auto">
-            <CardHeader>
-              <CardTitle>Editar Item</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <label className="text-sm font-medium">Nome</label>
-                <input
-                  type="text"
-                  className="w-full mt-1 p-2 border rounded-md"
-                  value={selectedItem.name}
-                  onChange={(e) => setSelectedItem({
-                    ...selectedItem,
-                    name: e.target.value
-                  })}
-                />
-              </div>
-              <div>
-                <label className="text-sm font-medium">Descrição</label>
-                <textarea
-                  className="w-full mt-1 p-2 border rounded-md"
-                  rows="3"
-                  value={selectedItem.description}
-                  onChange={(e) => setSelectedItem({
-                    ...selectedItem,
-                    description: e.target.value
-                  })}
-                />
-              </div>
-              <div>
-                <label className="text-sm font-medium">Preço</label>
-                <input
-                  type="number"
-                  step="0.01"
-                  className="w-full mt-1 p-2 border rounded-md"
-                  value={selectedItem.price}
-                  onChange={(e) => setSelectedItem({
-                    ...selectedItem,
-                    price: parseFloat(e.target.value)
-                  })}
-                />
-              </div>
-              <div>
-                <label className="text-sm font-medium">Categoria</label>
-                <select
-                  className="w-full mt-1 p-2 border rounded-md"
-                  value={selectedItem.category_id}
-                  onChange={(e) => setSelectedItem({
-                    ...selectedItem,
-                    category_id: parseInt(e.target.value)
-                  })}
-                >
-                  {categories.map((category) => (
-                    <option key={category.id} value={category.id}>
-                      {category.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  id="available"
-                  checked={selectedItem.is_available}
-                  onChange={(e) => setSelectedItem({
-                    ...selectedItem,
-                    is_available: e.target.checked
-                  })}
-                />
-                <label htmlFor="available" className="text-sm font-medium">
-                  Disponível
-                </label>
-              </div>
-              <div className="flex gap-2">
-                <Button 
-                  className="flex-1"
-                  onClick={() => handleSaveItem(selectedItem)}
-                >
-                  Salvar
-                </Button>
-                <Button 
-                  variant="outline" 
-                  className="flex-1"
-                  onClick={() => setSelectedItem(null)}
-                >
-                  Cancelar
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      )}
+      {/* Modal de Edição/Reutilizável */}
+      <MenuItemForm
+        item={selectedItem}
+        categories={categories}
+        onChange={setSelectedItem}
+        onSave={handleSaveItem}
+        onCancel={() => setSelectedItem(null)}
+      />
     </div>
   );
 };

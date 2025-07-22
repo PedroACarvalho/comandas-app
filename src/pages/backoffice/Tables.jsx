@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { listarMesas, criarMesa, editarMesa, deletarMesa } from '../../dataService';
-import Notification from '../../components/ui/Notification';
+import { Notification } from '../../components/ui/Notification';
 
 const initialForm = { numero: '', capacidade: '' };
 

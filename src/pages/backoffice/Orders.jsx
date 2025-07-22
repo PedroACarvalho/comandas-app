@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import socket from '../../lib/socket';
-import Notification from '../../components/ui/Notification';
+import { Notification } from '../../components/ui/Notification';
 
 const notificationSound = new Audio('/notification.mp3');
 
