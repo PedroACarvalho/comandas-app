@@ -1,0 +1,10 @@
+pytest
+pytest-flask
+pytest-cov 
+flasgger 
+black
+flake8 
+flask_cors 
+flask_socketio 
+flask_sqlalchemy
+flask_migrate 
