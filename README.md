@@ -409,3 +409,31 @@ A API possui documentação interativa via **Swagger UI** (OpenAPI), facilitando
 4. Veja a resposta da API em tempo real, incluindo status, headers e body.
 
 > **Dica:** Use o Swagger UI para validar integrações, testar rapidamente e entender o funcionamento da API sem precisar de ferramentas externas. 
+
+## ☁️ Versionamento no GitHub
+
+Este projeto está versionado e salvo remotamente no GitHub:
+
+- **Repositório:** [https://github.com/PedroACarvalho/PWA-para-c-lculo-e-pagamento-de-comandas](https://github.com/PedroACarvalho/PWA-para-c-lculo-e-pagamento-de-comandas)
+
+### Como salvar alterações no repositório remoto
+
+Sempre que fizer alterações no código e quiser salvar no GitHub, utilize os comandos abaixo no terminal, dentro da pasta do projeto:
+
+```bash
+git add .
+git commit -m "sua mensagem de commit aqui"
+git push
+```
+
+Esses comandos vão:
+- Adicionar todas as alterações para serem versionadas (`git add .`)
+- Criar um commit com uma mensagem descritiva (`git commit -m ...`)
+- Enviar as alterações para o repositório remoto no GitHub (`git push`)
+
+Se for o primeiro clone em outra máquina, basta rodar:
+```bash
+git clone https://github.com/PedroACarvalho/PWA-para-c-lculo-e-pagamento-de-comandas.git
+```
+
+Assim, todo o histórico e código do projeto estará sempre salvo e disponível na nuvem! 
