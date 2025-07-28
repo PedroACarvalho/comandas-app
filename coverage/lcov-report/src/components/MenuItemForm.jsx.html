@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">20.58% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>7/34</span>
+                <span class='fraction'>0/34</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">15% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>3/20</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">10% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/10</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">18.18% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/33</span>
+                <span class='fraction'>0/33</span>
             </div>
         
             
@@ -195,21 +195,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -217,7 +206,18 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -227,7 +227,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -321,12 +321,12 @@
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 &nbsp;
-export function MenuItemForm({ item, categories, onChange, onSave, onCancel }) {
-  const [imageFile, setImageFile] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState(item?.image || '');
-  const [uploading, setUploading] = useState(false);
+export function <span class="fstat-no" title="function not covered" >MenuItemForm(</span>{ item, categories, onChange, onSave, onCancel }) {
+  const [imageFile, setImageFile] = <span class="cstat-no" title="statement not covered" >useState(null);</span>
+  const [previewUrl, setPreviewUrl] = <span class="cstat-no" title="statement not covered" >useState(item?.image || '');</span>
+  const [uploading, setUploading] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
 &nbsp;
-  const handleImageChange = <span class="fstat-no" title="function not covered" >(e</span>) =&gt; {
+  const handleImageChange = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(e</span>) =&gt; {</span>
     const file = <span class="cstat-no" title="statement not covered" >e.target.files[0];</span>
 <span class="cstat-no" title="statement not covered" >    setImageFile(file);</span>
 <span class="cstat-no" title="statement not covered" >    setPreviewUrl(file ? URL.createObjectURL(file) : '');</span>
@@ -344,7 +344,7 @@ export function MenuItemForm({ item, categories, onChange, onSave, onCancel }) {
 <span class="cstat-no" title="statement not covered" >    return data.secure_url;</span>
   }
 &nbsp;
-  const handleSave = <span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {
+  const handleSave = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
     let imageUrl = <span class="cstat-no" title="statement not covered" >item.image;</span>
 <span class="cstat-no" title="statement not covered" >    if (imageFile) {</span>
 <span class="cstat-no" title="statement not covered" >      setUploading(true);</span>
@@ -354,7 +354,7 @@ export function MenuItemForm({ item, categories, onChange, onSave, onCancel }) {
 <span class="cstat-no" title="statement not covered" >    onSave({ ...item, image: imageUrl });</span>
   };
 &nbsp;
-  <span class="missing-if-branch" title="else path not taken" >E</span>if (!item) return null;
+<span class="cstat-no" title="statement not covered" >  if (!item) <span class="cstat-no" title="statement not covered" >return null;</span></span>
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"&gt;
       &lt;Card className="w-96 max-h-[80vh] overflow-y-auto"&gt;
@@ -451,7 +451,7 @@ export function MenuItemForm({ item, categories, onChange, onSave, onCancel }) {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-28T02:20:06.218Z
+                at 2025-07-28T02:28:30.982Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

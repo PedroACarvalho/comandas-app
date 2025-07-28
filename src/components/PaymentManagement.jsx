@@ -5,16 +5,32 @@ import { Badge } from './ui/badge';
 import { 
   CreditCard, 
   DollarSign, 
-  Users,
+  QrCode,
   CheckCircle,
-  Clock
+  Clock,
+  AlertCircle
 } from 'lucide-react';
-import { formatPrice, paymentMethods } from '../data/mockData';
+
+// Métodos de pagamento
+const paymentMethods = {
+  CASH: 'Dinheiro',
+  CREDIT_CARD: 'Cartão de Crédito',
+  DEBIT_CARD: 'Cartão de Débito',
+  PIX: 'PIX',
+  TRANSFER: 'Transferência'
+};
+
+// Função para formatar preços
+const formatPrice = (price) => {
+  return new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL'
+  }).format(price);
+};
 
 /**
- * PaymentManagement: Tela de gestão e visualização de pagamentos do backoffice.
- * Não recebe props atualmente.
- * Sugestão: extrair lista de pagamentos para componente separado se crescer.
+ * PaymentManagement: Componente de gestão de pagamentos (lista, filtros, ações).
+ * Sugestão: extrair modal de detalhes para componente separado se crescer.
  */
 const PaymentManagement = () => {
   const [payments, setPayments] = useState([]);
@@ -22,64 +38,85 @@ const PaymentManagement = () => {
 
   useEffect(() => {
     // Dados mockados de pagamentos
-    setPayments([
+    const mockPayments = [
       {
         id: 1,
-        order_id: 1,
-        customer_name: 'João Silva',
-        total_amount: 45.70,
-        payment_method: 'CASH',
-        status: 'Aprovado',
-        created_at: '2024-01-15T10:30:00Z',
-        splits: []
+        pedido_id: 1,
+        metodo: paymentMethods.CREDIT_CARD,
+        valor: 45.70,
+        status: 'confirmado',
+        data_criacao: '2024-01-15T10:30:00Z',
+        cliente_nome: 'João Silva',
+        mesa_id: 2
       },
       {
         id: 2,
-        order_id: 2,
-        customer_name: 'Maria Santos',
-        total_amount: 32.80,
-        payment_method: 'CREDIT_CARD',
-        status: 'Processando',
-        created_at: '2024-01-15T11:15:00Z',
-        splits: [
-          { person_name: 'Maria', amount: 16.40, payment_method: 'CREDIT_CARD' },
-          { person_name: 'Pedro', amount: 16.40, payment_method: 'PIX' }
-        ]
+        pedido_id: 2,
+        metodo: paymentMethods.PIX,
+        valor: 32.80,
+        status: 'pendente',
+        data_criacao: '2024-01-15T11:15:00Z',
+        cliente_nome: 'Maria Santos',
+        mesa_id: 4
+      },
+      {
+        id: 3,
+        pedido_id: 3,
+        metodo: paymentMethods.CASH,
+        valor: 28.50,
+        status: 'confirmado',
+        data_criacao: '2024-01-15T12:00:00Z',
+        cliente_nome: 'Carlos Oliveira',
+        mesa_id: 1
       }
-    ]);
+    ];
+    setPayments(mockPayments);
   }, []);
 
   const filteredPayments = filter === 'all' 
     ? payments 
-    : payments.filter(payment => payment.status.toLowerCase() === filter);
+    : payments.filter(payment => payment.status === filter);
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'Aprovado':
+      case 'confirmado':
         return 'bg-green-100 text-green-800';
-      case 'Processando':
+      case 'pendente':
         return 'bg-yellow-100 text-yellow-800';
-      case 'Pendente':
-        return 'bg-blue-100 text-blue-800';
-      case 'Cancelado':
+      case 'cancelado':
         return 'bg-red-100 text-red-800';
       default:
         return 'bg-gray-100 text-gray-800';
     }
   };
 
-  const getPaymentMethodIcon = (method) => {
-    switch (method) {
-      case 'CASH':
-        return <DollarSign className="w-4 h-4" />;
-      case 'CREDIT_CARD':
-      case 'DEBIT_CARD':
-        return <CreditCard className="w-4 h-4" />;
-      case 'PIX':
-        return <DollarSign className="w-4 h-4" />;
+  const getStatusIcon = (status) => {
+    switch (status) {
+      case 'confirmado':
+        return <CheckCircle className="w-4 h-4" />;
+      case 'pendente':
+        return <Clock className="w-4 h-4" />;
+      case 'cancelado':
+        return <AlertCircle className="w-4 h-4" />;
       default:
-        return <DollarSign className="w-4 h-4" />;
+        return <Clock className="w-4 h-4" />;
     }
+  };
+
+  const handleConfirmPayment = (paymentId) => {
+    setPayments(payments.map(payment => 
+      payment.id === paymentId 
+        ? { ...payment, status: 'confirmado' }
+        : payment
+    ));
+  };
+
+  const handleCancelPayment = (paymentId) => {
+    setPayments(payments.map(payment => 
+      payment.id === paymentId 
+        ? { ...payment, status: 'cancelado' }
+        : payment
+    ));
   };
 
   return (
@@ -90,12 +127,11 @@ const PaymentManagement = () => {
           <select
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            className="p-2 border rounded-md"
+            className="border rounded-md px-3 py-1"
           >
-            <option value="all">Todos os Status</option>
-            <option value="aprovado">Aprovados</option>
-            <option value="processando">Processando</option>
+            <option value="all">Todos</option>
             <option value="pendente">Pendentes</option>
+            <option value="confirmado">Confirmados</option>
             <option value="cancelado">Cancelados</option>
           </select>
         </div>
@@ -114,34 +150,34 @@ const PaymentManagement = () => {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Recebido</CardTitle>
+            <CardTitle className="text-sm font-medium">Confirmados</CardTitle>
+            <CheckCircle className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {payments.filter(p => p.status === 'confirmado').length}
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Pendentes</CardTitle>
+            <Clock className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {payments.filter(p => p.status === 'pendente').length}
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Valor Total</CardTitle>
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {formatPrice(payments.reduce((sum, p) => sum + p.total_amount, 0))}
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Aprovados</CardTitle>
-            <CheckCircle className="h-4 w-4 text-green-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {payments.filter(p => p.status === 'Aprovado').length}
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Processando</CardTitle>
-            <Clock className="h-4 w-4 text-yellow-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {payments.filter(p => p.status === 'Processando').length}
+              {formatPrice(payments.reduce((sum, p) => sum + p.valor, 0))}
             </div>
           </CardContent>
         </Card>
@@ -155,48 +191,69 @@ const PaymentManagement = () => {
         <CardContent>
           <div className="space-y-4">
             {filteredPayments.map((payment) => (
-              <Card key={payment.id} className="border-l-4 border-l-blue-500">
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-4 mb-2">
+              <Card key={payment.id} className="p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-4">
+                      <div>
                         <h3 className="font-semibold">Pagamento #{payment.id}</h3>
-                        <Badge className={getStatusColor(payment.status)}>
+                        <p className="text-sm text-muted-foreground">
+                          Mesa {payment.mesa_id} • {payment.cliente_nome}
+                        </p>
+                      </div>
+                      <Badge className={getStatusColor(payment.status)}>
+                        <div className="flex items-center gap-1">
+                          {getStatusIcon(payment.status)}
                           {payment.status}
-                        </Badge>
-                      </div>
-                      <div className="text-sm text-gray-600 space-y-1">
-                        <p><strong>Pedido:</strong> #{payment.order_id}</p>
-                        <p><strong>Cliente:</strong> {payment.customer_name}</p>
-                        <p><strong>Total:</strong> {formatPrice(payment.total_amount)}</p>
-                        <p><strong>Método:</strong> {paymentMethods[payment.payment_method]}</p>
-                        <p><strong>Data:</strong> {new Date(payment.created_at).toLocaleString('pt-BR')}</p>
-                      </div>
-                      
-                      {payment.splits.length > 0 && (
-                        <div className="mt-3 p-3 bg-gray-50 rounded-lg">
-                          <p className="text-sm font-medium mb-2">Divisão de Pagamento:</p>
-                          <div className="space-y-1">
-                            {payment.splits.map((split, index) => (
-                              <div key={index} className="flex justify-between text-sm">
-                                <span>{split.person_name}</span>
-                                <span>{formatPrice(split.amount)} - {paymentMethods[split.payment_method]}</span>
-                              </div>
-                            ))}
-                          </div>
                         </div>
-                      )}
+                      </Badge>
                     </div>
-                    <div className="flex items-center gap-2">
-                      {getPaymentMethodIcon(payment.payment_method)}
-                      {payment.splits.length > 0 && (
-                        <Users className="w-4 h-4 text-gray-500" />
-                      )}
+                    <div className="mt-2">
+                      <p className="text-sm">
+                        <strong>Método:</strong> {payment.metodo}
+                      </p>
+                      <p className="text-sm">
+                        <strong>Valor:</strong> {formatPrice(payment.valor)}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {new Date(payment.data_criacao).toLocaleString('pt-BR')}
+                      </p>
                     </div>
                   </div>
-                </CardContent>
+                  <div className="flex items-center gap-2">
+                    {payment.status === 'pendente' && (
+                      <>
+                        <Button
+                          size="sm"
+                          onClick={() => handleConfirmPayment(payment.id)}
+                        >
+                          Confirmar
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          onClick={() => handleCancelPayment(payment.id)}
+                        >
+                          Cancelar
+                        </Button>
+                      </>
+                    )}
+                    {payment.metodo === paymentMethods.PIX && (
+                      <Button size="sm" variant="outline">
+                        <QrCode className="w-4 h-4 mr-1" />
+                        QR Code
+                      </Button>
+                    )}
+                  </div>
+                </div>
               </Card>
             ))}
+            {filteredPayments.length === 0 && (
+              <div className="text-center py-8">
+                <AlertCircle className="w-12 h-12 text-muted-foreground mx-auto mb-2" />
+                <p className="text-muted-foreground">Nenhum pagamento encontrado</p>
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>

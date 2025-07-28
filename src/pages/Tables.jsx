@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
@@ -9,19 +9,15 @@ import {
   Edit,
   Trash2
 } from 'lucide-react';
-import { mockTables } from '../data/mockData';
+import { useTables } from '../lib/useTables';
 
 /**
  * Tables: Página de gestão de mesas (CRUD, estatísticas, modal de edição).
  * Sugestão: extrair modal de edição para componente separado se crescer.
  */
 const Tables = () => {
-  const [tables, setTables] = useState([]);
+  const { tables, loading, error, addTable, editTable, removeTable } = useTables();
   const [selectedTable, setSelectedTable] = useState(null);
-
-  useEffect(() => {
-    setTables(mockTables);
-  }, []);
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -38,20 +34,51 @@ const Tables = () => {
     }
   };
 
-  const handleAddTable = () => {
-    const newTable = {
-      id: tables.length + 1,
-      number: tables.length + 1,
-      capacity: 4,
-      status: 'Disponível',
-      qr_code: `table-${tables.length + 1}-qr`
-    };
-    setTables([...tables, newTable]);
+  const handleAddTable = async () => {
+    try {
+      const newTableData = {
+        numero: tables.length + 1,
+        capacidade: 4,
+        status: 'Disponível',
+        qr_code: `table-${tables.length + 1}-qr`
+      };
+      await addTable(newTableData);
+    } catch (err) {
+      console.error('Erro ao adicionar mesa:', err);
+    }
   };
 
-  const handleDeleteTable = (tableId) => {
-    setTables(tables.filter(table => table.id !== tableId));
+  const handleDeleteTable = async (tableId) => {
+    try {
+      await removeTable(tableId);
+    } catch (err) {
+      console.error('Erro ao deletar mesa:', err);
+    }
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <div className="spinner rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-2 text-gray-600">Carregando mesas...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <p className="text-red-600">Erro ao carregar mesas: {error}</p>
+          <Button onClick={() => window.location.reload()} className="mt-2">
+            Tentar Novamente
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -118,45 +145,46 @@ const Tables = () => {
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {tables.map((table) => (
               <Card key={table.id} className="relative">
-                <CardHeader className="pb-3">
+                <CardHeader className="pb-2">
                   <div className="flex items-center justify-between">
-                    <CardTitle className="text-lg">Mesa {table.number}</CardTitle>
-                    <div className="flex gap-2">
+                    <CardTitle className="text-lg">Mesa {table.numero}</CardTitle>
+                    <div className="flex gap-1">
                       <Button
-                        variant="ghost"
                         size="sm"
+                        variant="ghost"
                         onClick={() => setSelectedTable(table)}
                       >
                         <Edit className="w-4 h-4" />
                       </Button>
                       <Button
-                        variant="ghost"
                         size="sm"
+                        variant="ghost"
                         onClick={() => handleDeleteTable(table.id)}
-                        className="text-red-500 hover:text-red-700"
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>
                     </div>
                   </div>
                 </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-500">Capacidade:</span>
-                    <span className="font-medium">{table.capacity} pessoas</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-500">Status:</span>
-                    <Badge className={getStatusColor(table.status)}>
-                      {table.status}
-                    </Badge>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-500">QR Code:</span>
-                    <Button variant="outline" size="sm">
-                      <QrCode className="w-4 h-4 mr-1" />
-                      Ver
-                    </Button>
+                <CardContent className="pt-0">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-muted-foreground">Capacidade:</span>
+                      <span className="text-sm font-medium">{table.capacidade} pessoas</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-muted-foreground">Status:</span>
+                      <Badge className={getStatusColor(table.status)}>
+                        {table.status}
+                      </Badge>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-muted-foreground">QR Code:</span>
+                      <Button size="sm" variant="outline">
+                        <QrCode className="w-4 h-4 mr-1" />
+                        Ver QR
+                      </Button>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -164,67 +192,6 @@ const Tables = () => {
           </div>
         </CardContent>
       </Card>
-
-      {/* Modal de Edição (simplificado) */}
-      {selectedTable && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <Card className="w-96">
-            <CardHeader>
-              <CardTitle>Editar Mesa {selectedTable.number}</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <label className="text-sm font-medium">Capacidade</label>
-                <input
-                  type="number"
-                  className="w-full mt-1 p-2 border rounded-md"
-                  value={selectedTable.capacity}
-                  onChange={(e) => setSelectedTable({
-                    ...selectedTable,
-                    capacity: parseInt(e.target.value)
-                  })}
-                />
-              </div>
-              <div>
-                <label className="text-sm font-medium">Status</label>
-                <select
-                  className="w-full mt-1 p-2 border rounded-md"
-                  value={selectedTable.status}
-                  onChange={(e) => setSelectedTable({
-                    ...selectedTable,
-                    status: e.target.value
-                  })}
-                >
-                  <option value="Disponível">Disponível</option>
-                  <option value="Ocupada">Ocupada</option>
-                  <option value="Reservada">Reservada</option>
-                  <option value="Limpeza">Limpeza</option>
-                </select>
-              </div>
-              <div className="flex gap-2">
-                <Button 
-                  className="flex-1"
-                  onClick={() => {
-                    setTables(tables.map(t => 
-                      t.id === selectedTable.id ? selectedTable : t
-                    ));
-                    setSelectedTable(null);
-                  }}
-                >
-                  Salvar
-                </Button>
-                <Button 
-                  variant="outline" 
-                  className="flex-1"
-                  onClick={() => setSelectedTable(null)}
-                >
-                  Cancelar
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      )}
     </div>
   );
 };

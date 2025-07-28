@@ -9,9 +9,16 @@ import {
   Package,
   Tag
 } from 'lucide-react';
-import { formatPrice } from '../data/mockData';
 import { useMenuItems } from '../lib/useMenuItems';
 import { MenuItemForm } from '../components/MenuItemForm';
+
+// Função para formatar preços
+const formatPrice = (price) => {
+  return new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL'
+  }).format(price);
+};
 
 /**
  * Menu: Página de gestão do cardápio (CRUD de itens, categorias, filtros e estatísticas).
@@ -110,7 +117,7 @@ const Menu = () => {
         </Card>
       </div>
 
-      {/* Filtros */}
+      {/* Filtro por Categoria */}
       <Card>
         <CardHeader>
           <CardTitle>Filtrar por Categoria</CardTitle>
@@ -119,7 +126,6 @@ const Menu = () => {
           <div className="flex gap-2 flex-wrap">
             <Button
               variant={selectedCategory === 'all' ? 'default' : 'outline'}
-              size="sm"
               onClick={() => setSelectedCategory('all')}
             >
               Todas
@@ -128,7 +134,6 @@ const Menu = () => {
               <Button
                 key={category.id}
                 variant={selectedCategory === category.id.toString() ? 'default' : 'outline'}
-                size="sm"
                 onClick={() => setSelectedCategory(category.id.toString())}
               >
                 {category.name}
@@ -146,55 +151,37 @@ const Menu = () => {
         <CardContent>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {filteredItems.map((item) => (
-              <Card key={item.id || `${item.name}-${item.price}`} className="relative">
-                <div className="aspect-video bg-gray-200 rounded-t-lg overflow-hidden">
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      e.target.src = '/images/placeholder.jpg';
-                    }}
-                  />
-                </div>
-                <CardHeader className="pb-3">
+              <Card key={item.id} className="relative">
+                <CardHeader className="pb-2">
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-lg">{item.name}</CardTitle>
-                    <div className="flex gap-2">
+                    <div className="flex gap-1">
                       <Button
-                        variant="ghost"
                         size="sm"
+                        variant="ghost"
                         onClick={() => setSelectedItem(item)}
                       >
                         <Edit className="w-4 h-4" />
                       </Button>
                       <Button
-                        variant="ghost"
                         size="sm"
+                        variant="ghost"
                         onClick={() => handleDeleteItem(item.id)}
-                        className="text-red-500 hover:text-red-700"
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>
                     </div>
                   </div>
                 </CardHeader>
-                <CardContent className="space-y-3">
-                  <p className="text-sm text-gray-600 line-clamp-2">
-                    {item.description}
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <span className="font-bold text-lg">
-                      {formatPrice(item.price)}
-                    </span>
-                    <Badge 
-                      variant={item.is_available ? 'default' : 'secondary'}
-                    >
-                      {item.is_available ? 'Disponível' : 'Indisponível'}
-                    </Badge>
-                  </div>
-                  <div className="text-sm text-gray-500">
-                    Categoria: {categories.find(c => c.id === item.category_id)?.name}
+                <CardContent className="pt-0">
+                  <div className="space-y-2">
+                    <p className="text-sm text-muted-foreground">{item.description}</p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-lg font-bold">{formatPrice(item.price)}</span>
+                      <Badge variant={item.is_available ? 'default' : 'secondary'}>
+                        {item.is_available ? 'Disponível' : 'Indisponível'}
+                      </Badge>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -203,14 +190,15 @@ const Menu = () => {
         </CardContent>
       </Card>
 
-      {/* Modal de Edição/Reutilizável */}
-      <MenuItemForm
-        item={selectedItem}
-        categories={categories}
-        onChange={setSelectedItem}
-        onSave={handleSaveItem}
-        onCancel={() => setSelectedItem(null)}
-      />
+      {/* Modal de Edição */}
+      {selectedItem && (
+        <MenuItemForm
+          item={selectedItem}
+          onSave={handleSaveItem}
+          onCancel={() => setSelectedItem(null)}
+          categories={categories}
+        />
+      )}
     </div>
   );
 };

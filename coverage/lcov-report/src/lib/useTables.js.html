@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/lib/useMenuItems.js</title>
+    <title>Code coverage report for src/lib/useTables.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/lib</a> useMenuItems.js</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/lib</a> useTables.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/49</span>
+                <span class='fraction'>0/48</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/44</span>
+                <span class='fraction'>0/43</span>
             </div>
         
             
@@ -141,29 +141,7 @@
 <a name='L76'></a><a href='#L76'>76</a>
 <a name='L77'></a><a href='#L77'>77</a>
 <a name='L78'></a><a href='#L78'>78</a>
-<a name='L79'></a><a href='#L79'>79</a>
-<a name='L80'></a><a href='#L80'>80</a>
-<a name='L81'></a><a href='#L81'>81</a>
-<a name='L82'></a><a href='#L82'>82</a>
-<a name='L83'></a><a href='#L83'>83</a>
-<a name='L84'></a><a href='#L84'>84</a>
-<a name='L85'></a><a href='#L85'>85</a>
-<a name='L86'></a><a href='#L86'>86</a>
-<a name='L87'></a><a href='#L87'>87</a>
-<a name='L88'></a><a href='#L88'>88</a>
-<a name='L89'></a><a href='#L89'>89</a>
-<a name='L90'></a><a href='#L90'>90</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L79'></a><a href='#L79'>79</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -242,30 +220,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useState, useEffect, useCallback } from 'react';
-import { getMenuItems, createMenuItem, updateMenuItem, deleteMenuItem } from './menuService';
+import { listarMesas, criarMesa, editarMesa, deletarMesa } from '../dataService';
 &nbsp;
-function <span class="fstat-no" title="function not covered" >mapItemFromApi(</span>apiItem) {
-<span class="cstat-no" title="statement not covered" >  return {</span>
-    id: apiItem.item_id || apiItem.id, // usa item_id se existir
-    name: apiItem.nome,
-    description: apiItem.descricao,
-    price: apiItem.preco,
-    category_id: apiItem.categoria_id,
-    is_available: true // ou apiItem.disponivel, se existir no futuro
-  };
-}
-&nbsp;
-export function <span class="fstat-no" title="function not covered" >useMenuItems(</span>) {
-  const [items, setItems] = <span class="cstat-no" title="statement not covered" >useState([]);</span>
+export function <span class="fstat-no" title="function not covered" >useTables(</span>) {
+  const [tables, setTables] = <span class="cstat-no" title="statement not covered" >useState([]);</span>
   const [loading, setLoading] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
   const [error, setError] = <span class="cstat-no" title="statement not covered" >useState(null);</span>
 &nbsp;
-  const fetchItems = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
+  const fetchTables = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setLoading(true);</span>
 <span class="cstat-no" title="statement not covered" >    setError(null);</span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
-      const data = <span class="cstat-no" title="statement not covered" >await getMenuItems();</span>
-<span class="cstat-no" title="statement not covered" >      setItems(data.map(mapItemFromApi));</span>
+      const data = <span class="cstat-no" title="statement not covered" >await listarMesas();</span>
+<span class="cstat-no" title="statement not covered" >      setTables(data.mesas || []);</span>
     } catch (err) {
 <span class="cstat-no" title="statement not covered" >      setError(err.message);</span>
     } finally {
@@ -274,16 +241,16 @@ export function <span class="fstat-no" title="function not covered" >useMenuItem
   }, []);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    fetchItems();</span>
-  }, [fetchItems]);
+<span class="cstat-no" title="statement not covered" >    fetchTables();</span>
+  }, [fetchTables]);
 &nbsp;
-  const addItem = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (item) =&gt; {</span>
+  const addTable = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (tableData) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setLoading(true);</span>
 <span class="cstat-no" title="statement not covered" >    setError(null);</span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
-      const newItem = <span class="cstat-no" title="statement not covered" >await createMenuItem(item);</span>
-<span class="cstat-no" title="statement not covered" >      setItems(<span class="fstat-no" title="function not covered" >(p</span>rev) =&gt; <span class="cstat-no" title="statement not covered" >[...prev, mapItemFromApi(newItem)])</span>;</span>
-<span class="cstat-no" title="statement not covered" >      return mapItemFromApi(newItem);</span>
+      const newTable = <span class="cstat-no" title="statement not covered" >await criarMesa(tableData);</span>
+<span class="cstat-no" title="statement not covered" >      setTables(<span class="fstat-no" title="function not covered" >(p</span>rev) =&gt; <span class="cstat-no" title="statement not covered" >[...prev, newTable])</span>;</span>
+<span class="cstat-no" title="statement not covered" >      return newTable;</span>
     } catch (err) {
 <span class="cstat-no" title="statement not covered" >      setError(err.message);</span>
 <span class="cstat-no" title="statement not covered" >      throw err;</span>
@@ -292,13 +259,13 @@ export function <span class="fstat-no" title="function not covered" >useMenuItem
     }
   };
 &nbsp;
-  const editItem = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (id, item) =&gt; {</span>
+  const editTable = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (id, tableData) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setLoading(true);</span>
 <span class="cstat-no" title="statement not covered" >    setError(null);</span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
-      const updated = <span class="cstat-no" title="statement not covered" >await updateMenuItem(id, item);</span>
-<span class="cstat-no" title="statement not covered" >      setItems(<span class="fstat-no" title="function not covered" >(p</span>rev) =&gt; <span class="cstat-no" title="statement not covered" >prev.map(<span class="fstat-no" title="function not covered" >(i</span>) =&gt; (<span class="cstat-no" title="statement not covered" >i.id === id ? mapItemFromApi(updated) : i)</span>))</span>;</span>
-<span class="cstat-no" title="statement not covered" >      return mapItemFromApi(updated);</span>
+      const updated = <span class="cstat-no" title="statement not covered" >await editarMesa(id, tableData);</span>
+<span class="cstat-no" title="statement not covered" >      setTables(<span class="fstat-no" title="function not covered" >(p</span>rev) =&gt; <span class="cstat-no" title="statement not covered" >prev.map(<span class="fstat-no" title="function not covered" >(t</span>) =&gt; (<span class="cstat-no" title="statement not covered" >t.id === id ? updated : t)</span>))</span>;</span>
+<span class="cstat-no" title="statement not covered" >      return updated;</span>
     } catch (err) {
 <span class="cstat-no" title="statement not covered" >      setError(err.message);</span>
 <span class="cstat-no" title="statement not covered" >      throw err;</span>
@@ -307,12 +274,12 @@ export function <span class="fstat-no" title="function not covered" >useMenuItem
     }
   };
 &nbsp;
-  const removeItem = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (id) =&gt; {</span>
+  const removeTable = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (id) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setLoading(true);</span>
 <span class="cstat-no" title="statement not covered" >    setError(null);</span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
-<span class="cstat-no" title="statement not covered" >      await deleteMenuItem(id);</span>
-<span class="cstat-no" title="statement not covered" >      setItems(<span class="fstat-no" title="function not covered" >(p</span>rev) =&gt; <span class="cstat-no" title="statement not covered" >prev.filter(<span class="fstat-no" title="function not covered" >(i</span>) =&gt; <span class="cstat-no" title="statement not covered" >i.id !== id)</span>)</span>;</span>
+<span class="cstat-no" title="statement not covered" >      await deletarMesa(id);</span>
+<span class="cstat-no" title="statement not covered" >      setTables(<span class="fstat-no" title="function not covered" >(p</span>rev) =&gt; <span class="cstat-no" title="statement not covered" >prev.filter(<span class="fstat-no" title="function not covered" >(t</span>) =&gt; <span class="cstat-no" title="statement not covered" >t.id !== id)</span>)</span>;</span>
     } catch (err) {
 <span class="cstat-no" title="statement not covered" >      setError(err.message);</span>
 <span class="cstat-no" title="statement not covered" >      throw err;</span>
@@ -322,13 +289,13 @@ export function <span class="fstat-no" title="function not covered" >useMenuItem
   };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return {</span>
-    items,
+    tables,
     loading,
     error,
-    fetchItems,
-    addItem,
-    editItem,
-    removeItem,
+    fetchTables,
+    addTable,
+    editTable,
+    removeTable,
   };
 } </pre></td></tr></table></pre>
 
