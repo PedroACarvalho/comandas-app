@@ -146,7 +146,7 @@ const Menu = () => {
         <CardContent>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {filteredItems.map((item) => (
-              <Card key={item.id} className="relative">
+              <Card key={item.id || `${item.name}-${item.price}`} className="relative">
                 <div className="aspect-video bg-gray-200 rounded-t-lg overflow-hidden">
                   <img
                     src={item.image}

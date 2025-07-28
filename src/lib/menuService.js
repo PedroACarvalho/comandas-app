@@ -10,10 +10,15 @@ export async function getMenuItems() {
 }
 
 export async function createMenuItem(item) {
+  const payload = {
+    nome: item.name,
+    descricao: item.description,
+    preco: item.price
+  };
   const res = await fetch(API_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(item)
+    body: JSON.stringify(payload)
   });
   if (!res.ok) throw new Error('Erro ao criar item');
   const data = await res.json();
@@ -21,10 +26,15 @@ export async function createMenuItem(item) {
 }
 
 export async function updateMenuItem(id, item) {
+  const payload = {
+    nome: item.name,
+    descricao: item.description,
+    preco: item.price
+  };
   const res = await fetch(`${API_URL}/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(item)
+    body: JSON.stringify(payload)
   });
   if (!res.ok) throw new Error('Erro ao atualizar item');
   const data = await res.json();

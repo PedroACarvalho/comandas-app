@@ -1,6 +1,17 @@
 import { useState, useEffect, useCallback } from 'react';
 import { getMenuItems, createMenuItem, updateMenuItem, deleteMenuItem } from './menuService';
 
+function mapItemFromApi(apiItem) {
+  return {
+    id: apiItem.item_id || apiItem.id, // usa item_id se existir
+    name: apiItem.nome,
+    description: apiItem.descricao,
+    price: apiItem.preco,
+    category_id: apiItem.categoria_id,
+    is_available: true // ou apiItem.disponivel, se existir no futuro
+  };
+}
+
 export function useMenuItems() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -11,7 +22,7 @@ export function useMenuItems() {
     setError(null);
     try {
       const data = await getMenuItems();
-      setItems(data);
+      setItems(data.map(mapItemFromApi));
     } catch (err) {
       setError(err.message);
     } finally {
@@ -28,8 +39,8 @@ export function useMenuItems() {
     setError(null);
     try {
       const newItem = await createMenuItem(item);
-      setItems((prev) => [...prev, newItem]);
-      return newItem;
+      setItems((prev) => [...prev, mapItemFromApi(newItem)]);
+      return mapItemFromApi(newItem);
     } catch (err) {
       setError(err.message);
       throw err;
@@ -43,8 +54,8 @@ export function useMenuItems() {
     setError(null);
     try {
       const updated = await updateMenuItem(id, item);
-      setItems((prev) => prev.map((i) => (i.id === id ? updated : i)));
-      return updated;
+      setItems((prev) => prev.map((i) => (i.id === id ? mapItemFromApi(updated) : i)));
+      return mapItemFromApi(updated);
     } catch (err) {
       setError(err.message);
       throw err;

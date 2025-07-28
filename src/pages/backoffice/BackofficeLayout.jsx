@@ -5,6 +5,7 @@ const navItems = [
   { label: 'Dashboard', path: '/backoffice/dashboard' },
   { label: 'Pedidos', path: '/backoffice/orders' },
   { label: 'Mesas', path: '/backoffice/tables' },
+  { label: 'Gestão do Cardápio', path: '/backoffice/menu' },
   { label: 'Pagamentos', path: '/backoffice/payments' },
   { label: 'Relatórios', path: '/backoffice/reports' },
   { label: 'Configurações', path: '/backoffice/settings' },

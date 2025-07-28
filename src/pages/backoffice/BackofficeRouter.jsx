@@ -8,6 +8,7 @@ import BackofficePayments from './Payments';
 import BackofficeSettings from './Settings';
 import BackofficeReports from './Reports';
 import BackofficeLayout from './BackofficeLayout';
+import Menu from '../Menu';
 
 /**
  * BackofficeRouter: Define as rotas do painel do estabelecimento, incluindo layout e páginas internas.
@@ -23,6 +24,7 @@ const BackofficeRouter = () => {
         <Route path="payments" element={<BackofficePayments />} />
         <Route path="settings" element={<BackofficeSettings />} />
         <Route path="reports" element={<BackofficeReports />} />
+        <Route path="menu" element={<Menu />} />
         <Route index element={<Navigate to="dashboard" replace />} />
       </Route>
     </Routes>
