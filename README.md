@@ -1,4 +1,4 @@
-# 🍽️ Sistema de Comandas Online
+# 🍽️ Comandas App
 
 Sistema PWA (Progressive Web App) para cálculo e pagamento de comandas, desenvolvido conforme TCC.
 
@@ -20,7 +20,7 @@ Sistema PWA (Progressive Web App) para cálculo e pagamento de comandas, desenvo
 ### 1. Clone o repositório
 ```bash
 git clone <url-do-repositorio>
-cd "PWA para cálculo e pagamento de comandas"
+cd comandas-app
 ```
 
 ### 2. Instalar dependências do Backend
