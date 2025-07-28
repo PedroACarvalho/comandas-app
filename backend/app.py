@@ -4,10 +4,13 @@ import os
 # Adicionar o diretório atual ao path para que os imports funcionem
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+# Imports padrão
 from flask import Flask
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
 from flasgger import Swagger
+
+# Imports locais (após sys.path.insert)
 from database import db, init_db
 from routes.auth import auth_bp
 from routes.orders import orders_bp

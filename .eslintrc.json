@@ -25,8 +25,8 @@
   "overrides": [
     {
       "files": ["cypress/**/*.js"],
-      "env": {
-        "cypress/globals": true
+      "rules": {
+        "no-undef": "off"
       }
     }
   ]
