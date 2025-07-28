@@ -13,7 +13,7 @@ def fechar_pedidos_abertos_para_mesa(mesa_numero):
     from models import Pedido, Cliente
     pedidos_abertos = Pedido.query.join(Cliente).filter(
         Cliente.mesa == mesa_numero,
-        Pedido.fechado == False
+        Pedido.fechado.is_(False)
     ).all()
     for pedido in pedidos_abertos:
         pedido.fechado = True
