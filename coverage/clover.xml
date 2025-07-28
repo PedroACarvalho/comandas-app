@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1753668987655" clover="3.2.0">
-  <project timestamp="1753668987655" name="All files">
-    <metrics statements="738" coveredstatements="129" conditionals="350" coveredconditionals="22" methods="291" coveredmethods="45" elements="1379" coveredelements="196" complexity="0" loc="738" ncloc="738" packages="9" files="36" classes="36"/>
+<coverage generated="1753669206254" clover="3.2.0">
+  <project timestamp="1753669206254" name="All files">
+    <metrics statements="738" coveredstatements="200" conditionals="350" coveredconditionals="38" methods="291" coveredmethods="57" elements="1379" coveredelements="295" complexity="0" loc="738" ncloc="738" packages="9" files="36" classes="36"/>
     <package name="src">
-      <metrics statements="233" coveredstatements="0" conditionals="163" coveredconditionals="0" methods="76" coveredmethods="0"/>
+      <metrics statements="233" coveredstatements="57" conditionals="163" coveredconditionals="13" methods="76" coveredmethods="11"/>
       <file name="App.jsx" path="/Users/pedroaugustocarvalho/Documents/PWA para cálculo e pagamento de comandas/src/App.jsx">
-        <metrics statements="201" coveredstatements="0" conditionals="158" coveredconditionals="0" methods="53" coveredmethods="0"/>
-        <line num="8" count="0" type="stmt"/>
-        <line num="9" count="0" type="stmt"/>
-        <line num="10" count="0" type="stmt"/>
-        <line num="11" count="0" type="stmt"/>
-        <line num="12" count="0" type="stmt"/>
-        <line num="13" count="0" type="stmt"/>
-        <line num="14" count="0" type="stmt"/>
-        <line num="17" count="0" type="stmt"/>
-        <line num="18" count="0" type="stmt"/>
-        <line num="19" count="0" type="stmt"/>
-        <line num="20" count="0" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
-        <line num="22" count="0" type="cond" truecount="0" falsecount="2"/>
+        <metrics statements="201" coveredstatements="47" conditionals="158" coveredconditionals="11" methods="53" coveredmethods="8"/>
+        <line num="8" count="3" type="stmt"/>
+        <line num="9" count="2" type="stmt"/>
+        <line num="10" count="2" type="stmt"/>
+        <line num="11" count="2" type="stmt"/>
+        <line num="12" count="2" type="stmt"/>
+        <line num="13" count="2" type="stmt"/>
+        <line num="14" count="2" type="stmt"/>
+        <line num="17" count="2" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="22" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="24" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
-        <line num="27" count="0" type="stmt"/>
-        <line num="31" count="0" type="stmt"/>
-        <line num="35" count="0" type="stmt"/>
-        <line num="36" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="35" count="2" type="stmt"/>
+        <line num="36" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="37" count="0" type="stmt"/>
-        <line num="41" count="0" type="stmt"/>
+        <line num="41" count="2" type="stmt"/>
         <line num="42" count="0" type="stmt"/>
         <line num="43" count="0" type="stmt"/>
         <line num="44" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="45" count="0" type="stmt"/>
         <line num="47" count="0" type="stmt"/>
         <line num="51" count="0" type="stmt"/>
-        <line num="56" count="0" type="stmt"/>
+        <line num="56" count="2" type="stmt"/>
         <line num="57" count="0" type="stmt"/>
         <line num="58" count="0" type="stmt"/>
         <line num="59" count="0" type="stmt"/>
@@ -46,22 +46,22 @@
         <line num="71" count="0" type="stmt"/>
         <line num="72" count="0" type="stmt"/>
         <line num="74" count="0" type="stmt"/>
-        <line num="79" count="0" type="stmt"/>
+        <line num="79" count="2" type="stmt"/>
         <line num="80" count="0" type="stmt"/>
         <line num="82" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="83" count="0" type="stmt"/>
         <line num="84" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="89" count="0" type="stmt"/>
-        <line num="94" count="0" type="stmt"/>
+        <line num="94" count="2" type="stmt"/>
         <line num="95" count="0" type="stmt"/>
-        <line num="99" count="0" type="stmt"/>
+        <line num="99" count="2" type="stmt"/>
         <line num="100" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="101" count="0" type="stmt"/>
         <line num="103" count="0" type="stmt"/>
         <line num="104" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="112" count="0" type="stmt"/>
+        <line num="112" count="2" type="stmt"/>
         <line num="113" count="0" type="stmt"/>
-        <line num="117" count="0" type="stmt"/>
+        <line num="117" count="2" type="stmt"/>
         <line num="118" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="119" count="0" type="stmt"/>
         <line num="120" count="0" type="stmt"/>
@@ -79,10 +79,10 @@
         <line num="143" count="0" type="stmt"/>
         <line num="144" count="0" type="stmt"/>
         <line num="146" count="0" type="stmt"/>
-        <line num="151" count="0" type="stmt"/>
+        <line num="151" count="2" type="stmt"/>
         <line num="152" count="0" type="stmt"/>
         <line num="154" count="0" type="stmt"/>
-        <line num="158" count="0" type="stmt"/>
+        <line num="158" count="2" type="stmt"/>
         <line num="159" count="0" type="stmt"/>
         <line num="160" count="0" type="stmt"/>
         <line num="161" count="0" type="stmt"/>
@@ -95,7 +95,7 @@
         <line num="173" count="0" type="stmt"/>
         <line num="174" count="0" type="stmt"/>
         <line num="176" count="0" type="stmt"/>
-        <line num="181" count="0" type="stmt"/>
+        <line num="181" count="2" type="stmt"/>
         <line num="182" count="0" type="stmt"/>
         <line num="183" count="0" type="stmt"/>
         <line num="184" count="0" type="stmt"/>
@@ -107,41 +107,41 @@
         <line num="197" count="0" type="stmt"/>
         <line num="198" count="0" type="stmt"/>
         <line num="200" count="0" type="stmt"/>
-        <line num="205" count="0" type="stmt"/>
+        <line num="205" count="2" type="stmt"/>
         <line num="206" count="0" type="stmt"/>
         <line num="207" count="0" type="stmt"/>
         <line num="208" count="0" type="stmt"/>
         <line num="209" count="0" type="stmt"/>
         <line num="210" count="0" type="stmt"/>
-        <line num="214" count="0" type="stmt"/>
-        <line num="215" count="0" type="cond" truecount="0" falsecount="6"/>
-        <line num="217" count="0" type="stmt"/>
+        <line num="214" count="2" type="stmt"/>
+        <line num="215" count="2" type="cond" truecount="1" falsecount="5"/>
+        <line num="217" count="2" type="stmt"/>
         <line num="220" count="0" type="stmt"/>
         <line num="236" count="0" type="stmt"/>
         <line num="247" count="0" type="stmt"/>
         <line num="257" count="0" type="stmt"/>
         <line num="260" count="0" type="stmt"/>
-        <line num="264" count="0" type="stmt"/>
-        <line num="290" count="0" type="stmt"/>
-        <line num="291" count="0" type="stmt"/>
-        <line num="292" count="0" type="stmt"/>
-        <line num="293" count="0" type="stmt"/>
-        <line num="296" count="0" type="stmt"/>
-        <line num="297" count="0" type="stmt"/>
-        <line num="298" count="0" type="stmt"/>
-        <line num="299" count="0" type="stmt"/>
-        <line num="300" count="0" type="stmt"/>
-        <line num="302" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="264" count="2" type="stmt"/>
+        <line num="290" count="2" type="stmt"/>
+        <line num="291" count="2" type="stmt"/>
+        <line num="292" count="2" type="stmt"/>
+        <line num="293" count="2" type="stmt"/>
+        <line num="296" count="2" type="stmt"/>
+        <line num="297" count="1" type="stmt"/>
+        <line num="298" count="1" type="stmt"/>
+        <line num="299" count="1" type="stmt"/>
+        <line num="300" count="1" type="stmt"/>
+        <line num="302" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="304" count="0" type="stmt"/>
-        <line num="306" count="0" type="stmt"/>
-        <line num="309" count="0" type="stmt"/>
-        <line num="312" count="0" type="stmt"/>
+        <line num="306" count="1" type="stmt"/>
+        <line num="309" count="1" type="stmt"/>
+        <line num="312" count="2" type="stmt"/>
         <line num="313" count="0" type="stmt"/>
         <line num="314" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="315" count="0" type="stmt"/>
-        <line num="319" count="0" type="stmt"/>
+        <line num="319" count="2" type="stmt"/>
         <line num="320" count="0" type="stmt"/>
-        <line num="323" count="0" type="stmt"/>
+        <line num="323" count="2" type="stmt"/>
         <line num="337" count="0" type="stmt"/>
         <line num="358" count="0" type="stmt"/>
         <line num="361" count="0" type="stmt"/>
@@ -209,32 +209,32 @@
         <line num="885" count="0" type="stmt"/>
       </file>
       <file name="dataService.js" path="/Users/pedroaugustocarvalho/Documents/PWA para cálculo e pagamento de comandas/src/dataService.js">
-        <metrics statements="32" coveredstatements="0" conditionals="5" coveredconditionals="0" methods="23" coveredmethods="0"/>
-        <line num="6" count="0" type="stmt"/>
-        <line num="7" count="0" type="cond" truecount="0" falsecount="2"/>
+        <metrics statements="32" coveredstatements="10" conditionals="5" coveredconditionals="2" methods="23" coveredmethods="3"/>
+        <line num="6" count="2" type="stmt"/>
+        <line num="7" count="2" type="cond" truecount="1" falsecount="1"/>
         <line num="8" count="0" type="stmt"/>
         <line num="9" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="11" count="0" type="stmt"/>
-        <line num="14" count="0" type="stmt"/>
-        <line num="19" count="0" type="stmt"/>
+        <line num="11" count="2" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
         <line num="21" count="0" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
-        <line num="34" count="0" type="stmt"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="43" count="0" type="stmt"/>
+        <line num="34" count="1" type="stmt"/>
+        <line num="41" count="1" type="stmt"/>
+        <line num="43" count="1" type="stmt"/>
         <line num="46" count="0" type="stmt"/>
         <line num="49" count="0" type="stmt"/>
         <line num="56" count="0" type="stmt"/>
         <line num="63" count="0" type="stmt"/>
-        <line num="70" count="0" type="stmt"/>
+        <line num="70" count="1" type="stmt"/>
         <line num="72" count="0" type="stmt"/>
         <line num="79" count="0" type="stmt"/>
         <line num="82" count="0" type="stmt"/>
         <line num="85" count="0" type="stmt"/>
         <line num="92" count="0" type="stmt"/>
         <line num="95" count="0" type="stmt"/>
-        <line num="102" count="0" type="stmt"/>
+        <line num="102" count="1" type="stmt"/>
         <line num="104" count="0" type="stmt"/>
         <line num="111" count="0" type="stmt"/>
         <line num="114" count="0" type="stmt"/>
@@ -346,40 +346,40 @@
       </file>
       <file name="badge.jsx" path="/Users/pedroaugustocarvalho/Documents/PWA para cálculo e pagamento de comandas/src/components/ui/badge.jsx">
         <metrics statements="4" coveredstatements="4" conditionals="1" coveredconditionals="1" methods="1" coveredmethods="1"/>
-        <line num="9" count="4" type="cond" truecount="1" falsecount="0"/>
-        <line num="10" count="7" type="stmt"/>
-        <line num="17" count="7" type="stmt"/>
-        <line num="29" count="4" type="stmt"/>
+        <line num="9" count="5" type="cond" truecount="1" falsecount="0"/>
+        <line num="10" count="9" type="stmt"/>
+        <line num="17" count="9" type="stmt"/>
+        <line num="29" count="5" type="stmt"/>
       </file>
       <file name="button.jsx" path="/Users/pedroaugustocarvalho/Documents/PWA para cálculo e pagamento de comandas/src/components/ui/button.jsx">
         <metrics statements="6" coveredstatements="6" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
-        <line num="11" count="5" type="stmt"/>
-        <line num="18" count="22" type="stmt"/>
-        <line num="20" count="22" type="stmt"/>
-        <line num="29" count="22" type="stmt"/>
-        <line num="36" count="22" type="stmt"/>
-        <line num="52" count="5" type="stmt"/>
+        <line num="11" count="6" type="stmt"/>
+        <line num="18" count="26" type="stmt"/>
+        <line num="20" count="26" type="stmt"/>
+        <line num="29" count="26" type="stmt"/>
+        <line num="36" count="26" type="stmt"/>
+        <line num="52" count="6" type="stmt"/>
       </file>
       <file name="card.jsx" path="/Users/pedroaugustocarvalho/Documents/PWA para cálculo e pagamento de comandas/src/components/ui/card.jsx">
         <metrics statements="18" coveredstatements="16" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="4"/>
-        <line num="8" count="3" type="stmt"/>
-        <line num="9" count="42" type="stmt"/>
-        <line num="18" count="3" type="stmt"/>
-        <line num="20" count="3" type="stmt"/>
-        <line num="21" count="39" type="stmt"/>
-        <line num="27" count="3" type="stmt"/>
-        <line num="29" count="3" type="stmt"/>
-        <line num="30" count="39" type="stmt"/>
-        <line num="39" count="3" type="stmt"/>
-        <line num="41" count="3" type="stmt"/>
+        <line num="8" count="4" type="stmt"/>
+        <line num="9" count="44" type="stmt"/>
+        <line num="18" count="4" type="stmt"/>
+        <line num="20" count="4" type="stmt"/>
+        <line num="21" count="41" type="stmt"/>
+        <line num="27" count="4" type="stmt"/>
+        <line num="29" count="4" type="stmt"/>
+        <line num="30" count="41" type="stmt"/>
+        <line num="39" count="4" type="stmt"/>
+        <line num="41" count="4" type="stmt"/>
         <line num="42" count="0" type="stmt"/>
-        <line num="48" count="3" type="stmt"/>
-        <line num="50" count="3" type="stmt"/>
-        <line num="51" count="42" type="stmt"/>
-        <line num="53" count="3" type="stmt"/>
-        <line num="55" count="3" type="stmt"/>
+        <line num="48" count="4" type="stmt"/>
+        <line num="50" count="4" type="stmt"/>
+        <line num="51" count="44" type="stmt"/>
+        <line num="53" count="4" type="stmt"/>
+        <line num="55" count="4" type="stmt"/>
         <line num="56" count="0" type="stmt"/>
-        <line num="62" count="3" type="stmt"/>
+        <line num="62" count="4" type="stmt"/>
       </file>
       <file name="input.jsx" path="/Users/pedroaugustocarvalho/Documents/PWA para cálculo e pagamento de comandas/src/components/ui/input.jsx">
         <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
@@ -448,26 +448,26 @@
       </file>
     </package>
     <package name="src.data">
-      <metrics statements="9" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+      <metrics statements="9" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
       <file name="mockData.js" path="/Users/pedroaugustocarvalho/Documents/PWA para cálculo e pagamento de comandas/src/data/mockData.js">
-        <metrics statements="9" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="2" count="0" type="stmt"/>
-        <line num="3" count="0" type="stmt"/>
-        <line num="9" count="0" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
-        <line num="33" count="0" type="stmt"/>
-        <line num="42" count="0" type="stmt"/>
-        <line num="49" count="0" type="stmt"/>
-        <line num="56" count="0" type="stmt"/>
-        <line num="95" count="0" type="stmt"/>
+        <metrics statements="9" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="2" count="2" type="stmt"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="9" count="2" type="stmt"/>
+        <line num="21" count="2" type="stmt"/>
+        <line num="33" count="2" type="stmt"/>
+        <line num="42" count="2" type="stmt"/>
+        <line num="49" count="2" type="stmt"/>
+        <line num="56" count="2" type="stmt"/>
+        <line num="95" count="2" type="stmt"/>
       </file>
     </package>
     <package name="src.lib">
-      <metrics statements="86" coveredstatements="41" conditionals="13" coveredconditionals="0" methods="26" coveredmethods="14"/>
+      <metrics statements="86" coveredstatements="25" conditionals="13" coveredconditionals="0" methods="26" coveredmethods="10"/>
       <file name="menuService.js" path="/Users/pedroaugustocarvalho/Documents/PWA para cálculo e pagamento de comandas/src/lib/menuService.js">
-        <metrics statements="18" coveredstatements="2" conditionals="8" coveredconditionals="0" methods="4" coveredmethods="1"/>
+        <metrics statements="18" coveredstatements="1" conditionals="8" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="3" count="1" type="stmt"/>
-        <line num="6" count="1" type="stmt"/>
+        <line num="6" count="0" type="stmt"/>
         <line num="7" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="8" count="0" type="stmt"/>
         <line num="9" count="0" type="stmt"/>
@@ -486,8 +486,8 @@
         <line num="49" count="0" type="stmt"/>
       </file>
       <file name="socket.js" path="/Users/pedroaugustocarvalho/Documents/PWA para cálculo e pagamento de comandas/src/lib/socket.js">
-        <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="6" count="0" type="stmt"/>
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="6" count="1" type="stmt"/>
       </file>
       <file name="useApi.js" path="/Users/pedroaugustocarvalho/Documents/PWA para cálculo e pagamento de comandas/src/lib/useApi.js">
         <metrics statements="14" coveredstatements="14" conditionals="1" coveredconditionals="0" methods="3" coveredmethods="3"/>
@@ -514,22 +514,22 @@
         <line num="11" count="3" type="stmt"/>
       </file>
       <file name="useMenuItems.js" path="/Users/pedroaugustocarvalho/Documents/PWA para cálculo e pagamento de comandas/src/lib/useMenuItems.js">
-        <metrics statements="44" coveredstatements="16" conditionals="4" coveredconditionals="0" methods="12" coveredmethods="3"/>
+        <metrics statements="44" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="12" coveredmethods="0"/>
         <line num="5" count="0" type="stmt"/>
-        <line num="16" count="2" type="stmt"/>
-        <line num="17" count="2" type="stmt"/>
-        <line num="18" count="2" type="stmt"/>
-        <line num="20" count="2" type="stmt"/>
-        <line num="21" count="1" type="stmt"/>
-        <line num="22" count="1" type="stmt"/>
-        <line num="23" count="1" type="stmt"/>
-        <line num="24" count="1" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
-        <line num="27" count="1" type="stmt"/>
-        <line num="29" count="1" type="stmt"/>
-        <line num="33" count="2" type="stmt"/>
-        <line num="34" count="1" type="stmt"/>
-        <line num="37" count="2" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
         <line num="38" count="0" type="stmt"/>
         <line num="39" count="0" type="stmt"/>
         <line num="40" count="0" type="stmt"/>
@@ -539,7 +539,7 @@
         <line num="45" count="0" type="stmt"/>
         <line num="46" count="0" type="stmt"/>
         <line num="48" count="0" type="stmt"/>
-        <line num="52" count="2" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
         <line num="53" count="0" type="stmt"/>
         <line num="54" count="0" type="stmt"/>
         <line num="55" count="0" type="stmt"/>
@@ -549,7 +549,7 @@
         <line num="60" count="0" type="stmt"/>
         <line num="61" count="0" type="stmt"/>
         <line num="63" count="0" type="stmt"/>
-        <line num="67" count="2" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
         <line num="68" count="0" type="stmt"/>
         <line num="69" count="0" type="stmt"/>
         <line num="70" count="0" type="stmt"/>
@@ -558,7 +558,7 @@
         <line num="74" count="0" type="stmt"/>
         <line num="75" count="0" type="stmt"/>
         <line num="77" count="0" type="stmt"/>
-        <line num="81" count="2" type="stmt"/>
+        <line num="81" count="0" type="stmt"/>
       </file>
       <file name="useSocket.js" path="/Users/pedroaugustocarvalho/Documents/PWA para cálculo e pagamento de comandas/src/lib/useSocket.js">
         <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
@@ -569,11 +569,11 @@
       </file>
       <file name="utils.js" path="/Users/pedroaugustocarvalho/Documents/PWA para cálculo e pagamento de comandas/src/lib/utils.js">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
-        <line num="9" count="198" type="stmt"/>
+        <line num="9" count="212" type="stmt"/>
       </file>
     </package>
     <package name="src.pages">
-      <metrics statements="104" coveredstatements="49" conditionals="38" coveredconditionals="11" methods="59" coveredmethods="20"/>
+      <metrics statements="104" coveredstatements="53" conditionals="38" coveredconditionals="14" methods="59" coveredmethods="24"/>
       <file name="Dashboard.jsx" path="/Users/pedroaugustocarvalho/Documents/PWA para cálculo e pagamento de comandas/src/pages/Dashboard.jsx">
         <metrics statements="7" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="17" count="0" type="stmt"/>
@@ -585,9 +585,9 @@
         <line num="94" count="0" type="stmt"/>
       </file>
       <file name="Menu.jsx" path="/Users/pedroaugustocarvalho/Documents/PWA para cálculo e pagamento de comandas/src/pages/Menu.jsx">
-        <metrics statements="30" coveredstatements="13" conditionals="16" coveredconditionals="3" methods="17" coveredmethods="3"/>
-        <line num="20" count="1" type="stmt"/>
-        <line num="21" count="3" type="stmt"/>
+        <metrics statements="30" coveredstatements="17" conditionals="16" coveredconditionals="6" methods="17" coveredmethods="7"/>
+        <line num="20" count="2" type="stmt"/>
+        <line num="21" count="2" type="stmt"/>
         <line num="22" count="2" type="stmt"/>
         <line num="23" count="2" type="stmt"/>
         <line num="24" count="2" type="stmt"/>
@@ -605,16 +605,16 @@
         <line num="54" count="0" type="stmt"/>
         <line num="56" count="0" type="stmt"/>
         <line num="59" count="2" type="stmt"/>
-        <line num="96" count="0" type="stmt"/>
-        <line num="107" count="0" type="stmt"/>
+        <line num="96" count="2" type="stmt"/>
+        <line num="107" count="2" type="stmt"/>
         <line num="123" count="0" type="stmt"/>
         <line num="128" count="1" type="stmt"/>
         <line num="132" count="0" type="stmt"/>
-        <line num="149" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="149" count="2" type="cond" truecount="1" falsecount="1"/>
         <line num="156" count="0" type="stmt"/>
         <line num="167" count="0" type="stmt"/>
         <line num="174" count="0" type="stmt"/>
-        <line num="197" count="0" type="stmt"/>
+        <line num="197" count="1" type="stmt"/>
         <line num="212" count="0" type="stmt"/>
       </file>
       <file name="Orders.jsx" path="/Users/pedroaugustocarvalho/Documents/PWA para cálculo e pagamento de comandas/src/pages/Orders.jsx">
@@ -692,11 +692,11 @@
       </file>
     </package>
     <package name="src.pages.backoffice">
-      <metrics statements="154" coveredstatements="0" conditionals="68" coveredconditionals="0" methods="67" coveredmethods="0"/>
+      <metrics statements="154" coveredstatements="17" conditionals="68" coveredconditionals="0" methods="67" coveredmethods="0"/>
       <file name="BackofficeLayout.jsx" path="/Users/pedroaugustocarvalho/Documents/PWA para cálculo e pagamento de comandas/src/pages/backoffice/BackofficeLayout.jsx">
-        <metrics statements="10" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="6" coveredmethods="0"/>
-        <line num="4" count="0" type="stmt"/>
-        <line num="17" count="0" type="stmt"/>
+        <metrics statements="10" coveredstatements="2" conditionals="6" coveredconditionals="0" methods="6" coveredmethods="0"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
         <line num="18" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
         <line num="21" count="0" type="stmt"/>
@@ -707,37 +707,37 @@
         <line num="47" count="0" type="stmt"/>
       </file>
       <file name="BackofficeRouter.jsx" path="/Users/pedroaugustocarvalho/Documents/PWA para cálculo e pagamento de comandas/src/pages/backoffice/BackofficeRouter.jsx">
-        <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="16" count="0" type="stmt"/>
+        <metrics statements="2" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="16" count="1" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
       </file>
       <file name="Dashboard.jsx" path="/Users/pedroaugustocarvalho/Documents/PWA para cálculo e pagamento de comandas/src/pages/backoffice/Dashboard.jsx">
-        <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="6" count="0" type="stmt"/>
+        <metrics statements="2" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="6" count="1" type="stmt"/>
         <line num="7" count="0" type="stmt"/>
       </file>
       <file name="Login.jsx" path="/Users/pedroaugustocarvalho/Documents/PWA para cálculo e pagamento de comandas/src/pages/backoffice/Login.jsx">
-        <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="6" count="0" type="stmt"/>
+        <metrics statements="2" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="6" count="1" type="stmt"/>
         <line num="7" count="0" type="stmt"/>
       </file>
       <file name="Orders.jsx" path="/Users/pedroaugustocarvalho/Documents/PWA para cálculo e pagamento de comandas/src/pages/backoffice/Orders.jsx">
-        <metrics statements="68" coveredstatements="0" conditionals="40" coveredconditionals="0" methods="33" coveredmethods="0"/>
-        <line num="5" count="0" type="stmt"/>
-        <line num="7" count="0" type="stmt"/>
-        <line num="14" count="0" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
+        <metrics statements="68" coveredstatements="6" conditionals="40" coveredconditionals="0" methods="33" coveredmethods="0"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
         <line num="23" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
         <line num="25" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="27" count="0" type="stmt"/>
-        <line num="31" count="0" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
         <line num="32" count="0" type="stmt"/>
         <line num="40" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="41" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="42" count="0" type="stmt"/>
-        <line num="48" count="0" type="stmt"/>
+        <line num="48" count="1" type="stmt"/>
         <line num="49" count="0" type="stmt"/>
         <line num="50" count="0" type="stmt"/>
         <line num="51" count="0" type="stmt"/>
@@ -793,9 +793,9 @@
         <line num="178" count="0" type="stmt"/>
       </file>
       <file name="Payments.jsx" path="/Users/pedroaugustocarvalho/Documents/PWA para cálculo e pagamento de comandas/src/pages/backoffice/Payments.jsx">
-        <metrics statements="18" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="9" coveredmethods="0"/>
-        <line num="5" count="0" type="stmt"/>
-        <line num="10" count="0" type="stmt"/>
+        <metrics statements="18" coveredstatements="2" conditionals="8" coveredconditionals="0" methods="9" coveredmethods="0"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
         <line num="12" count="0" type="stmt"/>
         <line num="14" count="0" type="stmt"/>
@@ -814,19 +814,19 @@
         <line num="40" count="0" type="cond" truecount="0" falsecount="2"/>
       </file>
       <file name="Reports.jsx" path="/Users/pedroaugustocarvalho/Documents/PWA para cálculo e pagamento de comandas/src/pages/backoffice/Reports.jsx">
-        <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="6" count="0" type="stmt"/>
+        <metrics statements="2" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="6" count="1" type="stmt"/>
         <line num="7" count="0" type="stmt"/>
       </file>
       <file name="Settings.jsx" path="/Users/pedroaugustocarvalho/Documents/PWA para cálculo e pagamento de comandas/src/pages/backoffice/Settings.jsx">
-        <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="6" count="0" type="stmt"/>
+        <metrics statements="2" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="6" count="1" type="stmt"/>
         <line num="7" count="0" type="stmt"/>
       </file>
       <file name="Tables.jsx" path="/Users/pedroaugustocarvalho/Documents/PWA para cálculo e pagamento de comandas/src/pages/backoffice/Tables.jsx">
-        <metrics statements="48" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="14" coveredmethods="0"/>
-        <line num="5" count="0" type="stmt"/>
-        <line num="10" count="0" type="stmt"/>
+        <metrics statements="48" coveredstatements="2" conditionals="14" coveredconditionals="0" methods="14" coveredmethods="0"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
         <line num="12" count="0" type="stmt"/>
         <line num="13" count="0" type="stmt"/>

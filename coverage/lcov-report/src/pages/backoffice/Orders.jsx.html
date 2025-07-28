@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">7.4% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/81</span>
+                <span class='fraction'>6/81</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">8.82% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/68</span>
+                <span class='fraction'>6/68</span>
             </div>
         
             
@@ -259,33 +259,33 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -302,7 +302,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -451,23 +451,23 @@
 import socket from '../../lib/socket';
 import { Notification } from '../../components/ui/Notification';
 &nbsp;
-const notificationSound = <span class="cstat-no" title="statement not covered" >new Audio('/notification.mp3');</span>
+const notificationSound = new Audio('/notification.mp3');
 &nbsp;
-const statusOptions = <span class="cstat-no" title="statement not covered" >[</span>
+const statusOptions = [
   'Todos',
   'Cozinha',
   'Preparando',
   'Pronto',
   'Entregue',
 ];
-const statusOptionsCard = <span class="cstat-no" title="statement not covered" >[</span>
+const statusOptionsCard = [
   'Cozinha',
   'Preparando',
   'Pronto',
   'Entregue',
 ];
 &nbsp;
-const fetchPedidos = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
+const fetchPedidos = <span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {
 <span class="cstat-no" title="statement not covered" >  try {</span>
     const res = <span class="cstat-no" title="statement not covered" >await fetch('http://localhost:5001/api/pedidos');</span>
     const data = <span class="cstat-no" title="statement not covered" >await res.json();</span>
@@ -477,7 +477,7 @@ const fetchPedidos = <span class="cstat-no" title="statement not covered" ><span
   }
 };
 &nbsp;
-const updatePedidoStatus = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (pedido_id, status) =&gt; {</span>
+const updatePedidoStatus = <span class="fstat-no" title="function not covered" >as</span>ync (pedido_id, status) =&gt; {
 <span class="cstat-no" title="statement not covered" >  await fetch(`http://localhost:5001/api/pedidos/${pedido_id}/status`, {</span>
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
@@ -494,7 +494,7 @@ function <span class="fstat-no" title="function not covered" >getComandaStatus(<
 /**
  * BackofficeOrders: Página de gestão de pedidos em tempo real no backoffice (WebSocket, filtros, busca, feedback visual).
  */
-const BackofficeOrders = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+const BackofficeOrders = <span class="fstat-no" title="function not covered" >()</span> =&gt; {
   const [pedidos, setPedidos] = <span class="cstat-no" title="statement not covered" >useState([]);</span>
   const [notification, setNotification] = <span class="cstat-no" title="statement not covered" >useState(null);</span>
   const [statusFiltro, setStatusFiltro] = <span class="cstat-no" title="statement not covered" >useState('Todos');</span>
@@ -646,7 +646,7 @@ export default BackofficeOrders; </pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-28T02:16:27.619Z
+                at 2025-07-28T02:20:06.218Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
