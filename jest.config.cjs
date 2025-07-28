@@ -14,14 +14,7 @@ module.exports = {
     '!src/main.jsx',
     '!src/index.css'
   ],
-  coverageThreshold: {
-    global: {
-      branches: 0,
-      functions: 0,
-      lines: 0,
-      statements: 0
-    }
-  },
+
   transform: {
     '^.+\\.(js|jsx)$': ['babel-jest', { configFile: './babel.config.cjs' }]
   }
