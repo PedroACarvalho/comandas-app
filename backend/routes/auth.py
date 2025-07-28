@@ -156,14 +156,14 @@ def obter_cliente_por_mesa(mesa):
     """
     try:
         cliente = Cliente.query.filter_by(mesa=mesa).first()
-        
+
         if not cliente:
             return jsonify({'error': 'Cliente não encontrado'}), 404
-        
+
         return jsonify({
             'cliente': cliente.to_dict()
         }), 200
-        
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -206,4 +206,4 @@ def remover_cliente(cliente_id):
         return jsonify({'message': 'Cliente removido com sucesso'}), 200
     except Exception as e:
         db.session.rollback()
-        return jsonify({'error': str(e)}), 500 
+        return jsonify({'error': str(e)}), 500

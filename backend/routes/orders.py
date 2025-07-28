@@ -82,7 +82,7 @@ def criar_pedido():
             return jsonify({'error': 'Cliente não encontrado'}), 404
         # Verificar se já existe um pedido aberto para este cliente
         pedido_existente = Pedido.query.filter_by(
-            cliente_id=data['cliente_id'], 
+            cliente_id=data['cliente_id'],
             fechado=False
         ).first()
         if pedido_existente:
@@ -185,14 +185,14 @@ def obter_pedido(pedido_id):
     """
     try:
         pedido = Pedido.query.get(pedido_id)
-        
+
         if not pedido:
             return jsonify({'error': 'Pedido não encontrado'}), 404
-        
+
         return jsonify({
             'pedido': pedido.to_dict()
         }), 200
-        
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -288,11 +288,11 @@ def obter_pedidos_cliente(cliente_id):
     """
     try:
         pedidos = Pedido.query.filter_by(cliente_id=cliente_id).all()
-        
+
         return jsonify({
             'pedidos': [pedido.to_dict() for pedido in pedidos]
         }), 200
-        
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -324,17 +324,17 @@ def obter_pedido_ativo_cliente(cliente_id):
     """
     try:
         pedido = Pedido.query.filter_by(
-            cliente_id=cliente_id, 
+            cliente_id=cliente_id,
             fechado=False
         ).first()
-        
+
         if not pedido:
             return jsonify({'error': 'Nenhum pedido ativo encontrado'}), 404
-        
+
         return jsonify({
             'pedido': pedido.to_dict()
         }), 200
-        
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -372,19 +372,19 @@ def fechar_pedido(pedido_id):
         pedido = Pedido.query.get(pedido_id)
         if not pedido:
             return jsonify({'error': 'Pedido não encontrado'}), 404
-        
+
         if pedido.fechado:
             return jsonify({'error': 'Pedido já está fechado'}), 400
-        
+
         pedido.fechado = True
         pedido.status = STATUS_PEDIDO_AGUARDANDO_PAGAMENTO
         db.session.commit()
-        
+
         return jsonify({
             'message': 'Pedido fechado com sucesso',
             'pedido': pedido.to_dict()
         }), 200
-        
+
     except Exception as e:
         db.session.rollback()
-        return jsonify({'error': str(e)}), 500 
+        return jsonify({'error': str(e)}), 500

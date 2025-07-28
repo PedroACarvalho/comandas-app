@@ -32,4 +32,4 @@ def test_obter_cliente_inexistente(client):
 def test_remover_cliente_inexistente(client):
     resp = client.delete('/api/cliente/99999')
     assert resp.status_code == 404
-    assert 'error' in resp.json 
+    assert 'error' in resp.json

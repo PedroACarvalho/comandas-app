@@ -17,4 +17,4 @@ def client(app):
 def _reset_db():
     from database import db
     db.drop_all()
-    db.create_all() 
+    db.create_all()

@@ -1,0 +1,20 @@
+# Build outputs
+dist/
+build/
+node_modules/
+
+# Generated files
+*.min.js
+*.bundle.js
+
+# Cypress videos and screenshots
+cypress/videos/
+cypress/screenshots/
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# Logs
+*.log 

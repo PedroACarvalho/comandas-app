@@ -7,9 +7,9 @@ from .mesa import Mesa
 
 __all__ = [
     'Cliente',
-    'Pedido', 
+    'Pedido',
     'Item',
     'PedidoItem',
     'Pagamento',
     'Mesa'
-] 
+]

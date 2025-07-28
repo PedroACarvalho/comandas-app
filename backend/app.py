@@ -1,13 +1,13 @@
 import sys
 import os
-from flask import Flask
-from flask_cors import CORS
-from flask_socketio import SocketIO, emit
-from flasgger import Swagger
 
 # Adicionar o diretório atual ao path para que os imports funcionem
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+from flask import Flask
+from flask_cors import CORS
+from flask_socketio import SocketIO, emit
+from flasgger import Swagger
 from database import db, init_db
 from routes.auth import auth_bp
 from routes.orders import orders_bp
@@ -105,4 +105,4 @@ def handle_connect():
 if __name__ == '__main__':
     with app.app_context():
         init_db()
-    socketio.run(app, debug=True, host='0.0.0.0', port=5001) 
+    socketio.run(app, debug=True, host='0.0.0.0', port=5001)

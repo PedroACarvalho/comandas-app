@@ -2,7 +2,8 @@
   "env": {
     "browser": true,
     "es2021": true,
-    "jest": true
+    "jest": true,
+    "node": true
   },
   "extends": [
     "eslint:recommended",
@@ -20,5 +21,13 @@
     "react/prop-types": "off",
     "no-unused-vars": "warn",
     "react/react-in-jsx-scope": "off"
-  }
+  },
+  "overrides": [
+    {
+      "files": ["cypress/**/*.js"],
+      "env": {
+        "cypress/globals": true
+      }
+    }
+  ]
 } 

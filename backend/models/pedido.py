@@ -5,14 +5,14 @@ from database import db
 class Pedido(db.Model):
     """Modelo de Pedido, representa um pedido realizado por um cliente."""
     __tablename__ = 'pedido'
-    
+
     pedido_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     cliente_id = db.Column(db.Integer, db.ForeignKey('cliente.cliente_id'), nullable=False)
     status = db.Column(db.String(50), nullable=False, default='Aguardando Seleção')
     data_hora = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     total = db.Column(db.Numeric(10, 2), nullable=False, default=0)
     fechado = db.Column(db.Boolean, default=False)  # Indica se o pedido foi fechado para pagamento
-    
+
     # Relacionamentos
     itens = db.relationship('PedidoItem', backref='pedido', cascade='all, delete-orphan')
 

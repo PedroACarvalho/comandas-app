@@ -12,4 +12,4 @@ def emitir_pagamento_recebido(socketio: SocketIO, pagamento):
     socketio.emit('pagamento_recebido', pagamento)
 
 def emitir_mesa_status(socketio: SocketIO, mesa):
-    socketio.emit('mesa_status', mesa) 
+    socketio.emit('mesa_status', mesa)

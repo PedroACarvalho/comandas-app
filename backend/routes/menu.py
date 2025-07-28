@@ -220,4 +220,4 @@ def remover_item(item_id):
         return jsonify({'message': 'Item removido com sucesso'}), 200
     except Exception as e:
         db.session.rollback()
-        return jsonify({'error': str(e)}), 500 
+        return jsonify({'error': str(e)}), 500

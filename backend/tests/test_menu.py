@@ -36,4 +36,4 @@ def test_atualizar_item_inexistente(client):
 def test_remover_item_inexistente(client):
     resp = client.delete('/api/itens/99999')
     assert resp.status_code == 404
-    assert 'error' in resp.json 
+    assert 'error' in resp.json

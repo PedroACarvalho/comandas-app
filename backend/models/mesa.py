@@ -20,4 +20,4 @@ class Mesa(db.Model):
             'numero': self.numero,
             'capacidade': self.capacidade,
             'status': self.status
-        } 
+        }

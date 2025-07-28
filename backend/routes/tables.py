@@ -188,4 +188,4 @@ def deletar_mesa(mesa_id):
         return jsonify({'error': ERRO_MESA_NAO_ENCONTRADA}), 404
     db.session.delete(mesa)
     db.session.commit()
-    return jsonify({'message': 'Mesa deletada com sucesso'}), 200 
+    return jsonify({'message': 'Mesa deletada com sucesso'}), 200

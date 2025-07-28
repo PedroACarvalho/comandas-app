@@ -21,4 +21,4 @@ if __name__ == '__main__':
     from app import app
     from database import db
     with app.app_context():
-        limpar_banco() 
+        limpar_banco()

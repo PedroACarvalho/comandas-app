@@ -120,14 +120,14 @@ def obter_pagamento(pagamento_id):
     """
     try:
         pagamento = Pagamento.query.get(pagamento_id)
-        
+
         if not pagamento:
             return jsonify({'error': 'Pagamento não encontrado'}), 404
-        
+
         return jsonify({
             'pagamento': pagamento.to_dict()
         }), 200
-        
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -159,13 +159,13 @@ def obter_pagamento_por_pedido(pedido_id):
     """
     try:
         pagamento = Pagamento.query.filter_by(pedido_id=pedido_id).first()
-        
+
         if not pagamento:
             return jsonify({'error': 'Pagamento não encontrado'}), 404
-        
+
         return jsonify({
             'pagamento': pagamento.to_dict()
         }), 200
-        
+
     except Exception as e:
-        return jsonify({'error': str(e)}), 500 
+        return jsonify({'error': str(e)}), 500

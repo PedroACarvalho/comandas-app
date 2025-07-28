@@ -65,4 +65,4 @@ def test_obter_pagamento_por_pedido(client):
 def test_obter_pagamento_inexistente(client):
     resp = client.get('/api/pagamentos/99999')
     assert resp.status_code == 404
-    assert 'error' in resp.json 
+    assert 'error' in resp.json

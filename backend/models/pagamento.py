@@ -5,7 +5,7 @@ from database import db
 class Pagamento(db.Model):
     """Modelo de Pagamento, representa um pagamento realizado para um pedido."""
     __tablename__ = 'pagamento'
-    
+
     pagamento_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     pedido_id = db.Column(db.Integer, db.ForeignKey('pedido.pedido_id'), nullable=False)
     metodo = db.Column(db.String(50), nullable=False)

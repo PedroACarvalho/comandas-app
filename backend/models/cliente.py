@@ -5,11 +5,11 @@ from database import db
 class Cliente(db.Model):
     """Modelo de Cliente, representa um cliente associado a uma mesa."""
     __tablename__ = 'cliente'
-    
+
     cliente_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nome = db.Column(db.String(255), nullable=False)
     mesa = db.Column(db.Integer, nullable=False)
-    
+
     # Relacionamentos
     pedidos = db.relationship('Pedido', backref='cliente')
 
@@ -23,4 +23,4 @@ class Cliente(db.Model):
             'cliente_id': self.cliente_id,
             'nome': self.nome,
             'mesa': self.mesa
-        } 
+        }

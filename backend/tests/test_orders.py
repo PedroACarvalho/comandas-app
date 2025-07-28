@@ -101,4 +101,4 @@ def test_fechar_pedido(client):
 def test_fechar_pedido_inexistente(client):
     resp = client.post('/api/pedidos/99999/fechar')
     assert resp.status_code == 404
-    assert 'error' in resp.json 
+    assert 'error' in resp.json
