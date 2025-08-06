@@ -25,19 +25,20 @@ from routes.tables import mesas_bp
 from events import emitir_pedido_novo, emitir_pedido_atualizado, emitir_pagamento_recebido, emitir_mesa_status
 from config import config
 
+
 def create_app(config_name=None):
     """Cria e configura a aplicação Flask para o sistema de comandas online."""
     app = Flask(__name__)
-    
+
     # Determinar configuração baseada em variável de ambiente
     if config_name is None:
         config_name = os.environ.get('FLASK_ENV', 'development')
-    
+
     app.config.from_object(config[config_name])
-    
+
     # Configurar CORS baseado na configuração
     CORS(app, resources={r"/*": {"origins": app.config['CORS_ORIGINS']}})
-    
+
     # Configurar logging
     if not app.debug and not app.testing:
         if not os.path.exists('logs'):
@@ -50,16 +51,16 @@ def create_app(config_name=None):
         app.logger.addHandler(file_handler)
         app.logger.setLevel(logging.INFO)
         app.logger.info('Comandas startup')
-    
+
     # Configurar rate limiting
-    limiter = Limiter(
+    Limiter(
         app=app,
         key_func=get_remote_address,
         default_limits=["200 per day", "50 per hour"]
     )
-    
+
     db.init_app(app)
-    migrate = Migrate(app, db)
+    Migrate(app, db)
     app.register_blueprint(auth_bp, url_prefix='/api')
     app.register_blueprint(orders_bp, url_prefix='/api')
     app.register_blueprint(menu_bp, url_prefix='/api')

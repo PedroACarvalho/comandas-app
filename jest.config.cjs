@@ -14,8 +14,16 @@ module.exports = {
     '!src/main.jsx',
     '!src/index.css'
   ],
-
   transform: {
     '^.+\\.(js|jsx)$': ['babel-jest', { configFile: './babel.config.cjs' }]
+  },
+  globals: {
+    'import.meta': {
+      env: {
+        MODE: 'test',
+        VITE_API_BASE_URL: 'http://localhost:5001',
+        VITE_SOCKET_URL: 'http://localhost:5001'
+      }
+    }
   }
 }; 
