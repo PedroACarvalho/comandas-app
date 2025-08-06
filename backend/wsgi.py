@@ -11,4 +11,4 @@ migrate = Migrate(app, db)
 
 # Expor para o Flask CLI
 if __name__ == "__main__":
-    app.run() 
+    app.run()
