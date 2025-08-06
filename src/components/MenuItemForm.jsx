@@ -26,16 +26,27 @@ export function MenuItemForm({ item, categories, onChange, onSave, onCancel }) {
   }
 
   const handleSave = async () => {
-    let imageUrl = item.image;
+    let imageUrl = itemWithDefaults.image;
     if (imageFile) {
       setUploading(true);
       imageUrl = await uploadToCloudinary(imageFile);
       setUploading(false);
     }
-    onSave({ ...item, image: imageUrl });
+    onSave({ ...itemWithDefaults, image: imageUrl });
   };
 
   if (!item) return null;
+  
+  // Garantir que o item tenha valores padrão
+  const itemWithDefaults = {
+    name: item.name || '',
+    description: item.description || '',
+    price: item.price || 0,
+    category_id: item.category_id || 1,
+    is_available: item.is_available !== undefined ? item.is_available : true,
+    image: item.image || '',
+    ...item
+  };
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <Card className="w-96 max-h-[80vh] overflow-y-auto">
@@ -48,8 +59,8 @@ export function MenuItemForm({ item, categories, onChange, onSave, onCancel }) {
             <input
               type="text"
               className="w-full mt-1 p-2 border rounded-md"
-              value={item.name}
-              onChange={e => onChange({ ...item, name: e.target.value })}
+              value={itemWithDefaults.name}
+              onChange={e => onChange({ ...itemWithDefaults, name: e.target.value })}
             />
           </div>
           <div>
@@ -57,32 +68,39 @@ export function MenuItemForm({ item, categories, onChange, onSave, onCancel }) {
             <textarea
               className="w-full mt-1 p-2 border rounded-md"
               rows="3"
-              value={item.description}
-              onChange={e => onChange({ ...item, description: e.target.value })}
+              value={itemWithDefaults.description}
+              onChange={e => onChange({ ...itemWithDefaults, description: e.target.value })}
             />
           </div>
           <div>
             <label className="text-sm font-medium">Preço</label>
-            <input
-              type="text"
-              inputMode="decimal"
-              step="0.01"
-              className="w-full mt-1 p-2 border rounded-md"
-              value={isNaN(item.price) || item.price === undefined ? '' : item.price}
-              onChange={e => {
-                // Aceita vírgula ou ponto como separador decimal
-                const value = e.target.value.replace(',', '.');
-                const parsed = parseFloat(value);
-                onChange({ ...item, price: isNaN(parsed) ? '' : parsed });
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">R$</span>
+              <input
+                type="number"
+                step="0.01"
+                min="0"
+                placeholder="0,00"
+                className="w-full mt-1 p-2 pl-8 border rounded-md"
+                value={itemWithDefaults.price || ''}
+                              onChange={e => {
+                const value = parseFloat(e.target.value);
+                // Permite valores vazios durante digitação
+                if (e.target.value === '') {
+                  onChange({ ...itemWithDefaults, price: 0 });
+                } else {
+                  onChange({ ...itemWithDefaults, price: isNaN(value) ? 0 : value });
+                }
               }}
-            />
+              />
+            </div>
           </div>
           <div>
             <label className="text-sm font-medium">Categoria</label>
             <select
               className="w-full mt-1 p-2 border rounded-md"
-              value={item.category_id}
-              onChange={e => onChange({ ...item, category_id: parseInt(e.target.value) })}
+              value={itemWithDefaults.category_id}
+              onChange={e => onChange({ ...itemWithDefaults, category_id: parseInt(e.target.value) })}
             >
               {categories.map(category => (
                 <option key={category.id} value={category.id}>
@@ -106,8 +124,8 @@ export function MenuItemForm({ item, categories, onChange, onSave, onCancel }) {
             <input
               type="checkbox"
               id="available"
-              checked={item.is_available}
-              onChange={e => onChange({ ...item, is_available: e.target.checked })}
+              checked={itemWithDefaults.is_available}
+              onChange={e => onChange({ ...itemWithDefaults, is_available: e.target.checked })}
             />
             <label htmlFor="available" className="text-sm font-medium">
               Disponível

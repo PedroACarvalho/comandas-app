@@ -10,38 +10,12 @@ export function useOrders() {
     setLoading(true);
     setError(null);
     try {
-      // TODO: Implementar endpoint para listar todos os pedidos
-      // Por enquanto, vamos usar dados mockados até ter o endpoint
-      const mockOrders = [
-        {
-          id: 1,
-          mesa_id: 2,
-          cliente_nome: 'João Silva',
-          status: 'preparando',
-          valor_total: 45.70,
-          taxa_servico: 4.57,
-          data_criacao: '2024-01-15T10:30:00Z',
-          itens: [
-            { nome: 'X-Burger', quantidade: 1, preco: 25.90 },
-            { nome: 'Batata Frita', quantidade: 1, preco: 15.90 },
-            { nome: 'Refrigerante', quantidade: 1, preco: 6.90 }
-          ]
-        },
-        {
-          id: 2,
-          mesa_id: 4,
-          cliente_nome: 'Maria Santos',
-          status: 'pronto',
-          valor_total: 32.80,
-          taxa_servico: 3.28,
-          data_criacao: '2024-01-15T11:15:00Z',
-          itens: [
-            { nome: 'X-Burger', quantidade: 1, preco: 25.90 },
-            { nome: 'Sorvete', quantidade: 1, preco: 8.90 }
-          ]
-        }
-      ];
-      setOrders(mockOrders);
+      const response = await fetch('/api/pedidos');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setOrders(data.pedidos || []);
     } catch (err) {
       setError(err.message);
     } finally {

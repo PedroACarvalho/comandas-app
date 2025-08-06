@@ -1,7 +1,8 @@
 // Configuração da API do backend para o PDV
+import { ENVIRONMENT } from './environment.js';
 
 export const API_CONFIG = {
-  BASE_URL: 'http://localhost:5001',
+  BASE_URL: ENVIRONMENT.API_BASE_URL,
   ENDPOINTS: {
     // Endpoints básicos
     TEST: '/api/test',

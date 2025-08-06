@@ -14,10 +14,14 @@ import { MenuItemForm } from '../components/MenuItemForm';
 
 // Função para formatar preços
 const formatPrice = (price) => {
+  // Garante que o preço seja um número
+  const numericPrice = parseFloat(price) || 0;
   return new Intl.NumberFormat('pt-BR', {
     style: 'currency',
-    currency: 'BRL'
-  }).format(price);
+    currency: 'BRL',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(numericPrice);
 };
 
 /**
@@ -44,7 +48,7 @@ const Menu = () => {
       name: '',
       description: '',
       price: 0,
-      image: '/images/placeholder.jpg',
+      image: '/images/placeholder.svg',
       category_id: categories[0]?.id || 1,
       is_available: true
     });
@@ -194,6 +198,7 @@ const Menu = () => {
       {selectedItem && (
         <MenuItemForm
           item={selectedItem}
+          onChange={setSelectedItem}
           onSave={handleSaveItem}
           onCancel={() => setSelectedItem(null)}
           categories={categories}
