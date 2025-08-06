@@ -147,10 +147,10 @@ def handle_connect():
 if __name__ == '__main__':
     with app.app_context():
         init_db()
-    
+
     # Configurar porta baseada em variável de ambiente
     port = int(os.environ.get('PORT', 5001))
     host = os.environ.get('HOST', '0.0.0.0')
     debug = os.environ.get('FLASK_ENV') == 'development'
-    
+
     socketio.run(app, debug=debug, host=host, port=port)
