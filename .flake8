@@ -1,4 +1,14 @@
 [flake8]
 max-line-length = 88
-exclude = .venv,venv,env,node_modules,dist,build,migrations
-ignore = E203, E266, E501, W503, F403, F401 
+extend-ignore = E402,E501,F401
+exclude = 
+    .git,
+    __pycache__,
+    .venv,
+    venv,
+    node_modules,
+    migrations,
+    instance,
+    logs,
+    coverage,
+    .coverage 

@@ -5,11 +5,4 @@ from .pedido_item import PedidoItem
 from .pagamento import Pagamento
 from .mesa import Mesa
 
-__all__ = [
-    'Cliente',
-    'Pedido',
-    'Item',
-    'PedidoItem',
-    'Pagamento',
-    'Mesa'
-]
+__all__ = ["Cliente", "Pedido", "Item", "PedidoItem", "Pagamento", "Mesa"]

@@ -1,19 +1,21 @@
 import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 from flask import Blueprint, request, jsonify
 from database import db
 from models import Mesa
 
 # Blueprint para mesas
-mesas_bp = Blueprint('mesas', __name__)
+mesas_bp = Blueprint("mesas", __name__)
 
 # --- Constantes de mensagens de erro ---
-ERRO_MESA_NAO_ENCONTRADA = 'Mesa não encontrada'
-ERRO_NUMERO_CAPACIDADE_OBRIGATORIOS = 'Número e capacidade são obrigatórios'
-ERRO_MESA_DUPLICADA = 'Já existe uma mesa com esse número'
+ERRO_MESA_NAO_ENCONTRADA = "Mesa não encontrada"
+ERRO_NUMERO_CAPACIDADE_OBRIGATORIOS = "Número e capacidade são obrigatórios"
+ERRO_MESA_DUPLICADA = "Já existe uma mesa com esse número"
 
-@mesas_bp.route('/mesas', methods=['GET'])
+
+@mesas_bp.route("/mesas", methods=["GET"])
 def listar_mesas():
     """
     Lista todas as mesas cadastradas.
@@ -33,7 +35,8 @@ def listar_mesas():
     mesas = Mesa.query.all()
     return jsonify([mesa.to_dict() for mesa in mesas]), 200
 
-@mesas_bp.route('/mesas/<int:mesa_id>', methods=['GET'])
+
+@mesas_bp.route("/mesas/<int:mesa_id>", methods=["GET"])
 def obter_mesa(mesa_id):
     """
     Obtém uma mesa pelo ID.
@@ -58,10 +61,11 @@ def obter_mesa(mesa_id):
     """
     mesa = db.session.get(Mesa, mesa_id)
     if not mesa:
-        return jsonify({'error': ERRO_MESA_NAO_ENCONTRADA}), 404
+        return jsonify({"error": ERRO_MESA_NAO_ENCONTRADA}), 404
     return jsonify(mesa.to_dict()), 200
 
-@mesas_bp.route('/mesas', methods=['POST'])
+
+@mesas_bp.route("/mesas", methods=["POST"])
 def criar_mesa():
     """
     Cria uma nova mesa.
@@ -95,19 +99,20 @@ def criar_mesa():
         description: Erro interno
     """
     data = request.get_json()
-    if not data or 'numero' not in data or 'capacidade' not in data:
-        return jsonify({'error': ERRO_NUMERO_CAPACIDADE_OBRIGATORIOS}), 400
-    if Mesa.query.filter_by(numero=data['numero']).first():
-        return jsonify({'error': ERRO_MESA_DUPLICADA}), 400
+    if not data or "numero" not in data or "capacidade" not in data:
+        return jsonify({"error": ERRO_NUMERO_CAPACIDADE_OBRIGATORIOS}), 400
+    if Mesa.query.filter_by(numero=data["numero"]).first():
+        return jsonify({"error": ERRO_MESA_DUPLICADA}), 400
     mesa = Mesa(
-        numero=data['numero'],
-        capacidade=data['capacidade'],
+        numero=data["numero"],
+        capacidade=data["capacidade"],
     )
     db.session.add(mesa)
     db.session.commit()
     return jsonify(mesa.to_dict()), 201
 
-@mesas_bp.route('/mesas/<int:mesa_id>', methods=['PUT'])
+
+@mesas_bp.route("/mesas/<int:mesa_id>", methods=["PUT"])
 def editar_mesa(mesa_id):
     """
     Edita uma mesa existente pelo ID.
@@ -146,18 +151,21 @@ def editar_mesa(mesa_id):
     """
     mesa = db.session.get(Mesa, mesa_id)
     if not mesa:
-        return jsonify({'error': ERRO_MESA_NAO_ENCONTRADA}), 404
+        return jsonify({"error": ERRO_MESA_NAO_ENCONTRADA}), 404
     data = request.get_json()
-    if 'numero' in data:
-        if Mesa.query.filter(Mesa.numero == data['numero'], Mesa.mesa_id != mesa_id).first():
-            return jsonify({'error': ERRO_MESA_DUPLICADA}), 400
-        mesa.numero = data['numero']
-    if 'capacidade' in data:
-        mesa.capacidade = data['capacidade']
+    if "numero" in data:
+        if Mesa.query.filter(
+            Mesa.numero == data["numero"], Mesa.mesa_id != mesa_id
+        ).first():
+            return jsonify({"error": ERRO_MESA_DUPLICADA}), 400
+        mesa.numero = data["numero"]
+    if "capacidade" in data:
+        mesa.capacidade = data["capacidade"]
     db.session.commit()
     return jsonify(mesa.to_dict()), 200
 
-@mesas_bp.route('/mesas/<int:mesa_id>', methods=['DELETE'])
+
+@mesas_bp.route("/mesas/<int:mesa_id>", methods=["DELETE"])
 def deletar_mesa(mesa_id):
     """
     Deleta uma mesa pelo ID.
@@ -185,7 +193,7 @@ def deletar_mesa(mesa_id):
     """
     mesa = db.session.get(Mesa, mesa_id)
     if not mesa:
-        return jsonify({'error': ERRO_MESA_NAO_ENCONTRADA}), 404
+        return jsonify({"error": ERRO_MESA_NAO_ENCONTRADA}), 404
     db.session.delete(mesa)
     db.session.commit()
-    return jsonify({'message': 'Mesa deletada com sucesso'}), 200
+    return jsonify({"message": "Mesa deletada com sucesso"}), 200
