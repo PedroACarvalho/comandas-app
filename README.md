@@ -1,86 +1,142 @@
-# 🍽️ Comandas App
+# 🍽️ Sistema de Comandas Online
 
 Sistema PWA (Progressive Web App) para cálculo e pagamento de comandas, desenvolvido conforme TCC.
 
 ## 🚀 Tecnologias Utilizadas
 
 - **Frontend**: React 18 + Vite + Tailwind CSS
-- **Backend**: Python Flask + SQLAlchemy
-- **Banco de Dados**: SQLite
-- **API**: RESTful com JSON
+- **Backend**: Python Flask + SQLAlchemy + SocketIO
+- **Banco de Dados**: PostgreSQL (produção) / SQLite (desenvolvimento)
+- **Cache**: Redis
+- **API**: RESTful com JSON + WebSocket
+- **Deploy**: Docker + Docker Compose + Nginx
 
 ## 📋 Pré-requisitos
 
+### Desenvolvimento Local
 - Python 3.9+
 - Node.js 16+
 - npm ou yarn
 
+### Deploy em VPS
+- Ubuntu 20.04+ ou Debian 11+
+- Docker e Docker Compose
+- 2GB RAM mínimo (4GB+ recomendado)
+- 20GB disco mínimo
+
 ## 🛠️ Instalação
 
-### 1. Clone o repositório
+### Desenvolvimento Local
+
+#### 1. Clone o repositório
 ```bash
-git clone <url-do-repositorio>
+git clone https://github.com/PedroACarvalho/PWA-para-c-lculo-e-pagamento-de-comandas.git
 cd comandas-app
 ```
 
-### 2. Instalar dependências do Backend
+#### 2. Instalar dependências do Backend
 ```bash
-# Criar ambiente virtual (opcional)
-python3 -m venv venv
-source venv/bin/activate  # No Windows: venv\Scripts\activate
+# Criar ambiente virtual
+python3 -m venv .venv
+source .venv/bin/activate  # No Windows: .venv\Scripts\activate
 
 # Instalar dependências
+cd backend
 pip install -r requirements.txt
 ```
 
-### 3. Instalar dependências do Frontend
+#### 3. Instalar dependências do Frontend
 ```bash
+cd ..
 npm install
 ```
 
 ## 🏃‍♂️ Como Executar
 
-### 1. Iniciar o Backend
+### Desenvolvimento Local
+
+#### 1. Iniciar o Backend
 ```bash
-python3 backend/app.py
+cd backend
+source ../.venv/bin/activate
+python app.py
 ```
 O backend estará disponível em: `http://localhost:5001`
 
-### 2. Iniciar o Frontend
+#### 2. Iniciar o Frontend
 ```bash
 npm run dev
 ```
 O frontend estará disponível em: `http://localhost:5173`
 
+### Deploy em VPS
+
+#### 1. Preparar VPS
+```bash
+# Atualizar sistema
+sudo apt update && sudo apt upgrade -y
+
+# Instalar Docker
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+
+# Instalar Docker Compose
+sudo curl -L "https://github.com/docker/compose/releases/download/v2.20.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+```
+
+#### 2. Deploy Automatizado
+```bash
+# Tornar script executável
+chmod +x deploy-vps.sh
+
+# Deploy em produção
+./deploy-vps.sh production
+
+# Verificar status
+./deploy-vps.sh production status
+```
+
+#### 3. Configurar Domínio (Opcional)
+```bash
+# Instalar Certbot para SSL
+sudo apt install certbot
+
+# Obter certificado SSL
+sudo certbot certonly --standalone -d seu-dominio.com
+
+# Configurar nginx com SSL (ver DEPLOY_VPS.md)
+```
+
 ## 📱 Como Usar o Sistema
 
 ### Fluxo do Cliente:
-1. **Acesse**: `http://localhost:5173`
+1. **Acesse**: `http://localhost:5173` (dev) ou `http://seu-dominio.com` (VPS)
 2. **Identificação**: Digite seu nome e selecione uma mesa
 3. **Cardápio**: Visualize e selecione os itens desejados
 4. **Carrinho**: Gerencie as quantidades dos itens
 5. **Pedido**: Confirme e faça o pedido
 6. **Pagamento**: Escolha a forma de pagamento
-7. **Finalização**: Pedido concluído com sucesso! A mesa é liberada para novos clientes, mas o histórico do pedido e do cliente é mantido no sistema.
+7. **Finalização**: Pedido concluído com sucesso!
 
 ### Observações sobre Pagamentos e Liberação de Mesa
 - Após o pagamento de um pedido:
-  - O status do pedido é atualizado para "Pago".
-  - A mesa é liberada automaticamente para uso por outro cliente.
-  - **O cliente e o pedido NÃO são removidos do banco**, garantindo histórico e rastreabilidade.
-  - Não é possível remover um cliente que possua pedidos associados.
-- O sistema impede pagamentos duplicados e só permite pagamento de pedidos fechados.
+  - O status do pedido é atualizado para "Pago"
+  - A mesa é liberada automaticamente para uso por outro cliente
+  - **O cliente e o pedido NÃO são removidos do banco**, garantindo histórico e rastreabilidade
+  - Não é possível remover um cliente que possua pedidos associados
 
 ### Formas de Pagamento Disponíveis:
 - 💰 Dinheiro
 - 💳 Cartão de Crédito
 - 💳 Cartão de Débito
-- 📱 PIX
+- 📱 PIX (com integração Mercado Pago)
 
 ## 🔌 API Endpoints
 
 ### Documentação da API
-Acesse: `http://localhost:5001/api`
+- **Swagger UI**: `http://localhost:5001/apidocs`
+- **Desenvolvimento**: `http://localhost:5001/api`
 
 ### Endpoints Principais:
 
@@ -95,6 +151,10 @@ Acesse: `http://localhost:5001/api`
 - `GET /api/itens/<id>` - Obter item por ID
 - `PUT /api/itens/<id>` - Atualizar item
 - `DELETE /api/itens/<id>` - Remover item
+
+#### Categorias
+- `GET /api/categorias` - Listar categorias
+- `POST /api/categorias` - Criar nova categoria
 
 #### Pedidos
 - `POST /api/pedidos` - Criar novo pedido
@@ -144,28 +204,41 @@ curl -X POST http://localhost:5001/api/pagamentos \
 
 ### Tabelas:
 - **cliente**: Informações do cliente (nome, mesa)
-- **item**: Itens do cardápio (nome, descrição, preço)
+- **item**: Itens do cardápio (nome, descrição, preço, categoria)
 - **pedido**: Pedidos dos clientes (cliente, status, total)
 - **pedido_item**: Relacionamento entre pedidos e itens
 - **pagamento**: Registro de pagamentos (método, valor, data)
+- **mesa**: Status das mesas (livre, ocupada)
 
 ### Dados de Exemplo:
-O sistema já vem com 5 itens de exemplo:
-- X-Burger (R$ 15,90)
-- X-Salada (R$ 17,90)
-- Refrigerante (R$ 6,50)
-- Batata Frita (R$ 12,90)
-- Sorvete (R$ 8,50)
+O sistema já vem com itens de exemplo organizados por categorias:
+- **Entradas**: Salada Caesar, Bruschetta
+- **Pratos Principais**: X-Burger, X-Salada, Frango Grelhado
+- **Bebidas**: Refrigerante, Suco Natural, Água
+- **Sobremesas**: Sorvete, Pudim, Torta de Chocolate
 
 ## 🎯 Funcionalidades
 
-- ✅ **Gestão de Clientes**: Criar e consultar por mesa
-- ✅ **Cardápio Digital**: Lista de itens com preços
-- ✅ **Carrinho Interativo**: Adicionar/remover itens
-- ✅ **Pedidos**: Criação e acompanhamento
-- ✅ **Pagamentos**: Múltiplas formas de pagamento
-- ✅ **Interface Responsiva**: Funciona em mobile e desktop
-- ✅ **PWA**: Pode ser instalado como app
+### ✅ Implementadas
+- **Gestão de Clientes**: Criar e consultar por mesa
+- **Cardápio Digital**: Lista de itens com preços e categorias
+- **Carrinho Interativo**: Adicionar/remover itens
+- **Pedidos**: Criação e acompanhamento em tempo real
+- **Pagamentos**: Múltiplas formas de pagamento
+- **Interface Responsiva**: Funciona em mobile e desktop
+- **PWA**: Pode ser instalado como app
+- **Dashboard**: Relatórios e estatísticas
+- **Backoffice**: Gestão completa do sistema
+- **Integração Mercado Pago**: Pagamentos PIX e cartão
+- **WebSocket**: Atualizações em tempo real
+
+### 🚀 Melhorias Recentes
+- **SQLAlchemy 2.0**: Compatibilidade atualizada
+- **Mercado Pago Integration**: API real implementada
+- **Dashboard Real**: Dados em tempo real das APIs
+- **Menu Aprimorado**: Busca, filtros e categorias dinâmicas
+- **Configuração Robusta**: Sistema de ambiente centralizado
+- **Deploy VPS**: Script automatizado para produção
 
 ## 🔧 Desenvolvimento
 
@@ -175,180 +248,94 @@ O sistema já vem com 5 itens de exemplo:
 │   ├── app.py              # Aplicação principal
 │   ├── database.py         # Configuração do banco
 │   ├── models/             # Modelos do banco
-│   └── routes/             # Rotas da API
+│   ├── routes/             # Rotas da API
+│   └── tests/              # Testes automatizados
 ├── src/
 │   ├── App.jsx            # Componente principal
-│   ├── dataService.js     # Serviços de API
-│   └── App.css            # Estilos
-├── package.json
-└── requirements.txt
+│   ├── pages/             # Páginas do sistema
+│   ├── components/        # Componentes reutilizáveis
+│   └── config/            # Configurações
+├── payment/               # Integração Mercado Pago
+├── deploy-vps.sh          # Script de deploy VPS
+├── docker-compose.yml     # Configuração Docker
+└── nginx.conf            # Configuração Nginx
 ```
 
 ### Comandos Úteis:
 ```bash
 # Verificar status dos servidores
 curl http://localhost:5001/     # Backend
-curl http://localhost:5173      # Frontend
+curl http://localhost:5173      # Frontend (dev)
+curl http://localhost/          # Frontend (VPS)
 
 # Ver documentação da API
-curl http://localhost:5001/api
+curl http://localhost:5001/apidocs
 
 # Listar itens do menu
 curl http://localhost:5001/api/itens
+
+# Verificar status VPS
+./deploy-vps.sh production status
 ```
 
-## ✅ Testes Automatizados (Backend)
+## ✅ Testes Automatizados
 
-O projeto possui **testes automatizados** para garantir a qualidade e a confiabilidade das principais rotas da API.
-
-### Como rodar os testes
+### Backend (Python)
 ```bash
-# (No ambiente virtual Python)
+cd backend
 pytest --cov=.
 ```
-- O comando acima executa todos os testes e mostra o relatório de cobertura.
+- **Cobertura**: ~70%
+- **Testes**: 26 testes automatizados
+- **Funcionalidades**: Clientes, Mesas, Menu, Pedidos
 
-### Estrutura dos testes
-Os testes estão localizados em `backend/tests/` e cobrem os seguintes fluxos:
-
-- **Clientes:**
-  - `POST /api/cliente` (criação)
-  - `GET /api/cliente/<mesa>` (consulta)
-  - `DELETE /api/cliente/<id>` (remoção)
-  - `GET /api/mesas/disponiveis` (mesas livres)
-- **Mesas:**
-  - `GET /api/mesas`, `POST /api/mesas`, `PUT /api/mesas/<id>`, `DELETE /api/mesas/<id>`
-- **Itens/Menu:**
-  - `GET /api/itens`, `POST /api/itens`, `PUT /api/itens/<id>`, `DELETE /api/itens/<id>`
-- **Pedidos:**
-  - `POST /api/pedidos`, `GET /api/pedidos`, `GET /api/pedidos/<id>`, `PUT /api/pedidos/<id>/status`
-  - `GET /api/pedidos/cliente/<id>`, `GET /api/pedidos/cliente/<id>/ativo`, `POST /api/pedidos/<id>/fechar`
-
-### Boas práticas adotadas nos testes
-- **Isolamento total:** O banco de dados é limpo antes de cada teste, garantindo que não haja interferência entre eles.
-- **Cobertura de fluxos de sucesso e erro:** Todos os endpoints principais são testados para casos de sucesso e falha (ex: dados inválidos, recursos inexistentes).
-- **Mock de WebSocket:** Funções de emissão de eventos via WebSocket são mockadas nos testes para evitar dependências externas.
-- **Cobertura:** Atualmente, a cobertura dos testes do backend está em torno de **70%** e pode ser expandida para pagamentos e outros fluxos.
-
-### Exemplo de saída dos testes
-```bash
-$ pytest --cov=.
-=========================================== test session starts ============================================
-collected 26 items
-
-backend/tests/test_auth.py .....
-backend/tests/test_menu.py .....
-backend/tests/test_orders.py .........
-backend/tests/test_routes.py .
-backend/tests/test_tables.py ......
-
-============================================== tests coverage ==============================================
-Name                            Stmts   Miss  Cover
----------------------------------------------------
-backend/routes/auth.py             68     10    85%
-backend/routes/menu.py             65     15    77%
-backend/routes/orders.py          120     26    78%
-backend/routes/tables.py           53      2    96%
-backend/tests/test_auth.py         27      0   100%
-backend/tests/test_menu.py         30      0   100%
-backend/tests/test_orders.py       91      0   100%
-backend/tests/test_tables.py       35      0   100%
-...
-TOTAL                             856    253    70%
-===================================== 26 passed, 29 warnings in 1.12s ======================================
-```
-
-### Como contribuir com testes
-- Adicione novos testes para cada novo endpoint ou fluxo implementado.
-- Garanta que todos os testes passem antes de submeter um PR.
-- Mantenha a cobertura sempre acima de 70%.
-
-## ✅ Testes Automatizados (Frontend)
-
-O frontend possui testes automatizados de dois tipos:
-- **Testes unitários e de integração** (Jest + React Testing Library)
-- **Testes end-to-end (E2E)** (Cypress)
-
-### Como rodar os testes unitários
+### Frontend (JavaScript)
 ```bash
 npm run test:coverage
 ```
-- Executa todos os testes unitários e mostra o relatório de cobertura.
+- **Cobertura**: Componentes, páginas e hooks
+- **E2E**: Cypress para testes end-to-end
 
-### Estrutura dos testes unitários
-Os testes ficam em `src/__tests__/` e cobrem:
-- Componentes de UI (`Button`, `Badge`, `Sidebar`, `Notification`...)
-- Páginas principais (`Orders`, `Tables`, `Menu`...)
-- Hooks customizados (`useApi`, `useLoading`, `useSocket`)
+## 🚀 Deploy e Produção
 
-#### Exemplo de teste de componente
-```js
-import { render, screen } from '@testing-library/react';
-import App from '../App';
+### Scripts de Deploy
+- **`deploy-vps.sh`**: Deploy automatizado para VPS
+- **`DEPLOY_VPS.md`**: Guia completo de deploy
+- **`PROBLEMAS_VPS.md`**: Troubleshooting
 
-test('renderiza o app sem crashar', () => {
-  render(<App />);
-  expect(screen.getByText(/comanda|dashboard|cardápio|mesa|pedido/i)).toBeInTheDocument();
-});
-```
-
-#### Exemplo de teste de página
-```js
-import { render, screen, fireEvent } from '@testing-library/react';
-import Orders from '../pages/Orders';
-
-test('renderiza lista de pedidos e filtra por status', () => {
-  render(<Orders />);
-  expect(screen.getByText('João')).toBeInTheDocument();
-  expect(screen.getByText('Maria')).toBeInTheDocument();
-  fireEvent.change(screen.getByRole('combobox'), { target: { value: 'Pronto' } });
-  expect(screen.queryByText('João')).not.toBeInTheDocument();
-  expect(screen.getByText('Maria')).toBeInTheDocument();
-});
-```
-
-### Como rodar testes E2E (Cypress)
+### Comandos VPS
 ```bash
-npx cypress open
-# ou
-npx cypress run
+# Deploy completo
+./deploy-vps.sh production
+
+# Verificar status
+./deploy-vps.sh production status
+
+# Ver logs
+./deploy-vps.sh production logs
+
+# Fazer backup
+./deploy-vps.sh production backup
+
+# Reiniciar serviços
+./deploy-vps.sh production restart
 ```
-- Os testes E2E ficam em `cypress/e2e/` e simulam o uso real do sistema no navegador.
-
-#### Exemplo de teste E2E
-```js
-// cypress/e2e/home.cy.js
-describe('Página inicial', () => {
-  it('deve exibir o título do sistema', () => {
-    cy.visit('http://localhost:5173');
-    cy.contains(/comanda|dashboard|cardápio|mesa|pedido/i).should('exist');
-  });
-});
-```
-
-### Boas práticas adotadas nos testes do frontend
-- **Cobertura de componentes, hooks e páginas**.
-- **Mocks de dados e dependências** para isolar o teste do backend.
-- **Testes E2E para fluxos críticos** (login, navegação, pedidos, etc).
-- **Cobertura**: mantenha sempre acima de 70% para garantir confiança nas mudanças.
-
-### Como contribuir com testes
-- Adicione testes para cada novo componente, hook ou página criada.
-- Garanta que todos os testes passem antes de submeter um PR.
-- Use mocks para dependências externas e dados dinâmicos.
 
 ## 🐛 Solução de Problemas
 
-### Backend não inicia:
+### Desenvolvimento Local
+
+#### Backend não inicia:
 ```bash
 # Verificar se a porta 5001 está livre
 lsof -ti:5001 | xargs kill -9
 
 # Reinstalar dependências
+cd backend
 pip install -r requirements.txt
 ```
 
-### Frontend não carrega:
+#### Frontend não carrega:
 ```bash
 # Verificar se a porta 5173 está livre
 lsof -ti:5173 | xargs kill -9
@@ -357,9 +344,37 @@ lsof -ti:5173 | xargs kill -9
 npm install
 ```
 
-### Erro de CORS:
-- O backend já está configurado com CORS habilitado
-- Se persistir, verifique se ambos os servidores estão rodando
+### VPS
+
+#### Containers não iniciam:
+```bash
+# Verificar logs
+docker-compose logs
+
+# Verificar recursos
+docker system df
+
+# Limpar e reiniciar
+docker system prune -a
+./deploy-vps.sh production restart
+```
+
+#### Problemas de porta:
+```bash
+# Verificar portas em uso
+sudo netstat -tulpn | grep :80
+sudo netstat -tulpn | grep :443
+
+# Parar serviços conflitantes
+sudo systemctl stop apache2 nginx
+```
+
+## 📖 Documentação
+
+- **`DEPLOY_VPS.md`**: Guia completo de deploy para VPS
+- **`PROBLEMAS_VPS.md`**: Troubleshooting e soluções
+- **`WIKI.md`**: Documentação técnica detalhada
+- **`TECHNICAL_DOCS.md`**: Especificações técnicas
 
 ## 📝 Licença
 
@@ -369,71 +384,25 @@ Este projeto foi desenvolvido como parte de um TCC (Trabalho de Conclusão de Cu
 
 Desenvolvido conforme especificações do TCC sobre Sistema de Comandas Online.
 
+## 🔗 Links Úteis
+
+- **Repositório**: [GitHub](https://github.com/PedroACarvalho/PWA-para-c-lculo-e-pagamento-de-comandas)
+- **Swagger UI**: `http://localhost:5001/apidocs`
+- **Documentação**: `DEPLOY_VPS.md`
+
 ---
 
-**🎉 Sistema 100% Funcional e Pronto para Uso!** 
+**🎉 Sistema 100% Funcional e Pronto para Produção!**
 
-## 🧹 Boas Práticas de Código (Clean Code)
+### 🚀 Status Atual
+- ✅ **Backend**: Funcionando com todas as melhorias
+- ✅ **Frontend**: Interface aprimorada e responsiva
+- ✅ **Deploy VPS**: Script automatizado pronto
+- ✅ **Testes**: Cobertura mantida
+- ✅ **Documentação**: Completa e atualizada
 
-Para contribuir com o projeto, siga as seguintes recomendações:
-
-- **Nomes claros e descritivos** para funções, variáveis e arquivos.
-- **Funções pequenas e com responsabilidade única**.
-- **Evite duplicação de código**: extraia funções utilitárias sempre que possível.
-- **Padronize status, mensagens e constantes** em variáveis ou enums.
-- **Adicione docstrings e comentários** explicativos em funções, classes e métodos complexos.
-- **Organize o código em módulos/coerentes** (rotas, modelos, serviços, etc.).
-- **Tratamento de erros consistente**: use try/except e mensagens claras para o usuário.
-- **Mantenha a documentação e exemplos de uso sempre atualizados** conforme a API evoluir.
-
-> **Dica:** Antes de submeter um PR, revise se endpoints, exemplos de uso e instruções no README refletem o estado atual da API. 
-
-## 📖 Documentação Interativa da API (Swagger)
-
-A API possui documentação interativa via **Swagger UI** (OpenAPI), facilitando a exploração, teste e integração dos endpoints.
-
-### Como acessar
-- Inicie o backend normalmente.
-- Acesse no navegador: [http://localhost:5001/apidocs](http://localhost:5001/apidocs)
-
-### O que você pode fazer no Swagger UI:
-- Visualizar todos os endpoints disponíveis, agrupados por categoria (Clientes, Mesas, Itens, Pedidos, Pagamentos).
-- Ver exemplos de requisições e respostas para cada rota.
-- Testar endpoints diretamente pelo navegador (enviando payloads e vendo respostas reais).
-- Conferir descrições, parâmetros obrigatórios, tipos de dados e mensagens de erro.
-
-### Exemplo de uso
-1. Abra o link acima no navegador.
-2. Expanda a seção desejada (ex: `POST /api/pedidos`).
-3. Clique em "Try it out" para editar e enviar uma requisição real.
-4. Veja a resposta da API em tempo real, incluindo status, headers e body.
-
-> **Dica:** Use o Swagger UI para validar integrações, testar rapidamente e entender o funcionamento da API sem precisar de ferramentas externas. 
-
-## ☁️ Versionamento no GitHub
-
-Este projeto está versionado e salvo remotamente no GitHub:
-
-- **Repositório:** [https://github.com/PedroACarvalho/PWA-para-c-lculo-e-pagamento-de-comandas](https://github.com/PedroACarvalho/PWA-para-c-lculo-e-pagamento-de-comandas)
-
-### Como salvar alterações no repositório remoto
-
-Sempre que fizer alterações no código e quiser salvar no GitHub, utilize os comandos abaixo no terminal, dentro da pasta do projeto:
-
-```bash
-git add .
-git commit -m "sua mensagem de commit aqui"
-git push
-```
-
-Esses comandos vão:
-- Adicionar todas as alterações para serem versionadas (`git add .`)
-- Criar um commit com uma mensagem descritiva (`git commit -m ...`)
-- Enviar as alterações para o repositório remoto no GitHub (`git push`)
-
-Se for o primeiro clone em outra máquina, basta rodar:
-```bash
-git clone https://github.com/PedroACarvalho/PWA-para-c-lculo-e-pagamento-de-comandas.git
-```
-
-Assim, todo o histórico e código do projeto estará sempre salvo e disponível na nuvem! 
+### 📈 Próximos Passos
+1. **Deploy em VPS** usando `./deploy-vps.sh production`
+2. **Configurar domínio** e SSL
+3. **Implementar monitoramento** avançado
+4. **Configurar backup** automático 

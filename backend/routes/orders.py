@@ -77,7 +77,7 @@ def criar_pedido():
         if not data or 'cliente_id' not in data or 'itens' not in data:
             return jsonify({'error': 'cliente_id e itens são obrigatórios'}), 400
         # Verificar se cliente existe
-        cliente = Cliente.query.get(data['cliente_id'])
+        cliente = db.session.get(Cliente, data['cliente_id'])
         if not cliente:
             return jsonify({'error': 'Cliente não encontrado'}), 404
         # Verificar se já existe um pedido aberto para este cliente
@@ -100,7 +100,7 @@ def criar_pedido():
         # Adicionar itens
         total_adicionado = Decimal('0.00')
         for item_data in data['itens']:
-            item = Item.query.get(item_data['item_id'])
+            item = db.session.get(Item, item_data['item_id'])
             if not item:
                 return jsonify({'error': f'Item {item_data["item_id"]} não encontrado'}), 404
             item_existente = PedidoItem.query.filter_by(
@@ -184,7 +184,7 @@ def obter_pedido(pedido_id):
         description: Erro interno
     """
     try:
-        pedido = Pedido.query.get(pedido_id)
+        pedido = db.session.get(Pedido, pedido_id)
 
         if not pedido:
             return jsonify({'error': 'Pedido não encontrado'}), 404
@@ -241,7 +241,7 @@ def atualizar_status_pedido(pedido_id):
         data = request.get_json()
         if not data or 'status' not in data:
             return jsonify({'error': 'Status é obrigatório'}), 400
-        pedido = Pedido.query.get(pedido_id)
+        pedido = db.session.get(Pedido, pedido_id)
         if not pedido:
             return jsonify({'error': 'Pedido não encontrado'}), 404
         pedido.status = data['status']
@@ -369,7 +369,7 @@ def fechar_pedido(pedido_id):
         description: Erro interno
     """
     try:
-        pedido = Pedido.query.get(pedido_id)
+        pedido = db.session.get(Pedido, pedido_id)
         if not pedido:
             return jsonify({'error': 'Pedido não encontrado'}), 404
 

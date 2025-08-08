@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">40% </span>
+                <span class="strong">42.85% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>2/5</span>
+                <span class='fraction'>3/7</span>
             </div>
         
             
@@ -205,7 +205,11 @@
 <a name='L140'></a><a href='#L140'>140</a>
 <a name='L141'></a><a href='#L141'>141</a>
 <a name='L142'></a><a href='#L142'>142</a>
-<a name='L143'></a><a href='#L143'>143</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L143'></a><a href='#L143'>143</a>
+<a name='L144'></a><a href='#L144'>144</a>
+<a name='L145'></a><a href='#L145'>145</a>
+<a name='L146'></a><a href='#L146'>146</a>
+<a name='L147'></a><a href='#L147'>147</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -216,6 +220,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -360,27 +368,31 @@ async function fetchJson(url, options = {}) {
   return await res.json();
 }
 &nbsp;
-const API_BASE_URL = 'http://localhost:5001/api';
+import { ENVIRONMENT } from './config/environment.js';
+&nbsp;
+// Em desenvolvimento, usar URLs relativas para aproveitar o proxy do Vite
+// Em produção, usar URLs completas
+const API_BASE_URL = ENVIRONMENT.API_BASE_URL === 'http://localhost:5001' ? '' : <span class="branch-1 cbranch-no" title="branch not covered" >ENVIRONMENT.API_BASE_URL;</span>
 &nbsp;
 /**
  * Serviços relacionados ao cliente (criação, consulta, remoção, mesas disponíveis)
  */
 export const clienteService = {
 <span class="fstat-no" title="function not covered" >  as</span>ync criarCliente(nome, mesa) {
-<span class="cstat-no" title="statement not covered" >    return fetchJson(`${API_BASE_URL}/cliente`, {</span>
+<span class="cstat-no" title="statement not covered" >    return fetchJson(`${API_BASE_URL}/api/cliente`, {</span>
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ nome, mesa }),
     });
   },
 <span class="fstat-no" title="function not covered" >  as</span>ync obterClientePorMesa(mesa) {
-<span class="cstat-no" title="statement not covered" >    return fetchJson(`${API_BASE_URL}/cliente/${mesa}`);</span>
+<span class="cstat-no" title="statement not covered" >    return fetchJson(`${API_BASE_URL}/api/cliente/${mesa}`);</span>
   },
 <span class="fstat-no" title="function not covered" >  as</span>ync removerCliente(clienteId) {
-<span class="cstat-no" title="statement not covered" >    return fetchJson(`${API_BASE_URL}/cliente/${clienteId}`, { method: 'DELETE' });</span>
+<span class="cstat-no" title="statement not covered" >    return fetchJson(`${API_BASE_URL}/api/cliente/${clienteId}`, { method: 'DELETE' });</span>
   },
   async listarMesasDisponiveis() {
-    return fetchJson(`${API_BASE_URL}/mesas/disponiveis`);
+    return fetchJson(`${API_BASE_URL}/api/mesas/disponiveis`);
   },
 };
 &nbsp;
@@ -389,27 +401,27 @@ export const clienteService = {
  */
 export const itemService = {
   async listarItens() {
-    return fetchJson(`${API_BASE_URL}/itens`);
+    return fetchJson(`${API_BASE_URL}/api/itens`);
   },
 <span class="fstat-no" title="function not covered" >  as</span>ync obterItem(itemId) {
-<span class="cstat-no" title="statement not covered" >    return fetchJson(`${API_BASE_URL}/itens/${itemId}`);</span>
+<span class="cstat-no" title="statement not covered" >    return fetchJson(`${API_BASE_URL}/api/itens/${itemId}`);</span>
   },
 <span class="fstat-no" title="function not covered" >  as</span>ync criarItem(item) {
-<span class="cstat-no" title="statement not covered" >    return fetchJson(`${API_BASE_URL}/itens`, {</span>
+<span class="cstat-no" title="statement not covered" >    return fetchJson(`${API_BASE_URL}/api/itens`, {</span>
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(item),
     });
   },
 <span class="fstat-no" title="function not covered" >  as</span>ync atualizarItem(itemId, item) {
-<span class="cstat-no" title="statement not covered" >    return fetchJson(`${API_BASE_URL}/itens/${itemId}`, {</span>
+<span class="cstat-no" title="statement not covered" >    return fetchJson(`${API_BASE_URL}/api/itens/${itemId}`, {</span>
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(item),
     });
   },
 <span class="fstat-no" title="function not covered" >  as</span>ync removerItem(itemId) {
-<span class="cstat-no" title="statement not covered" >    return fetchJson(`${API_BASE_URL}/itens/${itemId}`, { method: 'DELETE' });</span>
+<span class="cstat-no" title="statement not covered" >    return fetchJson(`${API_BASE_URL}/api/itens/${itemId}`, { method: 'DELETE' });</span>
   },
 };
 &nbsp;
@@ -418,30 +430,30 @@ export const itemService = {
  */
 export const pedidoService = {
 <span class="fstat-no" title="function not covered" >  as</span>ync criarPedido(clienteId, itens) {
-<span class="cstat-no" title="statement not covered" >    return fetchJson(`${API_BASE_URL}/pedidos`, {</span>
+<span class="cstat-no" title="statement not covered" >    return fetchJson(`${API_BASE_URL}/api/pedidos`, {</span>
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ cliente_id: clienteId, itens }),
     });
   },
 <span class="fstat-no" title="function not covered" >  as</span>ync obterPedido(pedidoId) {
-<span class="cstat-no" title="statement not covered" >    return fetchJson(`${API_BASE_URL}/pedidos/${pedidoId}`);</span>
+<span class="cstat-no" title="statement not covered" >    return fetchJson(`${API_BASE_URL}/api/pedidos/${pedidoId}`);</span>
   },
 <span class="fstat-no" title="function not covered" >  as</span>ync obterPedidoAtivoCliente(clienteId) {
-<span class="cstat-no" title="statement not covered" >    return fetchJson(`${API_BASE_URL}/pedidos/cliente/${clienteId}/ativo`);</span>
+<span class="cstat-no" title="statement not covered" >    return fetchJson(`${API_BASE_URL}/api/pedidos/cliente/${clienteId}/ativo`);</span>
   },
 <span class="fstat-no" title="function not covered" >  as</span>ync atualizarStatusPedido(pedidoId, status) {
-<span class="cstat-no" title="statement not covered" >    return fetchJson(`${API_BASE_URL}/pedidos/${pedidoId}/status`, {</span>
+<span class="cstat-no" title="statement not covered" >    return fetchJson(`${API_BASE_URL}/api/pedidos/${pedidoId}/status`, {</span>
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status }),
     });
   },
 <span class="fstat-no" title="function not covered" >  as</span>ync fecharPedido(pedidoId) {
-<span class="cstat-no" title="statement not covered" >    return fetchJson(`${API_BASE_URL}/pedidos/${pedidoId}/fechar`, { method: 'POST' });</span>
+<span class="cstat-no" title="statement not covered" >    return fetchJson(`${API_BASE_URL}/api/pedidos/${pedidoId}/fechar`, { method: 'POST' });</span>
   },
 <span class="fstat-no" title="function not covered" >  as</span>ync obterPedidosCliente(clienteId) {
-<span class="cstat-no" title="statement not covered" >    return fetchJson(`${API_BASE_URL}/pedidos/cliente/${clienteId}`);</span>
+<span class="cstat-no" title="statement not covered" >    return fetchJson(`${API_BASE_URL}/api/pedidos/cliente/${clienteId}`);</span>
   },
 };
 &nbsp;
@@ -450,17 +462,17 @@ export const pedidoService = {
  */
 export const pagamentoService = {
 <span class="fstat-no" title="function not covered" >  as</span>ync criarPagamento(pedidoId, metodo, valor) {
-<span class="cstat-no" title="statement not covered" >    return fetchJson(`${API_BASE_URL}/pagamentos`, {</span>
+<span class="cstat-no" title="statement not covered" >    return fetchJson(`${API_BASE_URL}/api/pagamentos`, {</span>
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ pedido_id: pedidoId, metodo, valor }),
     });
   },
 <span class="fstat-no" title="function not covered" >  as</span>ync obterPagamento(pagamentoId) {
-<span class="cstat-no" title="statement not covered" >    return fetchJson(`${API_BASE_URL}/pagamentos/${pagamentoId}`);</span>
+<span class="cstat-no" title="statement not covered" >    return fetchJson(`${API_BASE_URL}/api/pagamentos/${pagamentoId}`);</span>
   },
 <span class="fstat-no" title="function not covered" >  as</span>ync obterPagamentoPorPedido(pedidoId) {
-<span class="cstat-no" title="statement not covered" >    return fetchJson(`${API_BASE_URL}/pagamentos/pedido/${pedidoId}`);</span>
+<span class="cstat-no" title="statement not covered" >    return fetchJson(`${API_BASE_URL}/api/pagamentos/pedido/${pedidoId}`);</span>
   },
 };
 &nbsp;
@@ -496,7 +508,7 @@ export async function <span class="fstat-no" title="function not covered" >delet
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-28T02:28:30.982Z
+                at 2025-08-08T22:50:22.305Z
             </div>
         <script src="../prettify.js"></script>
         <script>

@@ -56,7 +56,7 @@ def obter_mesa(mesa_id):
       500:
         description: Erro interno
     """
-    mesa = Mesa.query.get(mesa_id)
+    mesa = db.session.get(Mesa, mesa_id)
     if not mesa:
         return jsonify({'error': ERRO_MESA_NAO_ENCONTRADA}), 404
     return jsonify(mesa.to_dict()), 200
@@ -144,7 +144,7 @@ def editar_mesa(mesa_id):
       500:
         description: Erro interno
     """
-    mesa = Mesa.query.get(mesa_id)
+    mesa = db.session.get(Mesa, mesa_id)
     if not mesa:
         return jsonify({'error': ERRO_MESA_NAO_ENCONTRADA}), 404
     data = request.get_json()
@@ -183,7 +183,7 @@ def deletar_mesa(mesa_id):
       500:
         description: Erro interno
     """
-    mesa = Mesa.query.get(mesa_id)
+    mesa = db.session.get(Mesa, mesa_id)
     if not mesa:
         return jsonify({'error': ERRO_MESA_NAO_ENCONTRADA}), 404
     db.session.delete(mesa)

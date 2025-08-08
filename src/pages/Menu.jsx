@@ -7,7 +7,9 @@ import {
   Edit, 
   Trash2,
   Package,
-  Tag
+  Tag,
+  Filter,
+  Search
 } from 'lucide-react';
 import { useMenuItems } from '../lib/useMenuItems';
 import { MenuItemForm } from '../components/MenuItemForm';
@@ -26,36 +28,74 @@ const formatPrice = (price) => {
 
 /**
  * Menu: Página de gestão do cardápio (CRUD de itens, categorias, filtros e estatísticas).
- * Sugestão: extrair modal de edição para componente separado se crescer.
+ * Agora com integração real de categorias e melhor UX.
  */
 const Menu = () => {
-  const [categories, setCategories] = useState([]); // Mantém mock para categorias por enquanto
+  const [categories, setCategories] = useState([]);
   const { items: menuItems, loading, error, addItem, editItem, removeItem, fetchItems } = useMenuItems();
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedItem, setSelectedItem] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
-    // TODO: Integrar categorias reais se necessário
-    setCategories([{ id: 1, name: 'Padrão' }]);
+    // Buscar categorias da API
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch('/api/categorias');
+        if (response.ok) {
+          const data = await response.json();
+          setCategories(data.categorias || []);
+        } else {
+          // Fallback para categorias padrão se a API não estiver disponível
+          setCategories([
+            { id: 1, nome: 'Entradas' },
+            { id: 2, nome: 'Pratos Principais' },
+            { id: 3, nome: 'Sobremesas' },
+            { id: 4, nome: 'Bebidas' },
+            { id: 5, nome: 'Acompanhamentos' }
+          ]);
+        }
+      } catch (err) {
+        console.error('Erro ao buscar categorias:', err);
+        // Fallback para categorias padrão
+        setCategories([
+          { id: 1, nome: 'Entradas' },
+          { id: 2, nome: 'Pratos Principais' },
+          { id: 3, nome: 'Sobremesas' },
+          { id: 4, nome: 'Bebidas' },
+          { id: 5, nome: 'Acompanhamentos' }
+        ]);
+      }
+    };
+
+    fetchCategories();
   }, []);
 
-  const filteredItems = selectedCategory === 'all' 
-    ? menuItems 
-    : menuItems.filter(item => item.category_id === parseInt(selectedCategory));
+  // Filtrar itens por categoria e busca
+  const filteredItems = menuItems.filter(item => {
+    const matchesCategory = selectedCategory === 'all' || 
+      item.categoria_id === parseInt(selectedCategory);
+    const matchesSearch = (item.nome?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+      (item.descricao?.toLowerCase() || '').includes(searchTerm.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   const handleAddItem = () => {
     setSelectedItem({
-      name: '',
-      description: '',
-      price: 0,
-      image: '/images/placeholder.svg',
-      category_id: categories[0]?.id || 1,
-      is_available: true
+      nome: '',
+      descricao: '',
+      preco: 0,
+      imagem: '/images/placeholder.svg',
+      categoria_id: categories[0]?.id || 1,
+      disponivel: true
     });
   };
 
   const handleDeleteItem = async (itemId) => {
-    await removeItem(itemId);
+    if (window.confirm('Tem certeza que deseja remover este item?')) {
+      await removeItem(itemId);
+    }
   };
 
   const handleSaveItem = async (item) => {
@@ -66,6 +106,19 @@ const Menu = () => {
     }
     setSelectedItem(null);
   };
+
+  const getCategoryName = (categoryId) => {
+    const category = categories.find(c => c.id === categoryId);
+    return category ? category.nome : 'Sem categoria';
+  };
+
+  const getAvailabilityStats = () => {
+    const available = menuItems.filter(item => item.disponivel).length;
+    const unavailable = menuItems.filter(item => !item.disponivel).length;
+    return { available, unavailable };
+  };
+
+  const stats = getAvailabilityStats();
 
   return (
     <div className="space-y-6">
@@ -103,9 +156,7 @@ const Menu = () => {
             <div className="h-4 w-4 bg-green-500 rounded-full" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {menuItems.filter(item => item.is_available).length}
-            </div>
+            <div className="text-2xl font-bold">{stats.available}</div>
           </CardContent>
         </Card>
         <Card>
@@ -114,94 +165,146 @@ const Menu = () => {
             <div className="h-4 w-4 bg-red-500 rounded-full" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {menuItems.filter(item => !item.is_available).length}
-            </div>
+            <div className="text-2xl font-bold">{stats.unavailable}</div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Filtro por Categoria */}
+      {/* Filtros e Busca */}
       <Card>
         <CardHeader>
-          <CardTitle>Filtrar por Categoria</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex gap-2 flex-wrap">
+          <div className="flex items-center justify-between">
+            <CardTitle>Filtros e Busca</CardTitle>
             <Button
-              variant={selectedCategory === 'all' ? 'default' : 'outline'}
-              onClick={() => setSelectedCategory('all')}
+              variant="outline"
+              onClick={() => setShowFilters(!showFilters)}
             >
-              Todas
+              <Filter className="w-4 h-4 mr-2" />
+              {showFilters ? 'Ocultar' : 'Mostrar'} Filtros
             </Button>
-            {categories.map((category) => (
-              <Button
-                key={category.id}
-                variant={selectedCategory === category.id.toString() ? 'default' : 'outline'}
-                onClick={() => setSelectedCategory(category.id.toString())}
-              >
-                {category.name}
-              </Button>
-            ))}
           </div>
-        </CardContent>
+        </CardHeader>
+        {showFilters && (
+          <CardContent className="space-y-4">
+            {/* Busca */}
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <input
+                type="text"
+                placeholder="Buscar itens..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            {/* Filtro por Categoria */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Categoria
+              </label>
+              <div className="flex gap-2 flex-wrap">
+                <Button
+                  variant={selectedCategory === 'all' ? 'default' : 'outline'}
+                  onClick={() => setSelectedCategory('all')}
+                >
+                  Todas
+                </Button>
+                {categories.map((category) => (
+                  <Button
+                    key={category.id}
+                    variant={selectedCategory === category.id.toString() ? 'default' : 'outline'}
+                    onClick={() => setSelectedCategory(category.id.toString())}
+                  >
+                    {category.nome}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          </CardContent>
+        )}
       </Card>
 
       {/* Lista de Itens */}
       <Card>
         <CardHeader>
-          <CardTitle>Itens do Cardápio</CardTitle>
+          <CardTitle>
+            Itens do Cardápio ({filteredItems.length})
+          </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {filteredItems.map((item) => (
-              <Card key={item.id} className="relative">
-                <CardHeader className="pb-2">
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-lg">{item.name}</CardTitle>
-                    <div className="flex gap-1">
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => setSelectedItem(item)}
-                      >
-                        <Edit className="w-4 h-4" />
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => handleDeleteItem(item.id)}
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <div className="space-y-2">
-                    <p className="text-sm text-muted-foreground">{item.description}</p>
+          {loading ? (
+            <div className="text-center py-8">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+              <p className="mt-2 text-gray-600">Carregando itens...</p>
+            </div>
+          ) : error ? (
+            <div className="text-center py-8">
+              <p className="text-red-600">Erro ao carregar itens: {error}</p>
+            </div>
+          ) : filteredItems.length === 0 ? (
+            <div className="text-center py-8">
+              <Package className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+              <p className="text-gray-600">
+                {searchTerm || selectedCategory !== 'all' 
+                  ? 'Nenhum item encontrado com os filtros aplicados'
+                  : 'Nenhum item cadastrado ainda'
+                }
+              </p>
+            </div>
+          ) : (
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {filteredItems.map((item) => (
+                <Card key={item.id} className="relative">
+                  <CardHeader>
                     <div className="flex items-center justify-between">
-                      <span className="text-lg font-bold">{formatPrice(item.price)}</span>
-                      <Badge variant={item.is_available ? 'default' : 'secondary'}>
-                        {item.is_available ? 'Disponível' : 'Indisponível'}
-                      </Badge>
+                      <CardTitle className="text-lg">{item.nome}</CardTitle>
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => setSelectedItem(item)}
+                        >
+                          <Edit className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleDeleteItem(item.id)}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-600 mb-2">{item.descricao}</p>
+                    <div className="flex items-center justify-between">
+                      <Badge variant={item.disponivel ? 'default' : 'secondary'}>
+                        {item.disponivel ? 'Disponível' : 'Indisponível'}
+                      </Badge>
+                      <span className="font-bold text-lg">
+                        {formatPrice(item.preco)}
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-500 mt-2">
+                      Categoria: {getCategoryName(item.categoria_id)}
+                    </p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
         </CardContent>
       </Card>
 
-      {/* Modal de Edição */}
+      {/* Modal de Edição/Criação */}
       {selectedItem && (
         <MenuItemForm
           item={selectedItem}
-          onChange={setSelectedItem}
+          categories={categories}
           onSave={handleSaveItem}
           onCancel={() => setSelectedItem(null)}
-          categories={categories}
         />
       )}
     </div>

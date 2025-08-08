@@ -196,7 +196,7 @@ def remover_cliente(cliente_id):
         description: Erro interno
     """
     try:
-        cliente = Cliente.query.get(cliente_id)
+        cliente = db.session.get(Cliente, cliente_id)
         if not cliente:
             return jsonify({'error': 'Cliente não encontrado'}), 404
         if cliente.pedidos and len(cliente.pedidos) > 0:

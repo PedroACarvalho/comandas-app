@@ -118,7 +118,7 @@ def obter_item(item_id):
         description: Erro interno
     """
     try:
-        item = Item.query.get(item_id)
+        item = db.session.get(Item, item_id)
         if not item:
             return jsonify({'error': ERRO_ITEM_NAO_ENCONTRADO}), 404
         return jsonify({'item': item.to_dict()}), 200
@@ -170,7 +170,7 @@ def atualizar_item(item_id):
     """
     try:
         data = request.get_json()
-        item = Item.query.get(item_id)
+        item = db.session.get(Item, item_id)
         if not item:
             return jsonify({'error': ERRO_ITEM_NAO_ENCONTRADO}), 404
         if 'nome' in data:
@@ -212,7 +212,7 @@ def remover_item(item_id):
         description: Erro interno
     """
     try:
-        item = Item.query.get(item_id)
+        item = db.session.get(Item, item_id)
         if not item:
             return jsonify({'error': ERRO_ITEM_NAO_ENCONTRADO}), 404
         db.session.delete(item)
@@ -220,4 +220,108 @@ def remover_item(item_id):
         return jsonify({'message': 'Item removido com sucesso'}), 200
     except Exception as e:
         db.session.rollback()
+        return jsonify({'error': str(e)}), 500
+
+@menu_bp.route('/categorias', methods=['GET'])
+def listar_categorias():
+    """
+    Lista todas as categorias de itens.
+    ---
+    tags:
+      - Categorias
+    responses:
+      200:
+        description: Lista de categorias
+        schema:
+          type: object
+          properties:
+            categorias:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  nome:
+                    type: string
+                  descricao:
+                    type: string
+      500:
+        description: Erro interno
+    """
+    try:
+        # Por enquanto, retornar categorias padrão
+        # TODO: Implementar modelo de Categoria quando necessário
+        categorias = [
+            {"id": 1, "nome": "Entradas", "descricao": "Pratos de entrada"},
+            {"id": 2, "nome": "Pratos Principais", "descricao": "Pratos principais"},
+            {"id": 3, "nome": "Sobremesas", "descricao": "Sobremesas e doces"},
+            {"id": 4, "nome": "Bebidas", "descricao": "Bebidas e refrigerantes"},
+            {"id": 5, "nome": "Acompanhamentos", "descricao": "Acompanhamentos e extras"}
+        ]
+        return jsonify({'categorias': categorias}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@menu_bp.route('/categorias', methods=['POST'])
+def criar_categoria():
+    """
+    Cria uma nova categoria.
+    ---
+    tags:
+      - Categorias
+    parameters:
+      - in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          required:
+            - nome
+          properties:
+            nome:
+              type: string
+              example: Saladas
+            descricao:
+              type: string
+              example: Saladas frescas
+    responses:
+      201:
+        description: Categoria criada com sucesso
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+            categoria:
+              type: object
+      400:
+        description: Dados inválidos
+      500:
+        description: Erro interno
+    """
+    try:
+        data = request.get_json()
+        if not data or 'nome' not in data:
+            return jsonify({'error': 'Nome da categoria é obrigatório'}), 400
+        
+        # TODO: Implementar criação real de categoria
+        categorias = [
+            {"id": 1, "nome": "Entradas", "descricao": "Pratos de entrada"},
+            {"id": 2, "nome": "Pratos Principais", "descricao": "Pratos principais"},
+            {"id": 3, "nome": "Sobremesas", "descricao": "Sobremesas e doces"},
+            {"id": 4, "nome": "Bebidas", "descricao": "Bebidas e refrigerantes"},
+            {"id": 5, "nome": "Acompanhamentos", "descricao": "Acompanhamentos e extras"}
+        ]
+        nova_categoria = {
+            "id": len(categorias) + 1,
+            "nome": data['nome'],
+            "descricao": data.get('descricao', '')
+        }
+        
+        return jsonify({
+            'message': 'Categoria criada com sucesso',
+            'categoria': nova_categoria
+        }), 201
+    except Exception as e:
         return jsonify({'error': str(e)}), 500

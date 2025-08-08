@@ -1,0 +1,1207 @@
+
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sistema de Comandas Online - Documentação Completa</title>
+        <style>
+            @media print {
+                @page {
+                    size: A4;
+                    margin: 2cm;
+                }
+                
+                body {
+                    font-size: 12pt;
+                    line-height: 1.4;
+                }
+                
+                h1 { font-size: 18pt; }
+                h2 { font-size: 16pt; }
+                h3 { font-size: 14pt; }
+                h4 { font-size: 13pt; }
+                
+                pre, code {
+                    font-size: 10pt;
+                    white-space: pre-wrap;
+                    word-wrap: break-word;
+                }
+                
+                .page-break {
+                    page-break-before: always;
+                }
+                
+                .no-break {
+                    page-break-inside: avoid;
+                }
+            }
+            
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                color: #333;
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: #fff;
+            }
+            
+            .header {
+                text-align: center;
+                border-bottom: 3px solid #3498db;
+                padding-bottom: 20px;
+                margin-bottom: 30px;
+            }
+            
+            .header h1 {
+                color: #2c3e50;
+                margin: 0;
+                font-size: 2.5em;
+            }
+            
+            .header .subtitle {
+                color: #7f8c8d;
+                font-size: 1.2em;
+                margin-top: 10px;
+            }
+            
+            .header .meta {
+                color: #95a5a6;
+                font-size: 0.9em;
+                margin-top: 10px;
+            }
+            
+            h1 {
+                color: #2c3e50;
+                border-bottom: 3px solid #3498db;
+                padding-bottom: 10px;
+                margin-top: 40px;
+                margin-bottom: 20px;
+            }
+            
+            h2 {
+                color: #34495e;
+                border-bottom: 2px solid #bdc3c7;
+                padding-bottom: 5px;
+                margin-top: 30px;
+                margin-bottom: 15px;
+            }
+            
+            h3 {
+                color: #2c3e50;
+                margin-top: 25px;
+                margin-bottom: 10px;
+            }
+            
+            h4, h5, h6 {
+                color: #34495e;
+                margin-top: 20px;
+                margin-bottom: 10px;
+            }
+            
+            code {
+                background-color: #f8f9fa;
+                padding: 2px 4px;
+                border-radius: 3px;
+                font-family: 'Courier New', monospace;
+                font-size: 0.9em;
+                color: #e74c3c;
+            }
+            
+            pre {
+                background-color: #f8f9fa;
+                border: 1px solid #e9ecef;
+                border-radius: 5px;
+                padding: 15px;
+                overflow-x: auto;
+                margin: 15px 0;
+            }
+            
+            pre code {
+                background-color: transparent;
+                padding: 0;
+                color: #333;
+            }
+            
+            blockquote {
+                border-left: 4px solid #3498db;
+                margin: 20px 0;
+                padding-left: 20px;
+                color: #666;
+                font-style: italic;
+            }
+            
+            table {
+                border-collapse: collapse;
+                width: 100%;
+                margin: 20px 0;
+                font-size: 0.9em;
+            }
+            
+            th, td {
+                border: 1px solid #ddd;
+                padding: 8px 12px;
+                text-align: left;
+            }
+            
+            th {
+                background-color: #f8f9fa;
+                font-weight: bold;
+                color: #2c3e50;
+            }
+            
+            tr:nth-child(even) {
+                background-color: #f9f9f9;
+            }
+            
+            ul, ol {
+                padding-left: 20px;
+            }
+            
+            li {
+                margin-bottom: 5px;
+            }
+            
+            a {
+                color: #3498db;
+                text-decoration: none;
+            }
+            
+            a:hover {
+                text-decoration: underline;
+            }
+            
+            .toc {
+                background-color: #f8f9fa;
+                border: 1px solid #e9ecef;
+                border-radius: 5px;
+                padding: 20px;
+                margin: 20px 0;
+            }
+            
+            .toc h2 {
+                margin-top: 0;
+                border-bottom: none;
+            }
+            
+            .toc ul {
+                list-style-type: none;
+                padding-left: 0;
+            }
+            
+            .toc li {
+                margin-bottom: 8px;
+            }
+            
+            .toc a {
+                color: #2c3e50;
+                text-decoration: none;
+            }
+            
+            .toc a:hover {
+                color: #3498db;
+            }
+            
+            .emoji {
+                font-size: 1.2em;
+            }
+            
+            .highlight {
+                background-color: #fff3cd;
+                border: 1px solid #ffeaa7;
+                border-radius: 3px;
+                padding: 10px;
+                margin: 10px 0;
+            }
+            
+            .success {
+                background-color: #d4edda;
+                border: 1px solid #c3e6cb;
+                border-radius: 3px;
+                padding: 10px;
+                margin: 10px 0;
+                color: #155724;
+            }
+            
+            .warning {
+                background-color: #fff3cd;
+                border: 1px solid #ffeaa7;
+                border-radius: 3px;
+                padding: 10px;
+                margin: 10px 0;
+                color: #856404;
+            }
+            
+            .info {
+                background-color: #d1ecf1;
+                border: 1px solid #bee5eb;
+                border-radius: 3px;
+                padding: 10px;
+                margin: 10px 0;
+                color: #0c5460;
+            }
+            
+            .page-break {
+                page-break-before: always;
+            }
+            
+            .no-break {
+                page-break-inside: avoid;
+            }
+            
+            .footer {
+                text-align: center;
+                margin-top: 50px;
+                padding-top: 20px;
+                border-top: 1px solid #e9ecef;
+                color: #95a5a6;
+                font-size: 0.9em;
+            }
+            
+            @media screen {
+                body {
+                    font-size: 14px;
+                }
+                
+                pre {
+                    max-width: 100%;
+                    overflow-x: auto;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <h1>📚 Sistema de Comandas Online</h1>
+            <div class="subtitle">Documentação Completa</div>
+            <div class="meta">
+                <strong>Autor:</strong> Pedro Augusto Carvalho<br>
+                <strong>Versão:</strong> 1.0.0<br>
+                <strong>Data:</strong> 07/08/2025<br>
+                <strong>Projeto:</strong> TCC - Sistema de Comandas Online
+            </div>
+        </div>
+        
+        <div class="content">
+            <h1 id="sistema-de-comandas-online">📚 Sistema de Comandas Online</h1>
+
+<h2 id="documentacao-completa">Documentação Completa</h2>
+
+<hr />
+
+<p><strong>Autor:</strong> Pedro Augusto Carvalho<br />
+<strong>Versão:</strong> 1.0.0<br />
+<strong>Data:</strong> 27/07/2024<br />
+<strong>Projeto:</strong> TCC - Sistema de Comandas Online  </p>
+
+<hr />
+
+<h1 id="sumario">📋 Sumário</h1>
+
+<ol>
+<li><a href="#introdução">Introdução</a></li>
+<li><a href="#visão-geral-do-sistema">Visão Geral do Sistema</a></li>
+<li><a href="#arquitetura-e-tecnologias">Arquitetura e Tecnologias</a></li>
+<li><a href="#instalação-e-configuração">Instalação e Configuração</a></li>
+<li><a href="#estrutura-do-projeto">Estrutura do Projeto</a></li>
+<li><a href="#api-documentation">API Documentation</a></li>
+<li><a href="#fluxo-de-funcionamento">Fluxo de Funcionamento</a></li>
+<li><a href="#funcionalidades">Funcionalidades</a></li>
+<li><a href="#testes-automatizados">Testes Automatizados</a></li>
+<li><a href="#deploy-e-manutenção">Deploy e Manutenção</a></li>
+<li><a href="#documentação-técnica">Documentação Técnica</a></li>
+<li><a href="#faq-e-suporte">FAQ e Suporte</a></li>
+<li><a href="#anexos">Anexos</a></li>
+</ol>
+
+<hr />
+
+<h1 id="introducao">🎯 Introdução</h1>
+
+<h2 id="sobre-o-projeto">Sobre o Projeto</h2>
+
+<p>O <strong>Sistema de Comandas Online</strong> é uma PWA (Progressive Web App) desenvolvida para estabelecimentos gastronômicos, permitindo o gerenciamento completo de pedidos, mesas, clientes e pagamentos.</p>
+
+<h3 id="objetivos-principais">Objetivos Principais</h3>
+
+<ul>
+<li><strong>Automatizar</strong> o processo de pedidos em restaurantes</li>
+<li><strong>Melhorar</strong> a experiência do cliente</li>
+<li><strong>Otimizar</strong> o fluxo de trabalho dos funcionários</li>
+<li><strong>Fornecer</strong> relatórios e análises de vendas</li>
+<li><strong>Garantir</strong> rastreabilidade completa dos pedidos</li>
+</ul>
+
+<h3 id="publico-alvo">Público-Alvo</h3>
+
+<ul>
+<li><strong>Restaurantes</strong> e estabelecimentos gastronômicos</li>
+<li><strong>Bares</strong> e lanchonetes</li>
+<li><strong>Food trucks</strong> e eventos</li>
+<li><strong>Cafeterias</strong> e docerias</li>
+</ul>
+
+<hr />
+
+<h1 id="visao-geral-do-sistema">🏗️ Visão Geral do Sistema</h1>
+
+<h2 id="conceito">Conceito</h2>
+
+<p>O sistema é uma aplicação web progressiva (PWA) que permite aos clientes fazerem pedidos diretamente de suas mesas através de dispositivos móveis, enquanto fornece aos estabelecimentos uma ferramenta completa de gestão.</p>
+
+<h2 id="caracteristicas-principais">Características Principais</h2>
+
+<ul>
+<li><strong>Interface Responsiva</strong>: Funciona em mobile e desktop</li>
+<li><strong>PWA</strong>: Pode ser instalado como aplicativo</li>
+<li><strong>Tempo Real</strong>: Atualizações via WebSocket</li>
+<li><strong>Offline</strong>: Funcionalidades básicas sem internet</li>
+<li><strong>Multiplataforma</strong>: Acessível via navegador</li>
+</ul>
+
+<hr />
+
+<h1 id="arquitetura-e-tecnologias">🛠️ Arquitetura e Tecnologias</h1>
+
+<h2 id="diagrama-de-arquitetura">Diagrama de Arquitetura</h2>
+
+<pre><code>┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Frontend      │    │    Backend      │    │   Database      │
+│   (React PWA)   │◄──►│   (Flask API)   │◄──►│   (SQLite)      │
+│                 │    │                 │    │                 │
+│ • Interface     │    │ • REST API      │    │ • Clientes      │
+│ • Navegação     │    │ • WebSocket     │    │ • Pedidos       │
+│ • PWA Features  │    │ • Swagger Docs  │    │ • Itens         │
+│ • Responsive    │    │ • CORS          │    │ • Pagamentos    │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+</code></pre>
+
+<h2 id="stack-tecnologica">Stack Tecnológica</h2>
+
+<h3 id="frontend">Frontend</h3>
+
+<ul>
+<li><strong>React 18</strong> - Framework JavaScript</li>
+<li><strong>Vite</strong> - Build tool e dev server</li>
+<li><strong>Tailwind CSS</strong> - Framework CSS</li>
+<li><strong>React Router</strong> - Roteamento</li>
+<li><strong>Socket.io Client</strong> - Comunicação em tempo real</li>
+</ul>
+
+<h3 id="backend">Backend</h3>
+
+<ul>
+<li><strong>Python 3.9+</strong> - Linguagem principal</li>
+<li><strong>Flask</strong> - Framework web</li>
+<li><strong>SQLAlchemy</strong> - ORM</li>
+<li><strong>SQLite</strong> - Banco de dados</li>
+<li><strong>Flasgger</strong> - Documentação Swagger</li>
+<li><strong>Flask-SocketIO</strong> - WebSocket</li>
+</ul>
+
+<h3 id="ferramentas-de-desenvolvimento">Ferramentas de Desenvolvimento</h3>
+
+<ul>
+<li><strong>Git</strong> - Controle de versão</li>
+<li><strong>GitHub</strong> - Repositório remoto</li>
+<li><strong>Pytest</strong> - Testes automatizados</li>
+<li><strong>Cypress</strong> - Testes E2E</li>
+<li><strong>Jest</strong> - Testes unitários</li>
+</ul>
+
+<hr />
+
+<h1 id="instalacao-e-configuracao">⚙️ Instalação e Configuração</h1>
+
+<h2 id="pre-requisitos">Pré-requisitos</h2>
+
+<pre><code># Verificar versões
+python3 --version  # 3.9+
+node --version     # 16+
+npm --version      # 8+
+</code></pre>
+
+<h2 id="instalacao-rapida">Instalação Rápida</h2>
+
+<pre><code># 1. Clone o repositório
+git clone https://github.com/PedroACarvalho/PWA-para-c-lculo-e-pagamento-de-comandas.git
+cd "PWA para cálculo e pagamento de comandas"
+
+# 2. Backend
+cd backend
+python3 -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+
+# 3. Frontend
+cd ..
+npm install
+
+# 4. Iniciar
+python3 backend/app.py  # Terminal 1
+npm run dev            # Terminal 2
+</code></pre>
+
+<h2 id="configuracao-detalhada">Configuração Detalhada</h2>
+
+<h3 id="backend-2">Backend</h3>
+
+<pre><code># Criar ambiente virtual
+python3 -m venv venv
+source venv/bin/activate
+
+# Instalar dependências
+pip install -r requirements.txt
+
+# Configurar variáveis de ambiente (opcional)
+export FLASK_ENV=development
+export FLASK_DEBUG=1
+
+# Inicializar banco de dados
+python3 init_db_script.py
+</code></pre>
+
+<h3 id="frontend-2">Frontend</h3>
+
+<pre><code># Instalar dependências
+npm install
+
+# Configurar variáveis de ambiente (opcional)
+echo "VITE_API_URL=http://localhost:5001" &gt; .env
+
+# Verificar instalação
+npm run build
+</code></pre>
+
+<hr />
+
+<h1 id="estrutura-do-projeto">📁 Estrutura do Projeto</h1>
+
+<pre><code>PWA para cálculo e pagamento de comandas/
+├── 📁 backend/                    # Backend Python/Flask
+│   ├── 📁 models/                 # Modelos do banco
+│   │   ├── cliente.py
+│   │   ├── item.py
+│   │   ├── mesa.py
+│   │   ├── pagamento.py
+│   │   ├── pedido.py
+│   │   └── pedido_item.py
+│   ├── 📁 routes/                 # Rotas da API
+│   │   ├── auth.py
+│   │   ├── menu.py
+│   │   ├── orders.py
+│   │   ├── payment.py
+│   │   └── tables.py
+│   ├── 📁 tests/                  # Testes automatizados
+│   │   ├── test_auth.py
+│   │   ├── test_menu.py
+│   │   ├── test_orders.py
+│   │   └── test_tables.py
+│   ├── app.py                     # Aplicação principal
+│   ├── database.py                # Configuração DB
+│   └── requirements.txt           # Dependências Python
+├── 📁 src/                        # Frontend React
+│   ├── 📁 components/             # Componentes reutilizáveis
+│   │   ├── Header.jsx
+│   │   ├── Sidebar.jsx
+│   │   └── ui/                    # Componentes UI
+│   ├── 📁 pages/                  # Páginas da aplicação
+│   │   ├── Dashboard.jsx
+│   │   ├── Menu.jsx
+│   │   ├── Orders.jsx
+│   │   ├── Tables.jsx
+│   │   └── 📁 backoffice/         # Painel administrativo
+│   ├── 📁 lib/                    # Utilitários e hooks
+│   │   ├── useApi.js
+│   │   ├── useSocket.js
+│   │   └── utils.js
+│   ├── 📁 config/                 # Configurações
+│   │   └── api.js
+│   └── 📁 __tests__/              # Testes unitários
+├── 📁 cypress/                    # Testes E2E
+│   └── 📁 e2e/
+├── 📁 public/                     # Arquivos estáticos
+├── package.json                   # Dependências Node.js
+├── vite.config.js                 # Configuração Vite
+└── README.md                      # Documentação principal
+</code></pre>
+
+<hr />
+
+<h1 id="api-documentation">📚 API Documentation</h1>
+
+<h2 id="endpoints-principais">Endpoints Principais</h2>
+
+<h3 id="clientes">Clientes</h3>
+
+<pre><code>POST   /api/cliente              # Criar cliente
+GET    /api/cliente/&lt;mesa&gt;       # Buscar por mesa
+DELETE /api/cliente/&lt;id&gt;         # Remover cliente
+</code></pre>
+
+<h3 id="itens-do-menu">Itens do Menu</h3>
+
+<pre><code>GET    /api/itens                # Listar todos
+POST   /api/itens                # Criar item
+GET    /api/itens/&lt;id&gt;           # Buscar por ID
+PUT    /api/itens/&lt;id&gt;           # Atualizar item
+DELETE /api/itens/&lt;id&gt;           # Remover item
+</code></pre>
+
+<h3 id="pedidos">Pedidos</h3>
+
+<pre><code>POST   /api/pedidos              # Criar pedido
+GET    /api/pedidos/&lt;id&gt;         # Buscar pedido
+PUT    /api/pedidos/&lt;id&gt;/status  # Atualizar status
+GET    /api/pedidos/cliente/&lt;id&gt; # Pedidos do cliente
+</code></pre>
+
+<h3 id="pagamentos">Pagamentos</h3>
+
+<pre><code>POST   /api/pagamentos           # Criar pagamento
+GET    /api/pagamentos/&lt;id&gt;      # Buscar pagamento
+GET    /api/pagamentos/pedido/&lt;id&gt; # Pagamento do pedido
+</code></pre>
+
+<h2 id="documentacao-interativa">Documentação Interativa</h2>
+
+<p>Acesse: <code>http://localhost:5001/apidocs</code></p>
+
+<h2 id="exemplos-de-uso">Exemplos de Uso</h2>
+
+<h3 id="criar-cliente">Criar Cliente</h3>
+
+<pre><code>curl -X POST http://localhost:5001/api/cliente \
+  -H "Content-Type: application/json" \
+  -d '{"nome": "João Silva", "mesa": 1}'
+</code></pre>
+
+<h3 id="criar-pedido">Criar Pedido</h3>
+
+<pre><code>curl -X POST http://localhost:5001/api/pedidos \
+  -H "Content-Type: application/json" \
+  -d '{
+    "cliente_id": 1,
+    "itens": [
+      {"item_id": 1, "quantidade": 2},
+      {"item_id": 3, "quantidade": 1}
+    ]
+  }'
+</code></pre>
+
+<h3 id="fazer-pagamento">Fazer Pagamento</h3>
+
+<pre><code>curl -X POST http://localhost:5001/api/pagamentos \
+  -H "Content-Type: application/json" \
+  -d '{
+    "pedido_id": 1,
+    "metodo": "Cartão de Crédito",
+    "valor": 38.30
+  }'
+</code></pre>
+
+<hr />
+
+<h1 id="fluxo-de-funcionamento">🔄 Fluxo de Funcionamento</h1>
+
+<h2 id="fluxo-do-cliente">Fluxo do Cliente</h2>
+
+<pre><code>graph TD
+    A[Cliente acessa PWA] --&gt; B[Identificação]
+    B --&gt; C[Seleciona mesa]
+    C --&gt; D[Visualiza cardápio]
+    D --&gt; E[Adiciona itens ao carrinho]
+    E --&gt; F[Confirma pedido]
+    F --&gt; G[Escolhe forma de pagamento]
+    G --&gt; H[Finaliza pagamento]
+    H --&gt; I[Mesa liberada]
+</code></pre>
+
+<h2 id="fluxo-do-estabelecimento">Fluxo do Estabelecimento</h2>
+
+<pre><code>graph TD
+    A[Funcionário acessa backoffice] --&gt; B[Visualiza pedidos]
+    B --&gt; C[Atualiza status]
+    C --&gt; D[Prepara pedido]
+    D --&gt; E[Entrega ao cliente]
+    E --&gt; F[Confirma entrega]
+    F --&gt; G[Gera relatórios]
+</code></pre>
+
+<h2 id="fluxo-de-pagamento">Fluxo de Pagamento</h2>
+
+<pre><code>graph TD
+    A[Cliente finaliza pedido] --&gt; B[Escolhe método]
+    B --&gt; C{Dinheiro?}
+    C --&gt;|Sim| D[Calcula troco]
+    C --&gt;|Não| E[Processa cartão/PIX]
+    D --&gt; F[Confirma pagamento]
+    E --&gt; F
+    F --&gt; G[Atualiza status]
+    G --&gt; H[Libera mesa]
+</code></pre>
+
+<hr />
+
+<h1 id="funcionalidades">⚡ Funcionalidades</h1>
+
+<h2 id="funcionalidades-do-cliente">Funcionalidades do Cliente</h2>
+
+<ul>
+<li>✅ <strong>Identificação</strong>: Nome e seleção de mesa</li>
+<li>✅ <strong>Cardápio Digital</strong>: Visualização de itens e preços</li>
+<li>✅ <strong>Carrinho Interativo</strong>: Adicionar/remover itens</li>
+<li>✅ <strong>Pedidos</strong>: Confirmação e acompanhamento</li>
+<li>✅ <strong>Pagamentos</strong>: Múltiplas formas de pagamento</li>
+<li>✅ <strong>PWA</strong>: Instalação como app</li>
+</ul>
+
+<h2 id="funcionalidades-do-estabelecimento">Funcionalidades do Estabelecimento</h2>
+
+<ul>
+<li>✅ <strong>Dashboard</strong>: Visão geral do negócio</li>
+<li>✅ <strong>Gestão de Pedidos</strong>: Acompanhamento em tempo real</li>
+<li>✅ <strong>Gestão de Mesas</strong>: Controle de ocupação</li>
+<li>✅ <strong>Gestão do Cardápio</strong>: CRUD completo de itens</li>
+<li>✅ <strong>Relatórios</strong>: Análises de vendas</li>
+<li>✅ <strong>Configurações</strong>: Personalização do sistema</li>
+</ul>
+
+<h2 id="funcionalidades-tecnicas">Funcionalidades Técnicas</h2>
+
+<ul>
+<li>✅ <strong>API RESTful</strong>: Endpoints bem documentados</li>
+<li>✅ <strong>WebSocket</strong>: Atualizações em tempo real</li>
+<li>✅ <strong>Responsive Design</strong>: Funciona em mobile e desktop</li>
+<li>✅ <strong>PWA Features</strong>: Offline, push notifications</li>
+<li>✅ <strong>Testes Automatizados</strong>: Cobertura de 70%+</li>
+<li>✅ <strong>Documentação Swagger</strong>: API interativa</li>
+</ul>
+
+<hr />
+
+<h1 id="testes-automatizados">🧪 Testes Automatizados</h1>
+
+<h2 id="testes-do-backend">Testes do Backend</h2>
+
+<pre><code># Executar todos os testes
+cd backend
+pytest --cov=.
+
+# Executar testes específicos
+pytest tests/test_orders.py
+pytest tests/test_menu.py
+
+# Ver cobertura detalhada
+pytest --cov=. --cov-report=html
+</code></pre>
+
+<h2 id="testes-do-frontend">Testes do Frontend</h2>
+
+<pre><code># Testes unitários
+npm run test
+
+# Testes com cobertura
+npm run test:coverage
+
+# Testes E2E (Cypress)
+npx cypress open
+npx cypress run
+</code></pre>
+
+<h2 id="cobertura-de-testes">Cobertura de Testes</h2>
+
+<ul>
+<li><strong>Backend</strong>: ~70% de cobertura</li>
+<li><strong>Frontend</strong>: Testes unitários + E2E</li>
+<li><strong>API</strong>: Todos os endpoints testados</li>
+<li><strong>UI</strong>: Componentes e páginas testados</li>
+</ul>
+
+<h2 id="estrutura-dos-testes">Estrutura dos Testes</h2>
+
+<h3 id="backend-pytest">Backend (Pytest)</h3>
+
+<pre><code>backend/tests/
+├── conftest.py           # Configuração pytest
+├── test_auth.py          # Testes de autenticação
+├── test_menu.py          # Testes do menu
+├── test_orders.py        # Testes de pedidos
+├── test_payments.py      # Testes de pagamentos
+├── test_routes.py        # Testes de rotas
+└── test_tables.py        # Testes de mesas
+</code></pre>
+
+<h3 id="frontend-vitest-cypress">Frontend (Vitest + Cypress)</h3>
+
+<pre><code>src/__tests__/
+├── App.test.jsx
+├── Badge.test.jsx
+├── Button.test.jsx
+├── Menu.test.jsx
+├── Notification.test.jsx
+├── Orders.test.jsx
+├── Sidebar.test.jsx
+├── Tables.test.jsx
+├── useApi.test.jsx
+├── useLoading.test.jsx
+└── useSocket.test.jsx
+
+cypress/
+├── cypress.config.js
+├── e2e/
+│   └── home.cy.js
+└── fixtures/
+    └── example.json
+</code></pre>
+
+<hr />
+
+<h1 id="deploy-e-manutencao">🚀 Deploy e Manutenção</h1>
+
+<h2 id="deploy-local">Deploy Local</h2>
+
+<pre><code># Backend
+cd backend
+python3 app.py
+
+# Frontend
+npm run dev
+</code></pre>
+
+<h2 id="deploy-em-producao">Deploy em Produção</h2>
+
+<h3 id="backend-herokurailway">Backend (Heroku/Railway)</h3>
+
+<pre><code># Criar Procfile
+echo "web: python app.py" &gt; Procfile
+
+# Configurar variáveis de ambiente
+export DATABASE_URL=postgresql://...
+export FLASK_ENV=production
+
+# Deploy
+git push heroku main
+</code></pre>
+
+<h3 id="frontend-vercelnetlify">Frontend (Vercel/Netlify)</h3>
+
+<pre><code># Build para produção
+npm run build
+
+# Deploy
+vercel --prod
+</code></pre>
+
+<h2 id="docker-opcional">Docker (Opcional)</h2>
+
+<pre><code># Dockerfile para Backend
+FROM python:3.9-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+COPY . .
+EXPOSE 5001
+CMD ["python", "app.py"]
+</code></pre>
+
+<h2 id="monitoramento">Monitoramento</h2>
+
+<ul>
+<li><strong>Logs</strong>: Verificar logs do backend</li>
+<li><strong>Performance</strong>: Monitorar tempo de resposta</li>
+<li><strong>Erros</strong>: Acompanhar erros da API</li>
+<li><strong>Uso</strong>: Métricas de utilização</li>
+</ul>
+
+<h2 id="atualizacoes">Atualizações</h2>
+
+<pre><code># Atualizar dependências
+pip install -r requirements.txt --upgrade
+npm update
+
+# Verificar segurança
+npm audit
+pip-audit
+
+# Testes após atualização
+pytest --cov=.
+npm run test
+</code></pre>
+
+<h2 id="backup">Backup</h2>
+
+<pre><code># Backup do banco
+cp comandas.db backup_$(date +%Y%m%d).db
+
+# Backup do código
+git push origin main
+</code></pre>
+
+<hr />
+
+<h1 id="documentacao-tecnica">🔧 Documentação Técnica</h1>
+
+<h2 id="modelos-de-dados">Modelos de Dados</h2>
+
+<h3 id="schema-do-banco">Schema do Banco</h3>
+
+<h4 id="tabela-clientes">Tabela: <code>clientes</code></h4>
+
+<pre><code>CREATE TABLE clientes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    mesa INTEGER NOT NULL,
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ativo BOOLEAN DEFAULT 1
+);
+</code></pre>
+
+<h4 id="tabela-itens">Tabela: <code>itens</code></h4>
+
+<pre><code>CREATE TABLE itens (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    descricao TEXT,
+    preco DECIMAL(10,2) NOT NULL,
+    categoria VARCHAR(50) DEFAULT 'Padrão',
+    disponivel BOOLEAN DEFAULT 1
+);
+</code></pre>
+
+<h4 id="tabela-pedidos">Tabela: <code>pedidos</code></h4>
+
+<pre><code>CREATE TABLE pedidos (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    cliente_id INTEGER NOT NULL,
+    status VARCHAR(20) DEFAULT 'Pendente',
+    total DECIMAL(10,2) DEFAULT 0,
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    data_atualizacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (cliente_id) REFERENCES clientes(id)
+);
+</code></pre>
+
+<h4 id="tabela-pedido_item">Tabela: <code>pedido_item</code></h4>
+
+<pre><code>CREATE TABLE pedido_item (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    pedido_id INTEGER NOT NULL,
+    item_id INTEGER NOT NULL,
+    quantidade INTEGER NOT NULL,
+    preco_unitario DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY (pedido_id) REFERENCES pedidos(id),
+    FOREIGN KEY (item_id) REFERENCES itens(id)
+);
+</code></pre>
+
+<h4 id="tabela-pagamentos">Tabela: <code>pagamentos</code></h4>
+
+<pre><code>CREATE TABLE pagamentos (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    pedido_id INTEGER NOT NULL,
+    metodo VARCHAR(50) NOT NULL,
+    valor DECIMAL(10,2) NOT NULL,
+    data_pagamento TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (pedido_id) REFERENCES pedidos(id)
+);
+</code></pre>
+
+<h2 id="componentes-frontend">Componentes Frontend</h2>
+
+<h3 id="estrutura-de-componentes">Estrutura de Componentes</h3>
+
+<pre><code>src/components/
+├── Header.jsx              # Header principal
+├── Sidebar.jsx             # Menu lateral
+├── MenuItemForm.jsx        # Formulário de itens
+├── Layout/
+│   └── Layout.jsx          # Layout base
+├── PaymentManagement/
+│   └── PaymentManagement.jsx # Gestão de pagamentos
+└── ui/                     # Componentes UI básicos
+    ├── badge.jsx
+    ├── button.jsx
+    ├── card.jsx
+    ├── input.jsx
+    ├── label.jsx
+    ├── Notification.jsx
+    └── textarea.jsx
+</code></pre>
+
+<h2 id="hooks-customizados">Hooks Customizados</h2>
+
+<h3 id="useapi-hook">useApi Hook</h3>
+
+<pre><code>// src/lib/useApi.js
+import { useState, useEffect } from 'react';
+
+const API_BASE_URL = 'http://localhost:5001/api';
+
+export const useApi = () =&gt; {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const request = async (endpoint, options = {}) =&gt; {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          ...options.headers,
+        },
+        ...options,
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (err) {
+      setError(err.message);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return {
+    loading,
+    error,
+    get: (endpoint) =&gt; request(endpoint),
+    post: (endpoint, data) =&gt; request(endpoint, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+    put: (endpoint, data) =&gt; request(endpoint, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+    del: (endpoint) =&gt; request(endpoint, { method: 'DELETE' }),
+  };
+};
+</code></pre>
+
+<h2 id="configuracao-de-ambiente">Configuração de Ambiente</h2>
+
+<h3 id="variaveis-de-ambiente">Variáveis de Ambiente</h3>
+
+<h4 id="backend-env">Backend (.env)</h4>
+
+<pre><code>FLASK_ENV=development
+FLASK_DEBUG=1
+DATABASE_URL=sqlite:///comandas.db
+SECRET_KEY=your-secret-key-here
+CORS_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
+</code></pre>
+
+<h4 id="frontend-env">Frontend (.env)</h4>
+
+<pre><code>VITE_API_URL=http://localhost:5001
+VITE_SOCKET_URL=http://localhost:5001
+VITE_APP_NAME=Sistema de Comandas
+</code></pre>
+
+<h3 id="dependencias">Dependências</h3>
+
+<h4 id="requirementstxt">requirements.txt</h4>
+
+<pre><code>Flask==2.3.3
+Flask-SQLAlchemy==3.0.5
+Flask-CORS==4.0.0
+Flasgger==0.9.7.1
+Flask-SocketIO==5.3.6
+python-socketio==5.8.0
+python-engineio==4.7.1
+pytest==7.4.0
+pytest-cov==4.1.0
+</code></pre>
+
+<h4 id="packagejson">package.json</h4>
+
+<pre><code>{
+  "name": "pwa-comandas",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest",
+    "test:coverage": "vitest --coverage",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.8.1",
+    "socket.io-client": "^4.6.1",
+    "lucide-react": "^0.263.1",
+    "clsx": "^2.0.0",
+    "tailwind-merge": "^1.14.0"
+  }
+}
+</code></pre>
+
+<hr />
+
+<h1 id="faq-e-suporte">❓ FAQ e Suporte</h1>
+
+<h2 id="perguntas-frequentes">Perguntas Frequentes</h2>
+
+<h3 id="como-adicionar-novos-itens-ao-cardapio">Como adicionar novos itens ao cardápio?</h3>
+
+<ol>
+<li>Acesse o backoffice: <code>http://localhost:5173/backoffice/menu</code></li>
+<li>Clique em "Adicionar Item"</li>
+<li>Preencha nome, descrição e preço</li>
+<li>Salve o item</li>
+</ol>
+
+<h3 id="como-liberar-uma-mesa-apos-pagamento">Como liberar uma mesa após pagamento?</h3>
+
+<ul>
+<li>A mesa é liberada automaticamente após o pagamento</li>
+<li>O cliente e pedido permanecem no histórico</li>
+<li>Não é possível remover clientes com pedidos ativos</li>
+</ul>
+
+<h3 id="como-configurar-formas-de-pagamento">Como configurar formas de pagamento?</h3>
+
+<ul>
+<li>O sistema suporta: Dinheiro, Cartão de Crédito, Cartão de Débito, PIX</li>
+<li>Para adicionar novas formas, edite o código em <code>src/pages/Orders.jsx</code></li>
+</ul>
+
+<h3 id="como-gerar-relatorios">Como gerar relatórios?</h3>
+
+<ol>
+<li>Acesse: <code>http://localhost:5173/backoffice/reports</code></li>
+<li>Selecione período desejado</li>
+<li>Visualize relatórios de vendas</li>
+</ol>
+
+<h3 id="como-resolver-problemas-de-cors">Como resolver problemas de CORS?</h3>
+
+<ul>
+<li>O backend já está configurado com CORS</li>
+<li>Verifique se ambos os servidores estão rodando</li>
+<li>Confirme as URLs nas configurações</li>
+</ul>
+
+<h3 id="como-testar-o-sistema">Como testar o sistema?</h3>
+
+<pre><code># Backend
+pytest --cov=.
+
+# Frontend
+npm run test
+npm run test:coverage
+
+# E2E
+npx cypress run
+</code></pre>
+
+<h2 id="problemas-comuns">Problemas Comuns</h2>
+
+<h3 id="backend-nao-inicia">Backend não inicia</h3>
+
+<pre><code># Verificar porta
+lsof -ti:5001 | xargs kill -9
+
+# Reinstalar dependências
+pip install -r requirements.txt
+</code></pre>
+
+<h3 id="frontend-nao-carrega">Frontend não carrega</h3>
+
+<pre><code># Verificar porta
+lsof -ti:5173 | xargs kill -9
+
+# Reinstalar dependências
+npm install
+</code></pre>
+
+<h3 id="erro-de-modulo-nao-encontrado">Erro de módulo não encontrado</h3>
+
+<pre><code># Instalar dependências Python
+python3 -m pip install flasgger
+
+# Verificar ambiente virtual
+source venv/bin/activate
+</code></pre>
+
+<h2 id="contato">Contato</h2>
+
+<ul>
+<li><strong>Repositório</strong>: <a href="https://github.com/PedroACarvalho/PWA-para-c-lculo-e-pagamento-de-comandas">GitHub</a></li>
+<li><strong>Issues</strong>: Reporte problemas no GitHub</li>
+<li><strong>Documentação</strong>: <a href="./README.md">README.md</a></li>
+</ul>
+
+<hr />
+
+<h1 id="anexos">📝 Anexos</h1>
+
+<h2 id="changelog">Changelog</h2>
+
+<h3 id="v100-2024-07-27">v1.0.0 (2024-07-27)</h3>
+
+<ul>
+<li>✅ Sistema completo funcional</li>
+<li>✅ PWA com todas as funcionalidades</li>
+<li>✅ API RESTful documentada</li>
+<li>✅ Testes automatizados</li>
+<li>✅ Interface responsiva</li>
+<li>✅ Gestão completa de pedidos e pagamentos</li>
+</ul>
+
+<h2 id="licenca">Licença</h2>
+
+<p>Este projeto foi desenvolvido como parte de um TCC (Trabalho de Conclusão de Curso).</p>
+
+<h2 id="recursos-adicionais">Recursos Adicionais</h2>
+
+<h3 id="links-uteis">Links Úteis</h3>
+
+<ul>
+<li><strong>Documentação Flask</strong>: https://flask.palletsprojects.com/</li>
+<li><strong>Documentação React</strong>: https://react.dev/</li>
+<li><strong>Documentação Tailwind</strong>: https://tailwindcss.com/docs</li>
+<li><strong>Documentação Vite</strong>: https://vitejs.dev/</li>
+<li><strong>Documentação Pytest</strong>: https://docs.pytest.org/</li>
+<li><strong>Documentação Vitest</strong>: https://vitest.dev/</li>
+</ul>
+
+<h3 id="livros-recomendados">Livros Recomendados</h3>
+
+<ul>
+<li>"Clean Code" - Robert C. Martin</li>
+<li>"Test-Driven Development" - Kent Beck</li>
+<li>"React Design Patterns" - Alex Banks &amp; Eve Porcello</li>
+<li>"Flask Web Development" - Miguel Grinberg</li>
+</ul>
+
+<hr />
+
+<p><strong>🎉 Sistema 100% Funcional e Documentado!</strong></p>
+
+<p><em>Esta documentação fornece todos os detalhes necessários para entender, instalar, configurar e manter o Sistema de Comandas Online.</em></p>
+
+<p><em>Última atualização: 27/07/2024</em></p>
+
+        </div>
+        
+        <div class="footer">
+            <p>🎉 Sistema 100% Funcional e Documentado!</p>
+            <p>Esta documentação fornece todos os detalhes necessários para entender, instalar, configurar e manter o Sistema de Comandas Online.</p>
+            <p><strong>Última atualização:</strong> 07/08/2025 18:32:36</p>
+        </div>
+    </body>
+    </html>
+    

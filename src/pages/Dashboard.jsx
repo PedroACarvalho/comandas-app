@@ -8,7 +8,8 @@ import {
   DollarSign,
   Clock,
   CheckCircle,
-  AlertCircle
+  AlertCircle,
+  RefreshCw
 } from 'lucide-react';
 import { Badge } from '../components/ui/badge';
 
@@ -22,7 +23,7 @@ const formatPrice = (price) => {
 
 /**
  * Dashboard: Página principal do backoffice com estatísticas e visão geral.
- * Sugestão: extrair cards de estatísticas para componentes separados se crescer.
+ * Agora integrado com API real para buscar dados em tempo real.
  */
 const Dashboard = () => {
   const [stats, setStats] = useState({
@@ -33,26 +34,73 @@ const Dashboard = () => {
     recentOrders: [],
     topItems: []
   });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    // TODO: Integrar com API real
-    // Por enquanto, dados mockados
-    setStats({
-      totalRevenue: 1250.80,
-      totalOrders: 45,
-      activeTables: 8,
-      pendingPayments: 3,
-      recentOrders: [
-        { id: 1, mesa: 2, cliente: 'João Silva', valor: 45.70, status: 'preparando' },
-        { id: 2, mesa: 4, cliente: 'Maria Santos', valor: 32.80, status: 'pronto' },
-        { id: 3, mesa: 1, cliente: 'Carlos Oliveira', valor: 28.50, status: 'entregue' }
-      ],
-      topItems: [
+  const fetchDashboardData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      // Buscar dados de pedidos
+      const ordersResponse = await fetch('/api/pedidos');
+      const ordersData = await ordersResponse.json();
+      const orders = ordersData.pedidos || [];
+
+      // Buscar dados de pagamentos
+      const paymentsResponse = await fetch('/api/pagamentos');
+      const paymentsData = await paymentsResponse.json();
+      const payments = paymentsData.pagamentos || [];
+
+      // Buscar dados de mesas
+      const tablesResponse = await fetch('/api/mesas');
+      const tablesData = await tablesResponse.json();
+      const tables = tablesData.mesas || [];
+
+      // Calcular estatísticas
+      const totalRevenue = payments
+        .filter(p => p.status === 'confirmado')
+        .reduce((sum, p) => sum + parseFloat(p.valor), 0);
+
+      const totalOrders = orders.length;
+      const activeTables = tables.filter(t => t.status === 'ocupada').length;
+      const pendingPayments = payments.filter(p => p.status === 'pendente').length;
+
+      // Pedidos recentes (últimos 5)
+      const recentOrders = orders
+        .sort((a, b) => new Date(b.data_criacao) - new Date(a.data_criacao))
+        .slice(0, 5);
+
+      // Itens mais vendidos (mockado por enquanto - precisa implementar endpoint)
+      const topItems = [
         { nome: 'X-Burger', vendas: 25, receita: 647.50 },
         { nome: 'Batata Frita', vendas: 18, receita: 286.20 },
         { nome: 'Refrigerante', vendas: 32, receita: 220.80 }
-      ]
-    });
+      ];
+
+      setStats({
+        totalRevenue,
+        totalOrders,
+        activeTables,
+        pendingPayments,
+        recentOrders,
+        topItems
+      });
+
+    } catch (err) {
+      setError('Erro ao carregar dados do dashboard');
+      console.error('Erro ao buscar dados:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchDashboardData();
+    
+    // Atualizar dados a cada 30 segundos
+    const interval = setInterval(fetchDashboardData, 30000);
+    return () => clearInterval(interval);
   }, []);
 
   const getStatusColor = (status) => {
@@ -68,11 +116,39 @@ const Dashboard = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <RefreshCw className="w-8 h-8 animate-spin text-blue-600" />
+        <span className="ml-2 text-gray-600">Carregando dados...</span>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <AlertCircle className="w-8 h-8 text-red-600" />
+        <span className="ml-2 text-red-600">{error}</span>
+        <Button 
+          onClick={fetchDashboardData} 
+          variant="outline" 
+          className="ml-4"
+        >
+          Tentar Novamente
+        </Button>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-        <Button>Ver Relatório Completo</Button>
+        <Button onClick={fetchDashboardData}>
+          <RefreshCw className="w-4 h-4 mr-2" />
+          Atualizar
+        </Button>
       </div>
 
       {/* Cards de Estatísticas */}
@@ -85,7 +161,7 @@ const Dashboard = () => {
           <CardContent>
             <div className="text-2xl font-bold">{formatPrice(stats.totalRevenue)}</div>
             <p className="text-xs text-muted-foreground">
-              +20.1% em relação ao mês passado
+              Hoje
             </p>
           </CardContent>
         </Card>
@@ -97,7 +173,7 @@ const Dashboard = () => {
           <CardContent>
             <div className="text-2xl font-bold">{stats.totalOrders}</div>
             <p className="text-xs text-muted-foreground">
-              +12 pedidos hoje
+              Pedidos ativos
             </p>
           </CardContent>
         </Card>
@@ -109,7 +185,7 @@ const Dashboard = () => {
           <CardContent>
             <div className="text-2xl font-bold">{stats.activeTables}</div>
             <p className="text-xs text-muted-foreground">
-              {stats.activeTables}/12 mesas ocupadas
+              Mesas ocupadas
             </p>
           </CardContent>
         </Card>
@@ -127,62 +203,68 @@ const Dashboard = () => {
         </Card>
       </div>
 
-      {/* Gráficos e Listas */}
-      <div className="grid gap-4 md:grid-cols-2">
-        {/* Pedidos Recentes */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Pedidos Recentes</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {stats.recentOrders.map((order) => (
-                <div key={order.id} className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium">Pedido #{order.id}</p>
-                    <p className="text-sm text-muted-foreground">
-                      Mesa {order.mesa} • {order.cliente}
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-medium">{formatPrice(order.valor)}</p>
+      {/* Pedidos Recentes */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Pedidos Recentes</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {stats.recentOrders.length > 0 ? (
+              stats.recentOrders.map((order) => (
+                <div key={order.id} className="flex items-center justify-between p-4 border rounded-lg">
+                  <div className="flex items-center space-x-4">
+                    <div>
+                      <p className="font-medium">Mesa {order.mesa_id}</p>
+                      <p className="text-sm text-gray-600">{order.cliente_nome}</p>
+                    </div>
                     <Badge className={getStatusColor(order.status)}>
                       {order.status}
                     </Badge>
                   </div>
+                  <div className="text-right">
+                    <p className="font-medium">{formatPrice(order.valor_total)}</p>
+                    <p className="text-sm text-gray-600">
+                      {new Date(order.data_criacao).toLocaleTimeString('pt-BR')}
+                    </p>
+                  </div>
                 </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+              ))
+            ) : (
+              <p className="text-center text-gray-500 py-8">
+                Nenhum pedido recente
+              </p>
+            )}
+          </div>
+        </CardContent>
+      </Card>
 
-        {/* Itens Mais Vendidos */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Itens Mais Vendidos</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {stats.topItems.map((item, index) => (
-                <div key={index} className="flex items-center justify-between">
+      {/* Itens Mais Vendidos */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Itens Mais Vendidos</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {stats.topItems.map((item, index) => (
+              <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
+                <div className="flex items-center space-x-4">
+                  <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                    <span className="text-sm font-medium text-blue-600">{index + 1}</span>
+                  </div>
                   <div>
                     <p className="font-medium">{item.nome}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {item.vendas} vendas
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-medium">{formatPrice(item.receita)}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {((item.receita / stats.totalRevenue) * 100).toFixed(1)}%
-                    </p>
+                    <p className="text-sm text-gray-600">{item.vendas} vendas</p>
                   </div>
                 </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+                <div className="text-right">
+                  <p className="font-medium">{formatPrice(item.receita)}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };

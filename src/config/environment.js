@@ -1,42 +1,102 @@
-// Configuração de ambiente para o frontend
+/**
+ * Configuração de ambiente para o sistema de comandas
+ * Centraliza todas as configurações baseadas no ambiente
+ */
+
 const ENV = import.meta.env.MODE || 'development';
 
-const ENVIRONMENTS = {
+const config = {
   development: {
-    API_BASE_URL: 'http://localhost:5001',
-    SOCKET_URL: 'http://localhost:5001',
-    DEBUG: true,
-    SENTRY_DSN: null
+    apiBaseUrl: 'http://localhost:5001',
+    socketUrl: 'http://localhost:5001',
+    debug: true,
+    logLevel: 'debug',
+    features: {
+      realTimeUpdates: true,
+      offlineMode: false,
+      analytics: false
+    }
   },
+  
   staging: {
-    API_BASE_URL: import.meta.env.VITE_API_BASE_URL || 'https://api-staging.comandas.com',
-    SOCKET_URL: import.meta.env.VITE_SOCKET_URL || 'https://api-staging.comandas.com',
-    DEBUG: false,
-    SENTRY_DSN: import.meta.env.VITE_SENTRY_DSN
+    apiBaseUrl: 'https://staging-api.comandas.com',
+    socketUrl: 'https://staging-api.comandas.com',
+    debug: false,
+    logLevel: 'info',
+    features: {
+      realTimeUpdates: true,
+      offlineMode: true,
+      analytics: true
+    }
   },
+  
   production: {
-    API_BASE_URL: import.meta.env.VITE_API_BASE_URL || 'https://api.comandas.com',
-    SOCKET_URL: import.meta.env.VITE_SOCKET_URL || 'https://api.comandas.com',
-    DEBUG: false,
-    SENTRY_DSN: import.meta.env.VITE_SENTRY_DSN
+    apiBaseUrl: 'https://api.comandas.com',
+    socketUrl: 'https://api.comandas.com',
+    debug: false,
+    logLevel: 'warn',
+    features: {
+      realTimeUpdates: true,
+      offlineMode: true,
+      analytics: true
+    }
   }
 };
 
-export const ENVIRONMENT = ENVIRONMENTS[ENV] || ENVIRONMENTS.development;
+// Configuração atual baseada no ambiente
+const currentConfig = config[ENV] || config.development;
 
-// Configuração do Sentry para monitoramento de erros
-export const SENTRY_CONFIG = {
-  dsn: ENVIRONMENT.SENTRY_DSN,
-  environment: ENV,
-  integrations: [],
-  tracesSampleRate: ENV === 'production' ? 0.1 : 1.0,
-  replaysSessionSampleRate: ENV === 'production' ? 0.1 : 1.0,
-  replaysOnErrorSampleRate: ENV === 'production' ? 1.0 : 1.0,
+// Configurações específicas que podem ser sobrescritas por variáveis de ambiente
+const envConfig = {
+  apiBaseUrl: import.meta.env.VITE_API_BASE_URL || currentConfig.apiBaseUrl,
+  socketUrl: import.meta.env.VITE_SOCKET_URL || currentConfig.socketUrl,
+  debug: import.meta.env.VITE_DEBUG === 'true' || currentConfig.debug,
+  logLevel: import.meta.env.VITE_LOG_LEVEL || currentConfig.logLevel,
+  features: {
+    realTimeUpdates: import.meta.env.VITE_REAL_TIME_UPDATES !== 'false' && currentConfig.features.realTimeUpdates,
+    offlineMode: import.meta.env.VITE_OFFLINE_MODE === 'true' || currentConfig.features.offlineMode,
+    analytics: import.meta.env.VITE_ANALYTICS === 'true' || currentConfig.features.analytics
+  }
 };
 
-// Configuração de logging
-export const LOG_CONFIG = {
-  level: ENVIRONMENT.DEBUG ? 'debug' : 'info',
-  enableConsole: ENVIRONMENT.DEBUG,
-  enableRemote: !ENVIRONMENT.DEBUG
-}; 
+// Função para obter configuração
+export const getConfig = (key) => {
+  return envConfig[key] || currentConfig[key];
+};
+
+// Função para verificar se uma feature está habilitada
+export const isFeatureEnabled = (featureName) => {
+  return envConfig.features[featureName] || false;
+};
+
+// Função para obter URL da API
+export const getApiUrl = (endpoint = '') => {
+  const baseUrl = envConfig.apiBaseUrl.replace(/\/$/, '');
+  const cleanEndpoint = endpoint.replace(/^\//, '');
+  return `${baseUrl}/${cleanEndpoint}`;
+};
+
+// Função para obter URL do WebSocket
+export const getSocketUrl = () => {
+  return envConfig.socketUrl;
+};
+
+// Função para logging baseada no nível configurado
+export const log = (level, message, ...args) => {
+  if (envConfig.debug || level === 'error') {
+    const timestamp = new Date().toISOString();
+    console[level](`[${timestamp}] ${message}`, ...args);
+  }
+};
+
+// Configuração exportada por padrão
+export default envConfig;
+
+// Exportar configurações específicas para uso direto
+export const {
+  apiBaseUrl,
+  socketUrl,
+  debug,
+  logLevel,
+  features
+} = envConfig; 

@@ -1,18 +1,26 @@
 import { render, screen } from '@testing-library/react';
 import Menu from '../pages/Menu';
 
+// Mock do fetch para evitar chamadas de API
+global.fetch = jest.fn(() =>
+  Promise.resolve({
+    ok: false,
+    json: () => Promise.resolve({ categorias: [] })
+  })
+);
+
 // Mock do useMenuItems para evitar chamadas de API
 jest.mock('../lib/useMenuItems', () => ({
   useMenuItems: () => ({
     items: [
       { 
         id: 1, 
-        name: 'X-Burger', 
-        category_id: 1, 
-        is_available: true, 
-        price: 10, 
-        description: 'Hambúrguer delicioso', 
-        image: '' 
+        nome: 'X-Burger', 
+        categoria_id: 1, 
+        disponivel: true, 
+        preco: 10, 
+        descricao: 'Hambúrguer delicioso', 
+        imagem: '' 
       }
     ],
     loading: false,

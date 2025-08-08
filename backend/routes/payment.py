@@ -66,7 +66,7 @@ def criar_pagamento():
         data = request.get_json()
         if not data or 'pedido_id' not in data or 'metodo' not in data or 'valor' not in data:
             return jsonify({'error': 'pedido_id, metodo e valor são obrigatórios'}), 400
-        pedido = Pedido.query.get(data['pedido_id'])
+        pedido = db.session.get(Pedido, data['pedido_id'])
         if not pedido:
             return jsonify({'error': 'Pedido não encontrado'}), 404
         pagamento_existente = Pagamento.query.filter_by(pedido_id=data['pedido_id']).first()
@@ -119,7 +119,7 @@ def obter_pagamento(pagamento_id):
         description: Erro interno
     """
     try:
-        pagamento = Pagamento.query.get(pagamento_id)
+        pagamento = db.session.get(Pagamento, pagamento_id)
 
         if not pagamento:
             return jsonify({'error': 'Pagamento não encontrado'}), 404
