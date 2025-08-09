@@ -114,7 +114,7 @@ function App() {
   );
 
   // Enviar pedido para cozinha
-  const enviarPedido = async () => {
+  const enviarPedido = async (criarNovoPedido = false) => {
     if (carrinho.length === 0) {
       setError('Adicione itens ao carrinho');
       return;
@@ -129,7 +129,7 @@ function App() {
         quantidade: item.quantidade
       }));
       
-      const response = await pedidoService.criarPedido(cliente.cliente_id, itensPedido);
+      const response = await pedidoService.criarPedido(cliente.cliente_id, itensPedido, criarNovoPedido);
       
       if (response.error) {
         setError(response.error);
@@ -152,6 +152,11 @@ function App() {
     setCurrentStep('menu');
     // Recarregar pedido ativo para mostrar itens já pedidos
     carregarPedidoAtivo();
+  };
+
+  // Enviar novo pedido (quando cliente pede mais itens)
+  const enviarNovoPedido = async () => {
+    await enviarPedido(true); // true = criar novo pedido
   };
 
   // Fechar conta
@@ -226,6 +231,7 @@ function App() {
             onRemover={removerDoCarrinho}
             onAtualizarQuantidade={atualizarQuantidade}
             onEnviarPedido={enviarPedido}
+            onEnviarNovoPedido={enviarNovoPedido}
             total={totalCarrinho}
             loading={loading}
             error={error}
@@ -390,7 +396,7 @@ function TelaCliente({ onSubmit, loading, error }) {
 }
 
 // Componente Tela Menu
-function TelaMenu({ itens, carrinho, pedidoAtivo, onAdicionar, onRemover, onAtualizarQuantidade, onEnviarPedido, total, loading, error }) {
+function TelaMenu({ itens, carrinho, pedidoAtivo, onAdicionar, onRemover, onAtualizarQuantidade, onEnviarPedido, onEnviarNovoPedido, total, loading, error }) {
   return (
     <div className="max-w-4xl mx-auto">
       <h2 className="text-xl font-semibold mb-4">Cardápio</h2>
@@ -496,11 +502,11 @@ function TelaMenu({ itens, carrinho, pedidoAtivo, onAdicionar, onRemover, onAtua
                 </div>
                 
                 <button
-                  onClick={onEnviarPedido}
+                  onClick={pedidoAtivo ? onEnviarNovoPedido : onEnviarPedido}
                   disabled={loading || carrinho.length === 0}
                   className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 disabled:opacity-50 font-medium"
                 >
-                  {loading ? 'Processando...' : 'Enviar Novo Pedido'}
+                  {loading ? 'Processando...' : (pedidoAtivo ? 'Enviar Novo Pedido' : 'Enviar Pedido')}
                 </button>
               </div>
             </>

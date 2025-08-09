@@ -1,20 +1,19 @@
 // Configuração da API do backend para o PDV
-import { ENVIRONMENT } from './environment.js';
 
 export const API_CONFIG = {
-  BASE_URL: ENVIRONMENT.API_BASE_URL,
+  BASE_URL: '', // Usar URLs relativas para que o Nginx faça proxy
   ENDPOINTS: {
     // Endpoints básicos
     TEST: '/api/test',
     HEALTH: '/api/health',
     
     // Mesas
-    TABLES: '/api/tables',
+    TABLES: '/api/mesas',
     
     // Cardápio
-    CATEGORIES: '/api/menu/categories',
-    MENU_ITEMS: '/api/menu/items',
-    FULL_MENU: '/api/menu/full',
+    CATEGORIES: '/api/categorias',
+    MENU_ITEMS: '/api/itens',
+    FULL_MENU: '/api/itens',
     
     // Pedidos
     ORDERS: '/api/orders',

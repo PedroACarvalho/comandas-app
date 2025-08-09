@@ -1,5 +1,6 @@
 // Serviço centralizado para chamadas de API do cardápio
 
+// Usar URLs relativas para que o Nginx faça proxy
 const API_URL = '/api/itens';
 
 export async function getMenuItems() {

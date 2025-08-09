@@ -19,6 +19,7 @@ def liberar_mesa(cliente):
         mesa = Mesa.query.filter_by(numero=cliente.mesa).first()
         if mesa:
             mesa.status = STATUS_MESA_LIVRE
+            db.session.commit()
 
 
 @payment_bp.route("/pagamentos", methods=["POST"])
@@ -88,18 +89,97 @@ def criar_pagamento():
             pedido_id=data["pedido_id"], metodo=data["metodo"], valor=data["valor"]
         )
         db.session.add(novo_pagamento)
+        
+        # Se for dinheiro, aguardar confirmação do estabelecimento
+        if data["metodo"].lower() == "dinheiro":
+            pedido.status = "Aguardando Confirmação"
+        else:
+            # Cartão/PIX - confirmar automaticamente
+            pedido.status = STATUS_PEDIDO_PAGO
+            # Liberar a mesa
+            liberar_mesa(pedido.cliente)
+        
+        db.session.commit()
+        if data["metodo"].lower() == "dinheiro":
+            return (
+                jsonify(
+                    {
+                        "message": "Pagamento em dinheiro aguardando confirmação",
+                        "pagamento": novo_pagamento.to_dict(),
+                    }
+                ),
+                201,
+            )
+        else:
+            return (
+                jsonify(
+                    {
+                        "message": "Pagamento processado com sucesso",
+                        "pagamento": novo_pagamento.to_dict(),
+                    }
+                ),
+                201,
+            )
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+
+
+@payment_bp.route("/pagamentos/<int:pagamento_id>/confirmar", methods=["POST"])
+def confirmar_pagamento_dinheiro(pagamento_id):
+    """
+    Confirmar pagamento em dinheiro pelo estabelecimento
+    ---
+    tags:
+      - Pagamentos
+    parameters:
+      - in: path
+        name: pagamento_id
+        type: integer
+        required: true
+        description: ID do pagamento
+    responses:
+      200:
+        description: Pagamento confirmado com sucesso
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+            pagamento:
+              type: object
+      404:
+        description: Pagamento não encontrado
+      400:
+        description: Pagamento já confirmado ou não é dinheiro
+      500:
+        description: Erro interno
+    """
+    try:
+        pagamento = db.session.get(Pagamento, pagamento_id)
+        if not pagamento:
+            return jsonify({"error": "Pagamento não encontrado"}), 404
+        
+        if pagamento.metodo.lower() != "dinheiro":
+            return jsonify({"error": "Apenas pagamentos em dinheiro podem ser confirmados"}), 400
+        
+        pedido = db.session.get(Pedido, pagamento.pedido_id)
+        if not pedido:
+            return jsonify({"error": "Pedido não encontrado"}), 404
+        
+        # Confirmar pagamento
         pedido.status = STATUS_PEDIDO_PAGO
-        # Liberar a mesa
         liberar_mesa(pedido.cliente)
         db.session.commit()
+        
         return (
             jsonify(
                 {
-                    "message": "Pagamento criado com sucesso",
-                    "pagamento": novo_pagamento.to_dict(),
+                    "message": "Pagamento confirmado com sucesso",
+                    "pagamento": pagamento.to_dict(),
                 }
             ),
-            201,
+            200,
         )
     except Exception as e:
         db.session.rollback()

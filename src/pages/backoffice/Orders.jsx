@@ -20,7 +20,7 @@ const statusOptionsCard = [
 
 const fetchPedidos = async () => {
   try {
-    const res = await fetch('http://localhost:5001/api/pedidos');
+    const res = await fetch('/api/pedidos');
     const data = await res.json();
     return data.pedidos || [];
   } catch {
@@ -29,7 +29,7 @@ const fetchPedidos = async () => {
 };
 
 const updatePedidoStatus = async (pedido_id, status) => {
-  await fetch(`http://localhost:5001/api/pedidos/${pedido_id}/status`, {
+  await fetch(`/api/pedidos/${pedido_id}/status`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ status }),

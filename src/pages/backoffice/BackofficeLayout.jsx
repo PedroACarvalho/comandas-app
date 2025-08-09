@@ -4,6 +4,7 @@ import { Link, Outlet, useLocation } from 'react-router-dom';
 const navItems = [
   { label: 'Dashboard', path: '/backoffice/dashboard' },
   { label: 'Pedidos', path: '/backoffice/orders' },
+  { label: '🍽️ Quadro da Cozinha', path: '/backoffice/kitchen' },
   { label: 'Mesas', path: '/backoffice/tables' },
   { label: 'Gestão do Cardápio', path: '/backoffice/menu' },
   { label: 'Pagamentos', path: '/backoffice/payments' },

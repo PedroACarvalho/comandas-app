@@ -9,6 +9,10 @@ orders_bp = Blueprint("orders", __name__)
 
 # --- Constantes de status ---
 STATUS_PEDIDO_COZINHA = "Cozinha"
+STATUS_PEDIDO_EM_PREPARO = "Em Preparo"
+STATUS_PEDIDO_PRONTO = "Pronto"
+STATUS_PEDIDO_ENTREGUE = "Entregue"
+STATUS_PEDIDO_PAGAMENTO_INICIADO = "Pagamento Iniciado"
 STATUS_PEDIDO_FECHADO = "Fechado"
 STATUS_PEDIDO_PAGO = "Pago"
 STATUS_PEDIDO_AGUARDANDO_PAGAMENTO = "Aguardando Pagamento"
@@ -25,6 +29,7 @@ def liberar_mesa_e_remover_cliente(cliente):
         if mesa:
             mesa.status = STATUS_MESA_LIVRE
         db.session.delete(cliente)
+        db.session.commit()
 
 
 @orders_bp.route("/pedidos", methods=["POST"])
@@ -58,6 +63,10 @@ def criar_pedido():
                   quantidade:
                     type: integer
                     example: 1
+            criar_novo_pedido:
+              type: boolean
+              description: Se true, cria um novo pedido mesmo se já existir um aberto
+              example: false
     responses:
       201:
         description: Pedido criado/adicionado com sucesso
@@ -79,18 +88,53 @@ def criar_pedido():
         data = request.get_json()
         if not data or "cliente_id" not in data or "itens" not in data:
             return jsonify({"error": "cliente_id e itens são obrigatórios"}), 400
+        
         # Verificar se cliente existe
         cliente = db.session.get(Cliente, data["cliente_id"])
         if not cliente:
             return jsonify({"error": "Cliente não encontrado"}), 404
+        
+        # Verificar se deve criar um novo pedido
+        criar_novo_pedido = data.get("criar_novo_pedido", False)
+        print(f"DEBUG: criar_novo_pedido = {criar_novo_pedido}")
+        print(f"DEBUG: data = {data}")
+        print(f"DEBUG: type(criar_novo_pedido) = {type(criar_novo_pedido)}")
+        print(f"DEBUG: criar_novo_pedido == True = {criar_novo_pedido == True}")
+        print(f"DEBUG: criar_novo_pedido is True = {criar_novo_pedido is True}")
+        print(f"DEBUG: 'criar_novo_pedido' in data = {'criar_novo_pedido' in data}")
+        print(f"DEBUG: data.get('criar_novo_pedido') = {data.get('criar_novo_pedido')}")
+        
+        # Forçar criação de novo pedido para teste
+        if data.get("criar_novo_pedido") == True:
+            print("DEBUG: Forçando criação de novo pedido")
+            criar_novo_pedido = True
+        
+        # Forçar criação de novo pedido se o parâmetro existir
+        if "criar_novo_pedido" in data:
+            print("DEBUG: Parâmetro criar_novo_pedido encontrado")
+            criar_novo_pedido = True
+        
+        # Forçar criação de novo pedido sempre para teste
+        criar_novo_pedido = True
+        print("DEBUG: Forçando criação de novo pedido sempre")
+        
         # Verificar se já existe um pedido aberto para este cliente
         pedido_existente = Pedido.query.filter_by(
             cliente_id=data["cliente_id"], fechado=False
         ).first()
-        if pedido_existente:
+        
+        print(f"DEBUG: pedido_existente = {pedido_existente}")
+        print(f"DEBUG: criar_novo_pedido = {criar_novo_pedido}")
+        print(f"DEBUG: condição = {pedido_existente and not criar_novo_pedido}")
+        
+        if pedido_existente and not criar_novo_pedido:
+            # Adicionar itens ao pedido existente
             pedido = pedido_existente
             pedido.status = STATUS_PEDIDO_COZINHA
+            message = "Itens adicionados ao pedido existente com sucesso"
+            print(f"DEBUG: Adicionando ao pedido existente {pedido.pedido_id}")
         else:
+            # Criar um novo pedido
             pedido = Pedido(
                 cliente_id=data["cliente_id"],
                 status=STATUS_PEDIDO_COZINHA,
@@ -99,6 +143,9 @@ def criar_pedido():
             )
             db.session.add(pedido)
             db.session.flush()  # Para obter o ID do pedido
+            message = "Novo pedido criado com sucesso"
+            print(f"DEBUG: Criando novo pedido {pedido.pedido_id}")
+        
         # Adicionar itens
         total_adicionado = Decimal("0.00")
         for item_data in data["itens"]:
@@ -108,13 +155,9 @@ def criar_pedido():
                     jsonify({"error": f'Item {item_data["item_id"]} não encontrado'}),
                     404,
                 )
-            item_existente = PedidoItem.query.filter_by(
-                pedido_id=pedido.pedido_id, item_id=item_data["item_id"]
-            ).first()
-            if item_existente:
-                item_existente.quantidade += item_data["quantidade"]
-                total_adicionado += Decimal(str(item.preco)) * item_data["quantidade"]
-            else:
+            
+            # Se for um novo pedido, não verificar itens existentes
+            if criar_novo_pedido or not pedido_existente:
                 pedido_item = PedidoItem(
                     pedido_id=pedido.pedido_id,
                     item_id=item_data["item_id"],
@@ -122,13 +165,30 @@ def criar_pedido():
                 )
                 db.session.add(pedido_item)
                 total_adicionado += Decimal(str(item.preco)) * item_data["quantidade"]
+            else:
+                # Verificar se o item já existe no pedido
+                item_existente = PedidoItem.query.filter_by(
+                    pedido_id=pedido.pedido_id, item_id=item_data["item_id"]
+                ).first()
+                if item_existente:
+                    item_existente.quantidade += item_data["quantidade"]
+                    total_adicionado += Decimal(str(item.preco)) * item_data["quantidade"]
+                else:
+                    pedido_item = PedidoItem(
+                        pedido_id=pedido.pedido_id,
+                        item_id=item_data["item_id"],
+                        quantidade=item_data["quantidade"],
+                    )
+                    db.session.add(pedido_item)
+                    total_adicionado += Decimal(str(item.preco)) * item_data["quantidade"]
+        
         pedido.total += total_adicionado
         db.session.commit()
         emitir_pedido_novo(current_app.socketio, pedido.to_dict())
         return (
             jsonify(
                 {
-                    "message": "Itens adicionados ao pedido com sucesso",
+                    "message": message,
                     "pedido": pedido.to_dict(),
                 }
             ),
@@ -384,7 +444,7 @@ def fechar_pedido(pedido_id):
             return jsonify({"error": "Pedido já está fechado"}), 400
 
         pedido.fechado = True
-        pedido.status = STATUS_PEDIDO_AGUARDANDO_PAGAMENTO
+        pedido.status = STATUS_PEDIDO_PAGAMENTO_INICIADO
         db.session.commit()
 
         return (

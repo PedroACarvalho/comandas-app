@@ -11,11 +11,8 @@ async function fetchJson(url, options = {}) {
   return await res.json();
 }
 
-import { ENVIRONMENT } from './config/environment.js';
-
-// Em desenvolvimento, usar URLs relativas para aproveitar o proxy do Vite
-// Em produção, usar URLs completas
-const API_BASE_URL = ENVIRONMENT.API_BASE_URL === 'http://localhost:5001' ? '' : ENVIRONMENT.API_BASE_URL;
+// Usar URLs relativas para que o Nginx faça proxy
+const API_BASE_URL = '';
 
 /**
  * Serviços relacionados ao cliente (criação, consulta, remoção, mesas disponíveis)
@@ -72,11 +69,15 @@ export const itemService = {
  * Serviços relacionados a pedidos
  */
 export const pedidoService = {
-  async criarPedido(clienteId, itens) {
+  async criarPedido(clienteId, itens, criarNovoPedido = false) {
     return fetchJson(`${API_BASE_URL}/api/pedidos`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ cliente_id: clienteId, itens }),
+      body: JSON.stringify({ 
+        cliente_id: clienteId, 
+        itens,
+        criar_novo_pedido: criarNovoPedido 
+      }),
     });
   },
   async obterPedido(pedidoId) {
@@ -123,11 +124,11 @@ export const pagamentoService = {
  * Serviços CRUD para mesas (Backoffice)
  */
 export async function listarMesas() {
-  return fetchJson('/api/mesas');
+  return fetchJson(`${API_BASE_URL}/api/mesas`);
 }
 
 export async function criarMesa(data) {
-  return fetchJson('/api/mesas', {
+  return fetchJson(`${API_BASE_URL}/api/mesas`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
@@ -135,7 +136,7 @@ export async function criarMesa(data) {
 }
 
 export async function editarMesa(mesa_id, data) {
-  return fetchJson(`/api/mesas/${mesa_id}`, {
+  return fetchJson(`${API_BASE_URL}/api/mesas/${mesa_id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
@@ -143,5 +144,5 @@ export async function editarMesa(mesa_id, data) {
 }
 
 export async function deletarMesa(mesa_id) {
-  return fetchJson(`/api/mesas/${mesa_id}`, { method: 'DELETE' });
+  return fetchJson(`${API_BASE_URL}/api/mesas/${mesa_id}`, { method: 'DELETE' });
 } 

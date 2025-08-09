@@ -232,8 +232,11 @@ COPY vite.config.js ./
 COPY tailwind.config.js ./
 COPY postcss.config.js ./
 
-# Instalar dependências
+# Instalar dependências de produção primeiro
 RUN npm ci --only=production
+
+# Instalar dependências de desenvolvimento necessárias para build
+RUN npm install --only=dev --ignore-scripts
 
 # Copiar código fonte
 COPY src/ ./src/

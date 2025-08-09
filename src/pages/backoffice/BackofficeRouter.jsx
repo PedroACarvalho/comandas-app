@@ -7,6 +7,7 @@ import BackofficeTables from './Tables';
 import BackofficePayments from './Payments';
 import BackofficeSettings from './Settings';
 import BackofficeReports from './Reports';
+import KitchenBoard from './KitchenBoard';
 import BackofficeLayout from './BackofficeLayout';
 import Menu from '../Menu';
 
@@ -22,6 +23,7 @@ const BackofficeRouter = () => {
         <Route path="orders" element={<BackofficeOrders />} />
         <Route path="tables" element={<BackofficeTables />} />
         <Route path="payments" element={<BackofficePayments />} />
+        <Route path="kitchen" element={<KitchenBoard />} />
         <Route path="settings" element={<BackofficeSettings />} />
         <Route path="reports" element={<BackofficeReports />} />
         <Route path="menu" element={<Menu />} />

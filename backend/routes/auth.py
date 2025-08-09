@@ -56,14 +56,9 @@ def listar_mesas_disponiveis():
         description: Erro interno
     """
     try:
-        # Buscar mesas livres
-        mesas_livres = Mesa.query.filter_by(status="livre").all()
-        # Buscar mesas que não têm cliente ativo
-        mesas_disponiveis = []
-        for mesa in mesas_livres:
-            cliente_ativo = Cliente.query.filter_by(mesa=mesa.numero).first()
-            if not cliente_ativo:
-                mesas_disponiveis.append(mesa)
+        # Buscar mesas livres - se o status é "livre", a mesa está disponível
+        mesas_disponiveis = Mesa.query.filter_by(status="livre").all()
+        
         return (
             jsonify(
                 {
@@ -122,8 +117,16 @@ def criar_cliente():
 
         fechar_pedidos_abertos_para_mesa(data["mesa"])
 
-        if existe_cliente_na_mesa(data["mesa"]):
-            return jsonify({"error": "Já existe um cliente nesta mesa"}), 400
+        # Verificar se há cliente na mesa e se todos os pedidos estão pagos
+        cliente_existente = Cliente.query.filter_by(mesa=data["mesa"]).first()
+        if cliente_existente:
+            from models import Pedido
+            pedidos_nao_pagos = Pedido.query.filter_by(
+                cliente_id=cliente_existente.cliente_id
+            ).filter(Pedido.status != "Pago").count()
+            
+            if pedidos_nao_pagos > 0:
+                return jsonify({"error": "Já existe um cliente nesta mesa com pedidos não pagos"}), 400
 
         novo_cliente = Cliente(nome=data["nome"], mesa=data["mesa"])
         db.session.add(novo_cliente)

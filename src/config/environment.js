@@ -3,7 +3,9 @@
  * Centraliza todas as configurações baseadas no ambiente
  */
 
-const ENV = import.meta.env.MODE || 'development';
+// Detectar ambiente - se não há VITE_API_BASE_URL e estamos em build, é produção
+const ENV = import.meta.env.VITE_API_BASE_URL ? 'development' : 'production';
+console.log('ENV:', ENV, 'VITE_API_BASE_URL:', import.meta.env.VITE_API_BASE_URL);
 
 const config = {
   development: {
@@ -31,8 +33,8 @@ const config = {
   },
   
   production: {
-    apiBaseUrl: 'https://api.comandas.com',
-    socketUrl: 'https://api.comandas.com',
+    apiBaseUrl: '', // URLs relativas para produção (Docker/Nginx)
+    socketUrl: '', // URLs relativas para produção (Docker/Nginx)
     debug: false,
     logLevel: 'warn',
     features: {
@@ -99,4 +101,13 @@ export const {
   debug,
   logLevel,
   features
-} = envConfig; 
+} = envConfig;
+
+// Exportar ENVIRONMENT para compatibilidade
+export const ENVIRONMENT = {
+  API_BASE_URL: envConfig.apiBaseUrl,
+  SOCKET_URL: envConfig.socketUrl,
+  DEBUG: envConfig.debug,
+  LOG_LEVEL: envConfig.logLevel,
+  FEATURES: envConfig.features
+}; 
