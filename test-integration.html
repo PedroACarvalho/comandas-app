@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Integração API .NET</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .loading { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background-color: #0056b3; }
+        button:disabled { background-color: #6c757d; cursor: not-allowed; }
+        .mesa {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+            display: inline-block;
+            min-width: 150px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Teste de Integração com API .NET</h1>
+    
+    <div id="status" class="status loading">
+        🔄 Verificando status da API...
+    </div>
+    
+    <div>
+        <button onclick="testarAPI()">🚀 Testar API</button>
+        <button onclick="criarMesa()">➕ Criar Mesa</button>
+        <button onclick="listarMesas()">📋 Listar Mesas</button>
+        <button onclick="limparResultados()">🗑️ Limpar</button>
+    </div>
+    
+    <div id="resultados"></div>
+    
+    <script>
+        const API_BASE = 'http://localhost:5001';
+        
+        async function testarAPI() {
+            const statusDiv = document.getElementById('status');
+            const resultadosDiv = document.getElementById('resultados');
+            
+            try {
+                statusDiv.className = 'status loading';
+                statusDiv.textContent = '🔄 Testando API...';
+                
+                // Teste 1: Listar mesas
+                const mesas = await fetch(`${API_BASE}/api/mesas`).then(r => r.json());
+                
+                // Teste 2: Mesas disponíveis
+                const mesasDisponiveis = await fetch(`${API_BASE}/api/mesas/disponiveis`).then(r => r.json());
+                
+                statusDiv.className = 'status success';
+                statusDiv.textContent = '✅ API funcionando perfeitamente!';
+                
+                resultadosDiv.innerHTML = `
+                    <h3>📊 Resultados dos Testes:</h3>
+                    <div class="status success">
+                        <strong>✅ Listar Mesas:</strong> ${mesas.length} mesas encontradas
+                    </div>
+                    <div class="status success">
+                        <strong>✅ Mesas Disponíveis:</strong> ${mesasDisponiveis.mesas_disponiveis?.length || 0} mesas disponíveis
+                    </div>
+                    <h4>📋 Mesas:</h4>
+                    <div>
+                        ${mesas.map(mesa => `
+                            <div class="mesa">
+                                <strong>Mesa ${mesa.numero}</strong><br>
+                                Capacidade: ${mesa.capacidade}<br>
+                                Status: ${mesa.status === 'livre' ? '🟢 Livre' : '🔴 Ocupada'}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                
+            } catch (error) {
+                statusDiv.className = 'status error';
+                statusDiv.textContent = `❌ Erro na API: ${error.message}`;
+                
+                resultadosDiv.innerHTML = `
+                    <div class="status error">
+                        <strong>Erro:</strong> ${error.message}
+                    </div>
+                `;
+            }
+        }
+        
+        async function criarMesa() {
+            const resultadosDiv = document.getElementById('resultados');
+            
+            try {
+                const novaMesa = await fetch(`${API_BASE}/api/mesas`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        numero: Math.floor(Math.random() * 100) + 10,
+                        capacidade: Math.floor(Math.random() * 6) + 2
+                    })
+                }).then(r => r.json());
+                
+                resultadosDiv.innerHTML += `
+                    <div class="status success">
+                        <strong>✅ Mesa criada:</strong> Mesa ${novaMesa.numero} com capacidade ${novaMesa.capacidade}
+                    </div>
+                `;
+                
+            } catch (error) {
+                resultadosDiv.innerHTML += `
+                    <div class="status error">
+                        <strong>❌ Erro ao criar mesa:</strong> ${error.message}
+                    </div>
+                `;
+            }
+        }
+        
+        async function listarMesas() {
+            const resultadosDiv = document.getElementById('resultados');
+            
+            try {
+                const mesas = await fetch(`${API_BASE}/api/mesas`).then(r => r.json());
+                
+                resultadosDiv.innerHTML = `
+                    <h3>📋 Mesas Atuais:</h3>
+                    <div>
+                        ${mesas.map(mesa => `
+                            <div class="mesa">
+                                <strong>Mesa ${mesa.numero}</strong><br>
+                                Capacidade: ${mesa.capacidade}<br>
+                                Status: ${mesa.status === 'livre' ? '🟢 Livre' : '🔴 Ocupada'}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                
+            } catch (error) {
+                resultadosDiv.innerHTML = `
+                    <div class="status error">
+                        <strong>❌ Erro ao listar mesas:</strong> ${error.message}
+                    </div>
+                `;
+            }
+        }
+        
+        function limparResultados() {
+            document.getElementById('resultados').innerHTML = '';
+        }
+        
+        // Teste automático ao carregar a página
+        window.onload = function() {
+            testarAPI();
+        };
+    </script>
+</body>
+</html>

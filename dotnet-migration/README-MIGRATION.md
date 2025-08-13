@@ -55,13 +55,13 @@ ComandasApp/
 ## 🔄 Funcionalidades a Migrar
 
 ### ✅ API Endpoints
-- [ ] `POST /api/cliente` - Criar cliente
-- [ ] `GET /api/mesas/disponiveis` - Listar mesas disponíveis
-- [ ] `POST /api/pedidos` - Criar pedido
-- [ ] `GET /api/pedidos` - Listar pedidos
-- [ ] `PUT /api/pedidos/{id}/status` - Atualizar status
+- [x] `POST /api/cliente` - Criar cliente
+- [x] `GET /api/mesas/disponiveis` - Listar mesas disponíveis
+- [x] `POST /api/pedidos` - Criar pedido
+- [x] `GET /api/pedidos` - Listar pedidos
+- [x] `PUT /api/pedidos/{id}/status` - Atualizar status
 - [ ] `POST /api/pagamentos` - Criar pagamento
-- [ ] `GET /api/itens` - Listar itens do menu
+- [x] `GET /api/itens` - Listar itens do menu
 - [ ] `GET /api/categorias` - Listar categorias
 
 ### ✅ WebSockets (SignalR)
@@ -134,17 +134,17 @@ ComandasApp/
 
 ## 📅 Cronograma
 
-### Semana 1: Setup e Estrutura
-- [ ] Criar projeto .NET
-- [ ] Configurar Entity Framework
-- [ ] Migrar entidades básicas
-- [ ] Setup de testes
+### Semana 1: Setup e Estrutura ✅
+- [x] Criar projeto .NET
+- [x] Configurar Entity Framework
+- [x] Migrar entidades básicas
+- [x] Setup de testes
 
-### Semana 2: API Básica
-- [ ] Migrar controllers principais
-- [ ] Implementar repositories
-- [ ] Configurar AutoMapper
-- [ ] Validações com FluentValidation
+### Semana 2: API Básica ✅
+- [x] Migrar controllers principais
+- [x] Implementar repositories
+- [x] Configurar AutoMapper
+- [x] Validações com FluentValidation
 
 ### Semana 3: WebSockets e Tempo Real
 - [ ] Implementar SignalR
@@ -213,9 +213,9 @@ dotnet test
 ## 🎯 Próximos Passos
 
 1. ✅ Backup do projeto atual (FEITO)
-2. 🔄 Criar estrutura .NET
-3. 🔄 Migrar entidades
-4. 🔄 Implementar API básica
+2. ✅ Criar estrutura .NET (FEITO)
+3. ✅ Migrar entidades (FEITO)
+4. ✅ Implementar API básica (FEITO)
 5. 🔄 WebSockets com SignalR
 6. 🔄 Funcionalidades especiais
 7. 🔄 Deploy e testes

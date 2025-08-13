@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { itemService, clienteService, pedidoService, pagamentoService } from './dataService';
 import './App.css';
 import BackofficeRouter from './pages/backoffice/BackofficeRouter';
+import ApiTest from './components/ApiTest';
+import SimpleTest from './components/SimpleTest';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 function App() {
@@ -286,6 +288,12 @@ function App() {
         } />
         {/* Rotas do backoffice */}
         <Route path="/backoffice/*" element={<BackofficeRouter />} />
+        
+        {/* Rota de teste da API .NET */}
+        <Route path="/api-test" element={<ApiTest />} />
+        
+        {/* Rota de teste simples */}
+        <Route path="/simple-test" element={<SimpleTest />} />
       </Routes>
     </Router>
   );

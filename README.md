@@ -240,6 +240,145 @@ O sistema já vem com itens de exemplo organizados por categorias:
 - **Configuração Robusta**: Sistema de ambiente centralizado
 - **Deploy VPS**: Script automatizado para produção
 
+## 🔌 WebSocket - Comunicação em Tempo Real
+
+O sistema utiliza **WebSocket** (Socket.IO) para fornecer atualizações em tempo real entre o frontend e backend, garantindo uma experiência fluida e responsiva.
+
+### 📡 Arquitetura WebSocket
+
+#### **Frontend (React)**
+- **`src/lib/socket.js`** - Instância global do Socket.IO
+- **`src/lib/useSocket.js`** - Hook React para escutar eventos
+- **`src/config/environment.js`** - Configuração da URL do WebSocket
+
+#### **Backend (Python/Flask)**
+- **`backend/app.py`** - Configuração do Flask-SocketIO
+- **`backend/events.py`** - Funções para emitir eventos
+- **`backend/routes/orders.py`** - Emissão de eventos de pedidos
+
+### 🎯 Eventos WebSocket Disponíveis
+
+| Evento | Descrição | Emitido em | Escutado em | Status |
+|--------|-----------|------------|-------------|---------|
+| `pedido_novo` | Novo pedido criado | ✅ Orders.py | ✅ Orders.jsx, KitchenBoard.jsx | ✅ Funcionando |
+| `pedido_atualizado` | Status do pedido alterado | ✅ Orders.py | ✅ Orders.jsx, KitchenBoard.jsx | ✅ Funcionando |
+| `pagamento_recebido` | Novo pagamento processado | ❌ Não implementado | ✅ Payments.jsx | ❌ Não funciona |
+| `mesa_status` | Status da mesa alterado | ❌ Não implementado | ❌ Não usado | ❌ Não implementado |
+
+### 📱 Páginas que Utilizam WebSocket
+
+#### **🛍️ Gestão de Pedidos (`/backoffice/orders`)**
+```javascript
+// Eventos escutados
+socket.on('pedido_novo', handleNovo);
+socket.on('pedido_atualizado', handleAtualizado);
+socket.on('pagamento_recebido', handlePagamento);
+```
+- **Função**: Atualização automática da lista de pedidos
+- **Benefício**: Não precisa recarregar a página
+
+#### **🍽️ Quadro da Cozinha (`/backoffice/kitchen`)**
+```javascript
+// Eventos escutados
+socket.on('pedido_novo', handleNovoPedido);
+socket.on('pedido_atualizado', handlePedidoAtualizado);
+```
+- **Função**: Atualização do quadro Kanban em tempo real
+- **Benefício**: Cozinha sempre atualizada com novos pedidos
+
+#### **💳 Gestão de Pagamentos (`/backoffice/payments`)**
+```javascript
+// Eventos escutados
+socket.on('pagamento_recebido', handlePagamento);
+```
+- **Função**: Notificação de novos pagamentos
+- **Status**: ⚠️ Evento não implementado no backend
+
+### 🔧 Configuração WebSocket
+
+#### **Variáveis de Ambiente**
+```bash
+# Desenvolvimento
+VITE_SOCKET_URL=http://localhost:5001
+
+# Produção (Docker)
+VITE_SOCKET_URL=http://localhost:5001
+```
+
+#### **Dependências**
+```json
+// Frontend (package.json)
+"socket.io-client": "^4.8.1"
+
+// Backend (requirements.txt)
+"Flask-SocketIO==5.3.6"
+"python-socketio==5.8.0"
+```
+
+#### **Nginx (Produção)**
+```nginx
+# Configuração para WebSocket
+location /socket.io/ {
+    proxy_pass http://backend:5001;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+}
+```
+
+### 🚧 Problemas Conhecidos
+
+#### **❌ Pagamento em Tempo Real**
+- **Problema**: Evento `pagamento_recebido` não é emitido no backend
+- **Localização**: `backend/routes/payment.py`
+- **Solução**: Implementar chamada para `emitir_pagamento_recebido()`
+
+#### **🔧 Como Implementar Pagamento em Tempo Real**
+```python
+# Em backend/routes/payment.py, após criar pagamento:
+from events import emitir_pagamento_recebido
+
+# Após db.session.commit():
+emitir_pagamento_recebido(current_app.socketio, novo_pagamento.to_dict())
+```
+
+### 🧪 Testes WebSocket
+
+#### **Frontend**
+```bash
+npm run test:coverage
+# Testa: src/__tests__/useSocket.test.jsx
+```
+
+#### **Backend**
+```bash
+cd backend
+pytest tests/test_orders.py
+# Mock dos eventos WebSocket nos testes
+```
+
+### 📊 Monitoramento WebSocket
+
+#### **Verificar Conexões Ativas**
+```bash
+# Logs do backend
+docker-compose logs backend | grep "Cliente conectado"
+
+# Status do Socket.IO
+curl http://localhost:5001/  # Verificar se está online
+```
+
+#### **Debug WebSocket**
+```javascript
+// No console do navegador
+socket.on('connect', () => console.log('Conectado!'));
+socket.on('disconnect', () => console.log('Desconectado!'));
+```
+
 ## 🔧 Desenvolvimento
 
 ### Estrutura de Arquivos:
