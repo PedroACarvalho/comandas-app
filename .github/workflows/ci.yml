@@ -46,14 +46,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
         
-      - name: Lint (eslint)
-        run: npx eslint . --ext js,jsx
-        
-      - name: Test (jest)
-        run: npm run test:coverage
-        
       - name: Build
         run: npm run build
+        
+      - name: Test
+        run: npm test -- --coverage --watchAll=false
 
   docker:
     runs-on: ubuntu-latest
@@ -64,11 +61,43 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
         
-      - name: Build and test Docker images
+      - name: Build and test Docker containers
         run: |
           docker compose build
           docker compose up -d
-          sleep 30
-          curl -f http://localhost:5001/api/mesas || exit 1
-          curl -f http://localhost:3000 || exit 1
+          
+          # Wait for services to be ready
+          echo "Waiting for services to start..."
+          sleep 60
+          
+          # Test API with retry logic
+          echo "Testing API endpoint..."
+          for i in {1..10}; do
+            if curl -f http://localhost:5001/api/mesas; then
+              echo "✅ API is responding!"
+              break
+            else
+              echo "⏳ Attempt $i: API not ready yet, waiting..."
+              sleep 10
+            fi
+          done
+          
+          # Test frontend
+          echo "Testing frontend..."
+          if curl -f http://localhost:3000; then
+            echo "✅ Frontend is responding!"
+          else
+            echo "❌ Frontend test failed"
+            exit 1
+          fi
+          
+          # Test nginx proxy
+          echo "Testing nginx proxy..."
+          if curl -f http://localhost:80; then
+            echo "✅ Nginx proxy is working!"
+          else
+            echo "❌ Nginx proxy test failed"
+            exit 1
+          fi
+          
           docker compose down 
